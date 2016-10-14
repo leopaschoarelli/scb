@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition>
+            <h:form>  
+                <p:panelMenu stateful="false" id="menu" >
+
+                    <p:submenu label="Colégio" icon="ui-icon-folder-open">
+                        <p:submenu label="Cadastros" icon="ui-icon-folder-open" >
+                            <p:menuitem title="Cadastrar Turnos do Colégio" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Turno" 
+                                        action="/pages/private/admin/turno/lista.xhtml" />
+
+                            <p:menuitem title="Cadastro de Turmas" 
+                                        process="@this"
+                                        icon="ui-icon-document"
+                                        value="Turmas" 
+                                        action="/pages/private/admin/turma/lista.xhtml" />
+                            <p:menuitem title="Cadastro do Tipo de Pessoas" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Tipos de Pessoas" 
+                                        action="/pages/private/admin/tipopessoa/lista.xhtml" />
+
+                            <p:menuitem title="Cadastrar Pessoas" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Pessoas" 
+                                        action="/pages/private/admin/pessoa/lista.xhtml" />
+                            <p:menuitem title="Cadastro de Instituição" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Instituição" 
+                                        action="/pages/private/admin/instituicao/lista.xhtml" />
+                            
+                            <p:menuitem title="Cadastrar Permissões de Acesso" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Permissões de Login" 
+                                        action="/pages/private/admin/role/lista.xhtml" />
+                            
+                            <p:menuitem title="Cadastrar Usuário do Sistema" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Usuário" 
+                                        action="/pages/private/admin/usuario/lista.xhtml" />
+                        </p:submenu>
+
+                        <p:submenu label="Biblioteca" icon="ui-icon-folder-open">
+                            <p:menuitem title="Cadastro de Grupo Emprestimo" 
+                                        process="@this"
+                                        icon="ui-icon-document"
+                                        value="Grupo Emp." 
+                                        action="/pages/private/admin/grupoemprestimo/lista.xhtml" />
+
+                            <p:menuitem title="Cadastro de Configuração" 
+                                        process="@this"
+                                        icon="ui-icon-document"
+                                        value="Config. Emp." 
+                                        action="/pages/private/admin/configuracaoemprestimo/lista.xhtml" />
+
+                            <p:menuitem title="Cadastro de Penalidades" 
+                                        process="@this"
+                                        icon="ui-icon-document"
+                                        value="Penalidades" 
+                                        action="/pages/private/admin/penalidade/lista.xhtml" />
+
+                            <p:menuitem title="Cadastro de Categorias" 
+                                        process="@this"
+                                        icon="ui-icon-document"
+                                        value="Categorias"
+                                        action="/pages/private/admin/categoria/lista.xhtml" />
+
+                            <p:menuitem title="Cadastro de Obras Literárias" 
+                                        process="@this"
+                                        icon="ui-icon-document"
+                                        value="Obra Literária" 
+                                        action="/pages/private/admin/publicacao/lista.xhtml" />
+                            <p:menuitem title="Cadastro de Editora" 
+                                        process="@this"
+                                        icon="ui-icon-document"
+                                        value="Editora" 
+                                        action="/pages/private/admin/editora/lista.xhtml" />
+                            <p:menuitem title="Cadastro de Autor" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Autor" 
+                                        action="/pages/private/admin/autor/lista.xhtml" />
+
+                            <p:menuitem title="Cadastro de Tipos de Autor" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Tipo de Autor" 
+                                        action="/pages/private/admin/tipoautor/lista.xhtml" />
+                        </p:submenu>
+
+                        <p:submenu label="Endereços" icon="ui-icon-folder-open">
+                            <p:menuitem title="Cadastrar Cidade" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Cidade" 
+                                        action="/pages/private/admin/endereco/cidade/lista.xhtml" />
+
+                            <p:menuitem title="Cadastrar Estado" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="Estado" 
+                                        action="/pages/private/admin/endereco/estado/lista.xhtml" />
+
+                            <p:menuitem title="Cadastrar País" 
+                                        process="@this" 
+                                        icon="ui-icon-document" 
+                                        value="País" 
+                                        action="/pages/private/admin/endereco/pais/lista.xhtml" />
+                        </p:submenu>
+                    </p:submenu>
+
+                    <p:submenu label="Gerencial" icon="ui-icon-document">
+                        <p:menuitem title="Emprestimo de Livro" 
+                                    process="@this"  
+                                    icon="ui-icon-document" 
+                                    value="Emprestimo" 
+
+                                    action="/pages/private/admin/emprestimo/lista.xhtml" >
+
+                        </p:menuitem>
+
+                        <p:menuitem title="Devolução de Livro" 
+                                    process="@this" 
+                                    icon="ui-icon-document" 
+                                    value="Devolução" 
+                                    action="/pages/private/admin/devolucao/lista.xhtml" />
+
+                        <p:menuitem title="Reservar Livro" 
+                                    process="@this" 
+                                    icon="ui-icon-document" 
+                                    value="Reserva" 
+                                    action="/pages/private/admin/reserva/lista.xhtml" />
+
+                        <p:menuitem title="Calendario" 
+                                    process="@this" 
+                                    icon="ui-icon-document" 
+                                    value="Calendario" 
+                                    action="/pages/private/admin/calendario/lista.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Relatórios" icon="ui-icon-document">
+
+                    </p:submenu>
+                    <f:facet name="options">
+                        <p:menuButton iconPos="right" value="Opção">
+                            <p:menuitem value="Perfil" action="/index.xhtml" icon="ui-icon-home"/>
+                            <p:menuitem value="Sair" action="/index.xhtml" icon="ui-icon-power"/>
+                        </p:menuButton>
+                    </f:facet>
+                </p:panelMenu>
+            </h:form>
+        </ui:composition>
+    </h:body>
+</html>

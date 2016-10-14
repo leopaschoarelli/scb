@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"    
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title><ui:insert name="title">Sistema Bibliotecário</ui:insert></title>
+        <link  rel="icon" href="resources/images/iconGori.png" type="image/ico"/>  
+        <meta name="author" content="Leonardo Paschoarelli"></meta>
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/dist/css/AdminLTE.min.css" />
+        <style type="text/css">
+            .form-signin {
+                margin: 0 auto;
+                max-width: 330px;
+                padding: 15px;
+            }
+            .ui-layout-north {
+                z-index:20 !important;
+                overflow:visible !important;;
+            }
+            .ui-layout-north .ui-layout-unit-content {
+                overflow:visible !important;
+            }
+            .grid-login {
+                background-color: #f2f2f2;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                margin-top: 8px;
+                padding: 10px
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <b:container>
+            <p:layout fullPage="true">
+                <p:layoutUnit style="text-align: center" header="Sistema de Controle Bibliotecário" position="north" size="70">
+                    <ui:insert name="cabecalho">
+                        <ui:include src="cabecalho.xhtml" />
+                    </ui:insert>
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <p:commandButton action="index.xhtml" value="Inicio" icon="ui-icon-home" />
+                            <p:commandButton action="consulta.xhtml" value="Consultar Livros" icon="ui-icon-search" />
+                        </f:facet>
+                    </p:toolbar>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center" size="50">
+                    <ui:insert name="conteudo" />
+                </p:layoutUnit>
+
+                <p:layoutUnit style="text-align: center" footer="Colégio Estadual José Luiz Gori - Ensino Fundamental, Médio e Profissional" position="south" size="38">
+                    <ui:insert name="rodape">
+                        <ui:include src="rodape.xhtml" />
+                    </ui:insert>
+                </p:layoutUnit>
+            </p:layout>
+        </b:container>
+    </h:body>
+</html>

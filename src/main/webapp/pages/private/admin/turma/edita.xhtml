@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="form-user" prependId="false"> 
+                    <div class="ui-fluid">
+                        <p:panel id="panelTurma" header="Cadastro de Turma">
+                            <p:messages id="messagesTurma" showDetail="true" closable="true" autoUpdate="true" />
+                            <p:focus context="panelTurma"/>
+                            <p:panelGrid id="gridTurma" 
+                                         columns="2"
+                                         layout="grid" 
+                                         style="margin-top: 20px; margin-bottom: 40px"
+                                         columnClasses="ui-grid-col-1, ui-grid-col-11">
+                                <p:outputLabel value="Turma:" for="descricao" />
+                                <p:inputText id="descricao" 
+                                             required="true"
+                                             placeholder="Descrição da Turma"
+                                             readonly="#{turmaControlador.visualiza}" 
+                                             value="#{turmaControlador.turma.descricao}" />
+                                <p:outputLabel value="Série:" for="serie" />
+                                <p:inputText id="serie" 
+                                             required="true"
+                                             placeholder="Série da Turma"
+                                             readonly="#{turmaControlador.visualiza}" 
+                                             value="#{turmaControlador.turma.serie}" />
+                                <p:outputLabel value="Modalidade:" for="modalidade" />
+                                <p:selectOneMenu required="true" id="modalidade" style="width:200px" disabled="#{turmaControlador.visualiza}" value="#{turmaControlador.turma.modalidade}" >
+                                    <f:selectItems var="tipo" itemLabel="#{tipo}" itemValue="#{tipo}"
+                                                   value="#{turmaControlador.tipoModalidade}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Turno:" for="turno"/>
+                                <p:autoComplete 
+                                    readonly="#{turmaControlador.visualiza}"
+                                    id="turno"
+                                    var="turno" 
+                                    required="true"
+                                    placeholder="Digite o Turno desta Turma"
+                                    completeMethod="#{turmaControlador.completaTurno}" 
+                                    converter="#{turmaControlador.converterTurno}"
+                                    emptyMessage="Nenhum resultado encontrado"
+                                    value="#{turmaControlador.turma.turno}"
+                                    itemValue="#{turno.id}" itemLabel="#{turno.toString()}"/>
+
+                            </p:panelGrid>
+                            <p:separator/>
+                            <p:panelGrid id="gridBotoes" columns="2"
+                                         layout="grid"
+                                         style="margin-top: 20px; margin-bottom: 40px"
+                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                         styleClass="panelgrid-noborder">
+                                <p:commandButton id="botaoSalvar" process="@form" icon="ui-icon-check" value="Salvar" action="#{turmaControlador.salvar()}" 
+                                                 update="@form" disabled="#{turmaControlador.visualiza}"/>
+                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{turmaControlador.prepararLista()}" update="@form" />
+                            </p:panelGrid>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

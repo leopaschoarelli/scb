@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="form-user" prependId="false">
+                    <div class="ui-fluid">
+                        <p:panel id="panelEstado" header="#{estadoControlador.header}">
+                            <p:messages id="messagesEstado" autoUpdate="true" closable="true" />
+                            <p:focus context="panelEstado"/>
+                            <p:panelGrid id="gridEstado" columns="2"
+                                         layout="grid" 
+                                         style="margin-top: 20px; margin-bottom: 40px"
+                                         columnClasses="ui-grid-col-1, ui-grid-col-11"
+                                         styleClass="panelgrid-noborder">
+                                <p:outputLabel value="Nome:" for="nomee" />
+                                <p:inputText required="true" 
+                                             id="nomee" 
+                                             placeholder="Nome do Estado"
+                                             readonly="#{estadoControlador.visualiza}" 
+                                             value="#{estadoControlador.estado.nome}"/>
+                                <p:outputLabel value="UF:" for="uf"/>
+                                <p:inputText required="true" 
+                                             id="uf" 
+                                             placeholder="UF do Estado"
+                                             readonly="#{estadoControlador.visualiza}" 
+                                             value="#{estadoControlador.estado.uf}" />
+                                <p:outputLabel value="País:" for="pais" />
+                                <p:autoComplete 
+                                    readonly="#{estadoControlador.visualiza}"
+                                    id="pais"
+                                    required="true"
+                                    var="pais" 
+                                    placeholder="Digite o nome do País"
+                                    completeMethod="#{estadoControlador.completaPais}" 
+                                    converter="#{estadoControlador.convertPais}"
+                                    emptyMessage="Nenhum resultado encontrado"
+                                    value="#{estadoControlador.estado.pais}"
+                                    itemValue="#{pais.id}" itemLabel="#{pais.toString()}"/>
+                            </p:panelGrid>
+                            <p:separator/>
+                            <p:panelGrid id="gridBotoes" columns="2"
+                                         layout="grid"
+                                         style="margin-top: 20px; margin-bottom: 40px"
+                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                         styleClass="panelgrid-noborder">
+                                <p:commandButton id="botaoSalvar" process="@form" ajax="true" icon="ui-icon-check" value="Salvar" action="#{estadoControlador.salvar}" 
+                                                 update="@form" disabled="#{estadoControlador.visualiza}"/>
+                                <p:commandButton id="botaoCancelar" process="@this" ajax="true" icon="ui-icon-close" value="Cancelar" action="#{estadoControlador.prepararLista}"/>
+                            </p:panelGrid>
+                        </p:panel>
+
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

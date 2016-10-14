@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="formLista" prependId="false">
+                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:panel  id="tipoPessoa" header="Tipo de Pessoas">
+                        <p:toolbar id="toolbarTipoPessoa">
+                            <f:facet name="left">
+                                <p:commandButton id="botaoNovo" 
+                                                 value="Novo" 
+                                                 icon="ui-icon-plus" 
+                                                 ajax="true"
+                                                 title="Adicionar novo Tipo de Pessoa"
+                                                 action="#{tipoPessoaControlador.prepararNovo}" />
+                                <span class="ui-separator">
+                                    <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                </span>
+                                <p:commandButton id="btnEditar" 
+                                                 icon="ui-icon-pencil" 
+                                                 process="@this"
+                                                 disabled="#{tipoPessoaControlador.tipoPessoaSelecionada == null}"
+                                                 title="Editar #{tipoPessoaControlador.tipoPessoaSelecionada.descricao}" 
+                                                 action="#{tipoPessoaControlador.prepararEdicao()}" 
+                                                 ajax="true" />
+                                <p:commandButton id="btnVisualizar" 
+                                                 icon="ui-icon-search" 
+                                                 process="@this"
+                                                 disabled="#{tipoPessoaControlador.tipoPessoaSelecionada == null}"
+                                                 title="Visualizar as informações de: #{tipoPessoaControlador.tipoPessoaSelecionada.descricao}" 
+                                                 action="#{tipoPessoaControlador.prepararVer()}" 
+                                                 ajax="true" />
+                                <p:commandButton id="btnExcluir" 
+                                                 icon="ui-icon-trash" 
+                                                 process="@this"
+                                                 disabled="#{tipoPessoaControlador.tipoPessoaSelecionada == null}"
+                                                 update="tableTipoPessoa toolbarTipoPessoa"
+                                                 action="#{tipoPessoaControlador.excluir()}" 
+                                                 title="Excluir o país: #{tipoPessoaControlador.tipoPessoaSelecionada.descricao} ?" 
+                                                 ajax="true">
+                                    <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+                                               message="Tem certeza que deseja excluir #{tipoPessoaControlador.tipoPessoaSelecionada.descricao}" />
+                                </p:commandButton>
+                            </f:facet>
+                        </p:toolbar>
+                        <br/>
+                        <p:dataTable paginator="true" 
+                                     reflow="true"
+                                     rows="10" 
+                                     resizeMode="fit"
+                                     scrollable="true"
+                                     scrollHeight="255"
+                                     id="tableTipoPessoa" 
+                                     value="#{tipoPessoaControlador.tipoPessoas}" 
+                                     resizableColumns="true"
+                                     var="tipoPessoa" 
+                                     selection="#{tipoPessoaControlador.tipoPessoaSelecionada}"
+                                     selectionMode="single"
+                                     rowKey="#{tipoPessoa.id}"
+                                     emptyMessage="Nenhum registro encontrado">
+                            <p:ajax event="rowSelect" update=":formLista:toolbarTipoPessoa"/>
+                            <p:ajax event="rowUnselect" update=":formLista:toolbarTipoPessoa" />
+                            <f:facet name="header">
+                                Lista de Tipo de Pessoas
+                            </f:facet>
+                            <p:column filterStyle="width: auto" filterBy="#{tipoPessoa.descricao}" headerText="Descrição">
+                                <h:outputText value="#{tipoPessoa.descricao}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                Total de tipos de pessoas: #{tipoPessoaControlador.tipoPessoas.size()}.
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

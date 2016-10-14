@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="formLista" prependId="false">
+                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:panel  id="tpAutor" header="Tipo de Autores">
+                        <p:toolbar id="toolbarTipoAutor">
+                            <f:facet name="left">
+                                <p:commandButton id="botaoNovo" 
+                                                 value="Novo"
+                                                 icon="ui-icon-plus"
+                                                 title="Adicionar novo Tipo de Autor"
+                                                 action="#{tipoAutorControlador.prepararNovo()}" />
+                                <span class="ui-separator">
+                                    <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                </span>
+                                <p:commandButton id="btnEditar" 
+                                                 process="@this"
+                                                 disabled="#{tipoAutorControlador.tipoAutorSelecionado == null}"
+                                                 icon="ui-icon-pencil" 
+                                                 title="Editar #{tipoAutorControlador.tipoAutorSelecionado.descricao}" 
+                                                 action="#{tipoAutorControlador.prepararEdicao()}" 
+                                                 ajax="true"/>
+                                <p:commandButton id="btnVisualizar" 
+                                                 process="@this"
+                                                 disabled="#{tipoAutorControlador.tipoAutorSelecionado == null}"
+                                                 icon="ui-icon-search" 
+                                                 title="Visualizar as informações de: #{tipoAutorControlador.tipoAutorSelecionado.descricao}" 
+                                                 action="#{tipoAutorControlador.prepararVer()}" 
+                                                 ajax="true"/>
+                                <p:commandButton id="btnExcluir" 
+                                                 icon="ui-icon-trash" 
+                                                 disabled="#{tipoAutorControlador.tipoAutorSelecionado == null}"
+                                                 process="@this"
+                                                 update="tableTipoAutor toolbarTipoAutor"
+                                                 action="#{tipoAutorControlador.excluir()}" 
+                                                 title="Excluir o Tipo de Autor: #{tipoAutorControlador.tipoAutorSelecionado.descricao} ?" 
+                                                 ajax="true">
+                                    <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+                                               message="Tem certeza que deseja excluir #{tipoAutorControlador.tipoAutorSelecionado.descricao}" />
+                                </p:commandButton>
+                            </f:facet>
+                        </p:toolbar>
+                        <br/>
+                        <p:dataTable paginator="true" 
+                                     reflow="true"
+                                     rows="10" 
+                                     resizeMode="fit"
+                                     scrollable="true"
+                                     scrollHeight="255"
+                                     id="tableTipoAutor" 
+                                     value="#{tipoAutorControlador.tipoAutores}" 
+                                     resizableColumns="true"
+                                     selection="#{tipoAutorControlador.tipoAutorSelecionado}"
+                                     selectionMode="single"
+                                     rowKey="#{tipoAutor.id}"
+                                     var="tipoAutor" 
+                                     emptyMessage="Nenhum registro encontrado">
+                            <p:ajax event="rowSelect" update=":formLista:toolbarTipoAutor"/>
+                            <p:ajax event="rowUnselect" update=":formLista:toolbarTipoAutor" />
+                            <f:facet name="header">
+                                Lista de Tipo de Autores
+                            </f:facet>
+                            <p:column filterStyle="width: auto" filterBy="#{tipoAutor.descricao}" headerText="Descrição">
+                                <h:outputText value="#{tipoAutor.descricao}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                Total de tipo de autores: #{tipoAutorControlador.tipoAutores.size()}.
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

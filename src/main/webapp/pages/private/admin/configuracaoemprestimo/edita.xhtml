@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="form-user" prependId="false">
+                    <div class="ui-fluid">
+                        <p:panel id="panelConfiguracao" header="#{configuracaoEmprestimoControlador.header}">
+                            <p:tabView id="complemento">
+                                <p:tab id="tabDados" title="Configuração" >
+                                    <p:panel id="config">
+                                        <p:messages id="messagesConfiguracao" autoUpdate="true" closable="true" />
+                                        <p:focus context="panelConfiguracao"/>
+                                        <p:panelGrid id="gridConfiguracao" columns="2"
+                                                     layout="grid" 
+                                                     style="margin-top: 20px; margin-bottom: 40px"
+                                                     columnClasses="ui-grid-col-2, ui-grid-col-11"
+                                                     styleClass="panelgrid-noborder">
+                                            <p:outputLabel value="Tipo Pessoa: " for="tipoPessoa"/>
+                                            <p:autoComplete 
+                                                readonly="#{configuracaoEmprestimoControlador.visualizar}"
+                                                id="tipoPessoa"
+                                                var="tipoPessoa" 
+                                                required="true"
+                                                placeholder="Digite o Tipo de Pessoa"
+                                                completeMethod="#{configuracaoEmprestimoControlador.completaTipoPessoas}" 
+                                                converter="#{configuracaoEmprestimoControlador.converterTipoPessoa}"
+                                                emptyMessage="Nenhum resultado encontrado"
+                                                value="#{configuracaoEmprestimoControlador.configuracaoEmprestimo.tipoPessoa}"
+                                                itemValue="#{tipoPessoa.id}" itemLabel="#{tipoPessoa.toString()}"/>
+                                            <p:outputLabel value="Dias: " for="dias" />
+                                            <p:inputText id="dias" 
+                                                         required="true"
+                                                         placeholder="Dias de Emprestimo"
+                                                         readonly="#{configuracaoEmprestimoControlador.visualizar}"
+                                                         value="#{configuracaoEmprestimoControlador.configuracaoEmprestimo.dias}" />
+                                            <p:outputLabel value="Volumes: " for="volumes" />
+                                            <p:inputText id="volumes" 
+                                                         required="true"
+                                                         placeholder="Quantidade Máx. de Volumes"
+                                                         readonly="#{configuracaoEmprestimoControlador.visualizar}" 
+                                                         value="#{configuracaoEmprestimoControlador.configuracaoEmprestimo.volumes}" />
+                                            <p:outputLabel value="Data de Vigência: " for="dtvig" />
+                                            <p:calendar id="dtvig"
+                                                        placeholder="Data de Vigência Final"
+                                                        readonly="#{configuracaoEmprestimoControlador.visualizar}" 
+                                                        value="#{configuracaoEmprestimoControlador.configuracaoEmprestimo.vigencia}" pattern="dd/MM/yyyy" mask="true" />
+                                        </p:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+                                <p:tab id="tabPen" title="Penalidades" >
+                                    <p:panel id="panelPenalidades" header="#{configuracaoEmprestimoControlador.header}">
+                                        <p:panelGrid id="gridPenalidades" columns="2"
+                                                     layout="grid" 
+                                                     style="margin-top: 20px; margin-bottom: 40px"
+                                                     columnClasses="ui-grid-col-2, ui-grid-col-11"
+                                                     styleClass="panelgrid-noborder">
+
+                                            <p:outputLabel value="Penalidade: " for="penalidade" />
+                                            <p:autoComplete 
+                                                readonly="#{configuracaoEmprestimoControlador.visualizar}"
+                                                id="penalidade"
+                                                var="penalidade" 
+                                                placeholder="Digite a Penalidade"
+                                                completeMethod="#{configuracaoEmprestimoControlador.completaPenalidades}" 
+                                                converter="#{configuracaoEmprestimoControlador.converterPenalidade}"
+                                                emptyMessage="Nenhum resultado encontrado"
+                                                value="#{configuracaoEmprestimoControlador.penalidade}"
+                                                itemValue="#{penalidade.id}" itemLabel="#{penalidade.toString()}"/>
+                                        </p:panelGrid>
+                                        <p:commandButton disabled="#{configuracaoEmprestimoControlador.visualizar}"
+                                                         action="#{configuracaoEmprestimoControlador.adicionaPenalidade}"
+                                                         id="addPenal" icon="ui-icon-plus" 
+                                                         title="Adicionar Penalidade"
+                                                         value="Adicionar" 
+                                                         process="@parent"
+                                                         update="panelPenalidades"/>
+                                        <br/>
+                                        <br/>
+                                        <p:dataTable id="tablePenal" 
+                                                     var="penal" 
+                                                     paginator="true" 
+                                                     reflow="true"
+                                                     rows="10" 
+                                                     resizableColumns="true"
+                                                     value="#{configuracaoEmprestimoControlador.configuracaoEmprestimo.penalidades}" 
+                                                     emptyMessage="Nenhum registro encontrado">
+                                            <f:facet name="header">
+                                                Lista de Penalidades
+                                            </f:facet>
+                                            <p:column filterStyle="width: auto" filterBy="#{penal.descricao}" headerText="Descrição">
+                                                <h:outputText value="#{penal.descricao}" />
+                                            </p:column>
+                                            <p:column style="width: 140px" headerText="Gerencial">
+                                                <p:commandButton disabled="#{configuracaoEmprestimoControlador.visualizar}" id="btnExcluir" icon="ui-icon-trash" update="tablePenal" ajax="true"/>
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </p:panel>
+                                </p:tab>
+                            </p:tabView>
+                        </p:panel>
+                        <p:separator/>
+                        <p:panelGrid id="gridBotoes" columns="2"
+                                     layout="grid"
+                                     style="margin-top: 20px; margin-bottom: 40px"
+                                     columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                     styleClass="panelgrid-noborder">
+                            <p:commandButton process="@this,complemento:tabDados" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{configuracaoEmprestimoControlador.salvar()}" 
+                                             ajax="true" update="@form" disabled="#{configuracaoEmprestimoControlador.visualizar}"/>
+                            <p:commandButton process="@this" id="botaoCancelar" icon="ui-icon-close" value="Cancelar" action="#{configuracaoEmprestimoControlador.prepararLista()}" ajax="true" />
+                        </p:panelGrid>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

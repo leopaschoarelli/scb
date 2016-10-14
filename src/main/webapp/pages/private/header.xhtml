@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"    
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:form>
+        <b:container fluid="true">
+            <a href="#" style="visibility: collapse" class="navbar-right dropdown-toggle" data-toggle="dropdown">
+                <i style="visibility: collapse" class="fa fa-envelope-o"></i>    
+            </a>
+            <p:accordionPanel styleClass="btn-default navbar-right" style="width: 200px;text-align: center" activeIndex="1" dynamic="true">
+                <p:tab titletip="Opções" titleStyle="font-size: 13px" titleStyleClass="center-block fa fa-home" closable="true" title=" Perfil">
+                    <li class="user-header">
+                        <center>
+                            <h:graphicImage height="100" library="images" name="user.png" class="img-circle" alt="User Image"/>
+                            <h4>
+                                Usuário
+                            </h4>
+                        </center>
+                    </li>
+                    <li class="user-footer">
+                        <div class="pull-left">
+                            <p:commandButton id="perfil" 
+                                             process="@this"
+                                             value="Perfil"
+                                             action="/index.xhtml" 
+                                             icon="ui-icon-person"  />
+                        </div>
+                        <div class="pull-right">
+                            <form action="${request.contextPath}/applogout" method="POST">
+                                <p:commandButton id="logout" 
+                                                 value="Logout"
+                                                 type="submit"
+                                                 ajax="false"
+                                                 icon="ui-icon-power"  >
+                                </p:commandButton>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>		
+                            </form> 
+                        </div>
+                    </li>
+                </p:tab>
+            </p:accordionPanel>
+
+
+        </b:container>
+    </h:form>
+</ui:composition>
+

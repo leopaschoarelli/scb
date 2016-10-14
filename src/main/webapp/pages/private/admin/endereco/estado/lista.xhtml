@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="formLista" prependId="false">
+                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:panel  id="estado" header="Estados">
+                        <p:toolbar id="toolbarEstado">
+                            <f:facet name="left">
+                                <p:commandButton ajax="true" 
+                                                 value="Novo" 
+                                                 icon="ui-icon-plus"
+                                                 title="Adicionar novo estado"
+                                                 action="#{estadoControlador.prepararNovo()}" />
+                                
+                                <span class="ui-separator">
+                                    <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                </span>
+                                    
+                                <p:commandButton id="btnEditar" 
+                                                 icon="ui-icon-pencil" 
+                                                 process="@this"
+                                                 disabled="#{estadoControlador.estadoSelecionado == null}"
+                                                 action="#{estadoControlador.prepararEdicao()}" 
+                                                 ajax="true" />
+                                <p:commandButton id="btnVisualizar" 
+                                                 icon="ui-icon-search"
+                                                 process="@this"
+                                                 disabled="#{estadoControlador.estadoSelecionado == null}"
+                                                 action="#{estadoControlador.prepararVer()}" 
+                                                 ajax="true" />
+                                <p:commandButton id="btnExcluir" 
+                                                 icon="ui-icon-trash" 
+                                                 process="@this"
+                                                 disabled="#{estadoControlador.estadoSelecionado == null}"
+                                                 update="tableEstado toolbarEstado"
+                                                 action="#{estadoControlador.excluir}" 
+                                                 ajax="true">
+                                    <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+                                               message="Tem certeza que deseja excluir #{estadoControlador.estadoSelecionado.nome}" />
+                                </p:commandButton>
+                            </f:facet>
+                        </p:toolbar>
+                        <br/>
+                        <p:dataTable paginator="true" 
+                                     rows="10" 
+                                     reflow="true"
+                                     resizeMode="fit"
+                                     scrollable="true"
+                                     scrollHeight="255"
+                                     id="tableEstado" 
+                                     value="#{estadoControlador.estados}" 
+                                     resizableColumns="true"
+                                     selection="#{estadoControlador.estadoSelecionado}"
+                                     selectionMode="single"
+                                     rowKey="#{estado.id}"
+                                     var="estado" 
+                                     emptyMessage="Nenhum registro encontrado">
+                            
+                            <p:ajax event="rowSelect" update=":formLista:toolbarEstado"/>
+                            <p:ajax event="rowUnselect" update=":formLista:toolbarEstado" />
+                            <f:facet name="header">
+                                Lista de Estados
+                            </f:facet>
+                            <p:column filterStyle="width: auto" filterBy="#{estado.nome}" headerText="Nome">
+                                <h:outputText value="#{estado.nome}" />
+                            </p:column>
+                            <p:column filterStyle="width: auto" filterBy="#{estado.uf}" headerText="UF">
+                                <h:outputText value="#{estado.uf}" />
+                            </p:column>
+                            <p:column filterStyle="width: auto" filterBy="#{estado.pais.nome}" headerText="País">
+                                <h:outputText value="#{estado.pais.nome}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                Total de estados: #{estadoControlador.estados.size()}.
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

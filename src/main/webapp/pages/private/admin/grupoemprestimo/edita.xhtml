@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="form-user" prependId="false">
+                    <div class="ui-fluid">
+                        <p:panel id="panelGrp" header="#{grupoEmprestimoControlador.header}">
+                            <p:messages id="messagesGrp" autoUpdate="true" closable="true" />
+                            <p:focus context="panelGrp"/>
+                            <p:tabView id="grp">
+                                <p:tab id="tabDados" title="Nome">
+                                    <p:panel id="panelNome">
+                                        <p:panelGrid id="gridNome" columns="2"
+                                                     layout="grid" 
+                                                     style="margin-top: 20px; margin-bottom: 40px"
+                                                     columnClasses="ui-grid-col-1, ui-grid-col-11">
+                                            <p:outputLabel value="Nome: " for="nome" />
+                                            <p:inputText id="nome" 
+                                                         required="true"
+                                                         placeholder="Nome do Grupo de Emprestimo"
+                                                         readonly="#{grupoEmprestimoControlador.visualizar}" 
+                                                         value="#{grupoEmprestimoControlador.grupoEmprestimo.nome}" />
+                                        </p:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+                                <p:tab title="Pessoas">
+                                    <p:panel id="panelPessoa">
+                                        <p:panelGrid id="gridPessoa" columns="2"
+                                                     layout="grid" 
+                                                     style="margin-top: 20px; margin-bottom: 40px"
+                                                     columnClasses="ui-grid-col-2, ui-grid-col-10">
+                                            <p:outputLabel value="Tipo de Pessoa: " for="tipoPessoa" />
+                                            <p:autoComplete 
+                                                readonly="#{grupoEmprestimoControlador.visualizar}"
+                                                id="tipoPessoa"
+                                                var="tipoPessoa" 
+                                                required="true"
+                                                placeholder="Digite o Tipo de Pessoa"
+                                                completeMethod="#{grupoEmprestimoControlador.completaTipoPessoa}" 
+                                                converter="#{grupoEmprestimoControlador.converterTipoPessoa}"
+                                                emptyMessage="Nenhum resultado encontrado"
+                                                value="#{grupoEmprestimoControlador.tipoPessoa}"
+                                                itemValue="#{tipoPessoa.id}" itemLabel="#{tipoPessoa.toString()}"/>
+                                        </p:panelGrid>
+                                        <p:commandButton disabled="#{grupoEmprestimoControlador.visualizar}" 
+                                                         action="#{grupoEmprestimoControlador.adicionaTipoPessoa}" 
+                                                         id="addTpPes" 
+                                                         icon="ui-icon-plus" 
+                                                         value="Adicionar" 
+                                                         process="@parent"
+                                                         title="Adicionar Tipo de Pessoa"
+                                                         update="panelPessoa"/>
+                                        <br/>
+                                        <br/>
+                                        <p:dataTable id="tableTp" 
+                                                     var="tp" 
+                                                     paginator="true" 
+                                                     reflow="true"
+                                                     rows="10" 
+                                                     resizableColumns="true"
+                                                     value="#{grupoEmprestimoControlador.grupoEmprestimo.tipoPessoas}" 
+                                                     emptyMessage="Nenhum registro encontrado">
+                                            <f:facet name="header">
+                                                Lista de Pessoas
+                                            </f:facet>
+                                            <p:column filterStyle="width: auto" filterBy="#{tp.descricao}" headerText="Descrição">
+                                                <h:outputText value="#{tp.descricao}" />
+                                            </p:column>
+                                            <p:column style="width: 140px" headerText="Gerencial">
+                                                <p:commandButton disabled="#{grupoEmprestimoControlador.visualizar}" id="btnExcluir" action="#{grupoEmprestimoControlador.excluirTipoPessoa(tp)}" icon="ui-icon-trash" update="tableTp" ajax="true"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:panel>
+                                </p:tab>
+                                <p:tab title="Obras">
+                                    <p:panel id="panelObra">
+                                        <p:panelGrid id="gridObra" columns="2"
+                                                     layout="grid" 
+                                                     style="margin-top: 20px; margin-bottom: 40px"
+                                                     columnClasses="ui-grid-col-2, ui-grid-col-10">
+                                            <p:outputLabel value="Obra Literaria: " for="publicacao" />
+                                            <p:autoComplete 
+                                                readonly="#{grupoEmprestimoControlador.visualizar}"
+                                                id="publicacao"
+                                                var="publicacao" 
+                                                placeholder="Digite a Publicação"
+                                                completeMethod="#{grupoEmprestimoControlador.completaPublicacoes}" 
+                                                converter="#{grupoEmprestimoControlador.converterPublicacao}"
+                                                emptyMessage="Nenhum resultado encontrado"
+                                                value="#{grupoEmprestimoControlador.publicacao}"
+                                                itemValue="#{publicacao.id}" itemLabel="#{publicacao.toString()}"/>
+                                        </p:panelGrid>
+                                        <p:commandButton disabled="#{grupoEmprestimoControlador.visualizar}" 
+                                                         action="#{grupoEmprestimoControlador.adicionaPublicacao}" 
+                                                         id="addObra" 
+                                                         icon="ui-icon-plus" 
+                                                         value="Adicionar" 
+                                                         process="@parent"
+                                                         title="Adicionar Publicação"
+                                                         update="panelObra"/>
+                                        <br/>
+                                        <br/>
+                                        <p:dataTable id="tableObra" 
+                                                     var="pub" 
+                                                     paginator="true" 
+                                                     reflow="true"
+                                                     rows="10" 
+                                                     resizableColumns="true"
+                                                     value="#{grupoEmprestimoControlador.grupoEmprestimo.grupoPublicacoes}" 
+                                                     emptyMessage="Nenhum registro encontrado">
+                                            <f:facet name="header">
+                                                Lista de Obras
+                                            </f:facet>
+                                            <p:column filterStyle="width: auto" filterBy="#{pub.tipoPublicacao.descricao}" headerText="Tipo de Obra">
+                                                <h:outputText value="#{pub.tipoPublicacao.descricao}" />
+                                            </p:column>
+                                            <p:column filterStyle="width: auto" filterBy="#{pub.titulo}" headerText="Título">
+                                                <h:outputText value="#{pub.titulo}" />
+                                            </p:column>
+                                            <p:column filterStyle="width: auto" filterBy="#{pub.subtitulo}" headerText="Subtitulo">
+                                                <h:outputText value="#{pub.subtitulo}" />
+                                            </p:column>
+                                            <p:column filterStyle="width: auto" filterBy="#{pub.categoria.descricao}" headerText="Categoria">
+                                                <h:outputText value="#{pub.categoria.descricao}" />
+                                            </p:column>
+                                            <p:column style="width: 140px" headerText="Gerencial">
+                                                <p:commandButton process="@this" disabled="#{grupoEmprestimoControlador.visualizar}" id="btnExcluir" action="#{grupoEmprestimoControlador.excluirPublicacao(pub)}" icon="ui-icon-trash" update="tableObra" ajax="true"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:panel>
+                                </p:tab>
+                            </p:tabView>
+                            <p:panelGrid id="gridBotoes" columns="2"
+                                         layout="grid"
+                                         style="margin-top: 20px; margin-bottom: 40px"
+                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                         styleClass="panelgrid-noborder">
+                                <p:commandButton process="@this,grp:tabDados"
+                                                 id="botaoSalvar" 
+                                                 icon="ui-icon-check" 
+                                                 value="Salvar" 
+                                                 action="#{grupoEmprestimoControlador.salvar}" 
+                                                 update="@form" disabled="#{grupoEmprestimoControlador.visualizar}"/>
+                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{grupoEmprestimoControlador.prepararLista}" update="@form" />
+                            </p:panelGrid>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

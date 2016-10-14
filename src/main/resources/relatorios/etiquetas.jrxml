@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="etiquetas" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef590405-9a0e-4417-99e9-c55b139ce7d6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SQL" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select a.cdd,a.cutter,b.tombo,b.numexe from publicacao a, exemplar b
+where b.publicacao_id = a.id
+and 1=1 $P!{SQL}]]>
+	</queryString>
+	<field name="tombo" class="java.lang.String"/>
+	<field name="cdd" class="java.lang.String"/>
+	<field name="cutter" class="java.lang.String"/>
+	<field name="numexe" class="java.lang.String"/>
+	<detail>
+		<band height="122" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="10" width="270" height="96" uuid="9fc5ef20-6473-42ec-afe7-4e8b12f4db8b"/>
+			</rectangle>
+			<elementGroup>
+				<textField>
+					<reportElement x="121" y="86" width="138" height="20" uuid="8db7cbb4-f908-4dcf-982b-12980714f458"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{tombo}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<rectangle>
+				<reportElement x="0" y="10" width="270" height="21" uuid="024b0a05-7c03-4ae1-a871-a9b3149a75a6"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="11" width="270" height="20" uuid="07a2e728-d10f-433e-a624-f06c65553efa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Colégio Estadual José Luiz Gori - Biblioteca]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="31" width="111" height="75" uuid="54826458-9c90-4b5d-ba37-f6b11a1c1a0d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="31" width="111" height="26" uuid="e3060dd0-7dd4-4030-b6dc-7772fe15ae1b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="80" width="111" height="26" uuid="58532ddd-cf68-455a-b696-31a15672a6e8"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="80" width="44" height="26" uuid="95109dd4-c806-4cae-b4f5-78ccc1997474"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Exem]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="44" y="80" width="67" height="26" uuid="2fd0d250-ef17-47e8-a434-170de6bad65a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{numexe}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="57" width="44" height="23" uuid="26126f9d-62e9-4766-a16e-47f4bdc6e8b6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cutter]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="44" y="57" width="67" height="23" uuid="900791b5-76fc-4850-a434-722a5d454ffd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cutter}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="31" width="44" height="26" uuid="1a57f189-3f81-433c-a8b4-38aca1211331"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CDD]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="44" y="31" width="67" height="26" uuid="8139d447-79b2-49d9-95f9-d437529efd38"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cdd}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="-29" y="121" width="663" height="1" uuid="164bb000-c3cb-4425-8541-cb2287dbaae7"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<componentElement>
+				<reportElement mode="Transparent" x="121" y="42" width="138" height="44" uuid="8fe9f760-e3cf-400c-b370-b7e387a47472"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39 (Extended)" drawText="false" checksumRequired="false" barWidth="0" barHeight="0">
+					<jr:codeExpression><![CDATA[$F{tombo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

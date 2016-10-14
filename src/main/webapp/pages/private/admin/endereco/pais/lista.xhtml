@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="formLista" prependId="false">
+                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:panel  id="pais" header="Países">
+                        <p:toolbar id="toolbarPais"  >
+                            <f:facet name="left">
+                                <p:commandButton id="botaoNovo" 
+                                                 value="Novo" 
+                                                 icon="ui-icon-plus" 
+                                                 ajax="true"
+                                                 title="Adicionar novo país"
+                                                 action="#{paisControlador.prepararNovo}" />
+
+                                <span class="ui-separator">
+                                    <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                </span>
+
+                                <p:commandButton id="btnEditar" 
+                                                 icon="ui-icon-pencil"
+                                                 disabled="#{paisControlador.paisSelecionado == null}"
+                                                 process="@this"
+                                                 title="Editar" 
+                                                 action="#{paisControlador.prepararEdicao}" 
+                                                 ajax="true">
+                                </p:commandButton>
+                                <p:commandButton id="btnVisualizar" 
+                                                 icon="ui-icon-search" 
+                                                 process="@this"
+                                                 disabled="#{paisControlador.paisSelecionado == null}"
+                                                 title="Visualizar as informações de: #{pais.nome}" 
+                                                 action="#{paisControlador.prepararVer}" 
+                                                 ajax="true" />
+                                <p:commandButton id="btnExcluir" 
+                                                 icon="ui-icon-trash" 
+                                                 process="@this"
+                                                 update="tablePais toolbarPais"
+                                                 disabled="#{paisControlador.paisSelecionado == null}"
+                                                 action="#{paisControlador.excluir}" 
+                                                 title="Excluir o país?" 
+                                                 ajax="true">
+                                    <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+                                               message="Tem certeza que deseja excluir #{paisControlador.paisSelecionado.nome}" />
+                                </p:commandButton>
+                            </f:facet>
+                        </p:toolbar>
+                        <br/>
+                        <p:dataTable paginator="true" 
+                                     reflow="true"
+                                     rows="10"
+                                     resizeMode="fit"
+                                     scrollable="true"
+                                     scrollHeight="255"
+                                     id="tablePais" 
+                                     value="#{paisControlador.paises}"
+                                     selection="#{paisControlador.paisSelecionado}"
+                                     rowKey="#{pais.id}"
+                                     selectionMode="single"
+                                     resizableColumns="true"
+                                     var="pais" 
+                                     emptyMessage="Nenhum registro encontrado">
+                            <p:ajax event="rowSelect" update=":formLista:toolbarPais"/>
+                            <p:ajax event="rowUnselect" update=":formLista:toolbarPais" />
+                            <f:facet name="header">
+                                Lista de Países
+                            </f:facet>
+                            <p:column filterStyle="width: auto" filterBy="#{pais.nome}" headerText="Nome">
+                                <h:outputText value="#{pais.nome}" />
+                            </p:column>
+                            <p:column filterStyle="width: auto" filterBy="#{pais.sigla}" headerText="Sigla">
+                                <h:outputText value="#{pais.sigla}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                Total de países: #{paisControlador.paises.size()}.
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

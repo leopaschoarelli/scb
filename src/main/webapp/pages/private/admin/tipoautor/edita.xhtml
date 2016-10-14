@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="form-user" prependId="false">
+                    <div class="ui-fluid">
+                        <p:panel id="panelTpAutor" header="#{tipoAutorControlador.header}">
+                            <p:messages id="messagesTpAutor" showDetail="true" closable="true" autoUpdate="true" />
+                            <p:focus context="panelTpAutor"/>
+                            <p:panelGrid id="gridTpAutor" 
+                                         columns="2"
+                                         layout="grid" 
+                                         style="margin-top: 20px; margin-bottom: 40px"
+                                         columnClasses="ui-grid-col-1, ui-grid-col-11">
+                                <p:outputLabel value="Descrição: " for="descricao" />
+                                <p:inputText id="descricao" 
+                                             required="true"
+                                             placeholder="Descrição Tipo do Autor"
+                                             readonly="#{tipoAutorControlador.visualizar}" 
+                                             value="#{tipoAutorControlador.tipoAutor.descricao}" />
+                            </p:panelGrid>
+                            <p:separator/>
+                            <p:panelGrid id="gridBotoes" columns="2"
+                                         layout="grid"
+                                         style="margin-top: 20px; margin-bottom: 40px"
+                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                         styleClass="panelgrid-noborder">
+                                <p:commandButton id="botaoSalvar" process="@form" icon="ui-icon-check" value="Salvar" action="#{tipoAutorControlador.salvar()}" 
+                                                 update="@form" disabled="#{tipoAutorControlador.visualizar}"/>
+                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{tipoAutorControlador.prepararLista()}" update="@form" />
+                            </p:panelGrid>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition template="/pages/private/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="form-user" prependId="false" >
+                    <div class="ui-fluid">
+                        <p:panel id="panelReserva" header="#{reservaControlador.header}">
+                            <p:messages   id="messagesReserva" autoUpdate="true" />
+                            <p:focus context="panelReserva"/>
+                            <p:panelGrid id="gridReserva" 
+                                         columns="3"
+                                         layout="grid" 
+                                         style="margin-top: 5px; margin-bottom: 10px"
+                                         columnClasses="ui-grid-col-2, ui-grid-col-3, ui-grid-col-7">
+
+                                <p:outputLabel value="Pessoa: " for="pessoa" />
+                                <p:autoComplete 
+                                    readonly="#{reservaControlador.visualizar}"
+                                    id="pessoa"
+                                    var="pessoa" 
+                                    forceSelection="true"
+                                    completeMethod="#{reservaControlador.completaPessoa}" 
+                                    converter="#{reservaControlador.converterPessoa}"
+                                    emptyMessage="Nenhum resultado encontrado"
+                                    value="#{reservaControlador.reserva.pessoa}"
+                                    itemValue="#{pessoa.id}" itemLabel="#{pessoa.toString()}">
+                                    <p:ajax event="keyup"
+                                            update="addObra tableRes"
+                                            listener="#{reservaControlador.recuperaEmprestimoReserva('Sim')}"/>
+                                    <p:ajax event="itemSelect"
+                                            update="addObra tableRes"
+                                            listener="#{reservaControlador.recuperaEmprestimoReserva('Sim')}"/>
+                                </p:autoComplete>
+                                <p:outputLabel />
+
+                                <p:outputLabel value="Obra: " for="obra" />
+                                <p:autoComplete 
+                                    id="obra"
+                                    var="obra" 
+                                    forceSelection="true"
+                                    completeMethod="#{reservaControlador.completaPublicacao}" 
+                                    converter="#{reservaControlador.converterPublicacao}"
+                                    emptyMessage="Nenhum resultado encontrado"
+                                    value="#{reservaControlador.itemReserva.publicacao}"
+                                    itemValue="#{obra.id}" itemLabel="#{obra.toString()}">
+                                </p:autoComplete>
+
+                                <p:outputLabel/>
+
+                                <p:outputLabel value="Data Prevista: " for="dtPrevista" />
+                                <p:calendar id="dtPrevista"
+                                            readonly="#{reservaControlador.visualizar}" 
+                                            value="#{reservaControlador.itemReserva.previsao}" 
+                                            mask="true" 
+                                            pattern="dd/MM/yyyy" />
+                                            
+                                <p:outputLabel />
+                            </p:panelGrid>
+
+                            <p:commandButton  
+                                disabled="#{reservaControlador.reservar == false}" 
+                                actionListener="#{reservaControlador.adicionaReserva()}" 
+                                id="addObra" 
+                                icon="ui-icon-plus" 
+                                process="@form"
+                                value="Adicionar" 
+                                update="panelReserva tableRes messagesReserva addObra"
+                                title="Adicionar Reserva"/>
+
+                            <p:dataTable id="tableRes" 
+                                         var="itemres" 
+                                         paginator="true" 
+                                         reflow="true"
+                                         rows="5" 
+                                         style="margin-top: 10px"
+                                         resizableColumns="true"
+                                         value="#{reservaControlador.reserva.itemReserva}" 
+                                         emptyMessage="Nenhum registro encontrado">
+
+                                <p:column headerText="Publicação">
+                                    <h:outputText value="#{itemres.publicacao.titulo}" />
+                                </p:column>
+
+                                <p:column headerText="Data Reserva">
+                                    <h:outputText value="#{itemres.reserva.criacao}">
+                                        <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Data Previsão de Emprestimo">
+                                    <h:outputText value="#{itemres.previsao}">
+                                        <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                        <p:separator/>
+                        <p:panelGrid id="gridBotoes" columns="2"
+                                     layout="grid"
+                                     columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                     styleClass="panelgrid-noborder">
+                            <p:commandButton id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{reservaControlador.salvar}" 
+                                             update="@form" disabled="#{reservaControlador.visualizar}"/>
+                            <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{reservaControlador.prepararLista()}" update="@form" />
+
+                        </p:panelGrid>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
