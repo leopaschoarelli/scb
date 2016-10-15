@@ -52,13 +52,24 @@ public class ItemReservaDAOImpl extends AbstractDAO<ItemReserva> implements Item
         return q.getResultList();
     }
 
+    public List<ItemReserva> reservasAbertasPessoa(Pessoa pessoa) {
+        String sql = "select b.* from reserva a, itemreserva b "
+                + "where a.id = b.reserva_id "
+                + "and (b.efetivado = 'false' or b.efetivado is null) "
+                + "and b.previsao = current_date "
+                + "and a.pessoa_id = :parte ";
+        Query q = getEntityManager().createNativeQuery(sql, ItemReserva.class);
+        q.setParameter("parte", pessoa.getId());
+        return q.getResultList();
+    }
+
     public List<ItemReserva> filtrarReservas(String publicacao, String pessoa, Date dataInicial, Date dataFinal) {
         String sql = "select b.* from reserva a, itemreserva b, publicacao c, pessoa d "
                 + "where b.reserva_id = a.id "
                 + "and b.publicacao_id = c.id "
                 + "and a.pessoa_id = d.id ";
         if (!"".equals(publicacao)) {
-            System.out.println("Publicação: "+publicacao);
+            System.out.println("Publicação: " + publicacao);
             sql = sql + "and lower(c.titulo) like :publicacao ";
         }
         if (!"".equals(pessoa)) {

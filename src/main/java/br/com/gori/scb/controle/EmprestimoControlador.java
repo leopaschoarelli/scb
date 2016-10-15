@@ -6,6 +6,7 @@ import br.com.gori.scb.dao.impl.ConfiguracaoEmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.EmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.ExemplarDAOImpl;
 import br.com.gori.scb.dao.impl.ItemEmprestimoDAOImpl;
+import br.com.gori.scb.dao.impl.ItemReservaDAOImpl;
 import br.com.gori.scb.dao.impl.PessoaDAOImpl;
 import br.com.gori.scb.dao.impl.PublicacaoDAOImpl;
 import br.com.gori.scb.entidade.ComprovanteEmprestimo;
@@ -13,6 +14,7 @@ import br.com.gori.scb.entidade.ConfiguracaoEmprestimo;
 import br.com.gori.scb.entidade.Emprestimo;
 import br.com.gori.scb.entidade.Exemplar;
 import br.com.gori.scb.entidade.ItemEmprestimo;
+import br.com.gori.scb.entidade.ItemReserva;
 import br.com.gori.scb.entidade.Pessoa;
 import br.com.gori.scb.entidade.Publicacao;
 import br.com.gori.scb.entidade.util.EstadoExemplar;
@@ -41,7 +43,10 @@ public class EmprestimoControlador implements Serializable {
     private List<ItemEmprestimo> emprestimoFiltrado;
     private List<ItemEmprestimo> itensSelecionados;
     private List<ItemEmprestimo> itensEmprestado;
-
+    private List<ItemReserva> reservasAbertas;
+    private ItemReserva itemReserva;
+    private ItemReservaDAOImpl itemReservaDAO;
+    
     private EmprestimoDAOImpl emprestimoDAO;
     private ItemEmprestimo itemEmprestimo;
     private ItemEmprestimoDAOImpl itemEmprestimoDAO;
@@ -99,6 +104,7 @@ public class EmprestimoControlador implements Serializable {
         this.exemplarFiltro = new Exemplar();
         this.exemplaresFiltrados = new ArrayList<Exemplar>();
         this.exemplarDrop = new ArrayList<Exemplar>();
+        this.reservasAbertas = new  ArrayList<>();
         this.obra = "";
         this.emprestar = true;
         this.prazo = new Date();
@@ -107,6 +113,8 @@ public class EmprestimoControlador implements Serializable {
         this.configuracaoDAO = new ConfiguracaoEmprestimoDAOImpl();
         this.comprovante = new ComprovanteEmprestimo();
         this.comprovanteDAO = new ComprovanteDAOImpl();
+        this.itemReserva = new ItemReserva();
+        this.itemReservaDAO = new ItemReservaDAOImpl();
     }
 
     public void salvarSemSair() {
@@ -306,21 +314,25 @@ public class EmprestimoControlador implements Serializable {
         if ("Sim".equals(novo)) {
             emprestar = true;
             qtdEmprestada = 0;
-            itensEmprestado = new ArrayList<ItemEmprestimo>();
+            itensEmprestado = new ArrayList<>();
+            reservasAbertas = new ArrayList<>();
+            exemplarDrop.clear();
+            exemplaresFiltrados.clear();
         }
         Date dataDevol;
         dataDevol = null;
         if (emprestimo != null) {
             Pessoa pessoa = emprestimo.getPessoa();
             if (pessoa != null) {
-                nome = pessoa.getNome();
-                configEmprestimo = configuracaoDAO.buscarDiasEmprestimoPessoa(nome);
+                String nomePessoa = pessoa.getNome();
+                configEmprestimo = configuracaoDAO.buscarDiasEmprestimoPessoa(nomePessoa);
                 Integer dias = configEmprestimo.getDias();
                 qtdLimiteEmp = configEmprestimo.getVolumes();
                 if (itensEmprestado.isEmpty()) {
-                    itensEmprestado = emprestimoDAO.recuperarEmprestimosPessoa(nome);
+                    itensEmprestado = emprestimoDAO.recuperarEmprestimosPessoa(nomePessoa);
                 }
-                qtdEmprestada = emprestimoDAO.buscarQtdEmprestadaPessoa(nome);
+                qtdEmprestada = emprestimoDAO.buscarQtdEmprestadaPessoa(nomePessoa);
+                reservasAbertas = itemReservaDAO.reservasAbertasPessoa(pessoa);
                 validaQtdEmprestimo();
                 dataDevol = new Date();
                 dataDevol = addDays(dataDevol, dias);
@@ -329,6 +341,14 @@ public class EmprestimoControlador implements Serializable {
         itemEmprestimo.setPrazo(dataDevol);
     }
 
+    public void onEfetivaReserva(ItemReserva reserva){
+        this.itemReserva = new ItemReserva();
+        this.itemReserva = reserva;
+        this.itemReserva.setEfetivado(true);
+        this.reservasAbertas.remove(reserva);
+        this.exemplaresFiltrados = emprestimoDAO.getExemplares(this.itemReserva.getPublicacao().getId());
+    }
+    
     public void onExemplarAdiciona() {
         exemplarDrop.add(itemEmprestimo.getExemplar());
 //        itemEmprestimo.setPrazo(prazo);
@@ -619,4 +639,30 @@ public class EmprestimoControlador implements Serializable {
         this.comprovanteDAO = comprovanteDAO;
     }
 
+    public List<ItemReserva> getReservasAbertas() {
+        return reservasAbertas;
+    }
+
+    public void setReservasAbertas(List<ItemReserva> reservasAbertas) {
+        this.reservasAbertas = reservasAbertas;
+    }
+
+    public ItemReserva getItemReserva() {
+        return itemReserva;
+    }
+
+    public void setItemReserva(ItemReserva itemReserva) {
+        this.itemReserva = itemReserva;
+    }
+
+    public ItemReservaDAOImpl getItemReservaDAO() {
+        return itemReservaDAO;
+    }
+
+    public void setItemReservaDAO(ItemReservaDAOImpl itemReservaDAO) {
+        this.itemReservaDAO = itemReservaDAO;
+    }
+
+    
+    
 }

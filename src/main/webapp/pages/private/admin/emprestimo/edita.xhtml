@@ -17,7 +17,7 @@
                                          columns="2"
                                          layout="grid"
                                          styleClass="panelgrid-noborder"
-                                         style="margin-top: 5px; margin-bottom: 10px"
+                                         style="margin-top: 5px; margin-bottom: 1px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6">
                                 <p:panelGrid columns="2" id="camposEmp"
                                              styleClass="panelgrid-noborder"
@@ -36,7 +36,7 @@
                                         value="#{emprestimoControlador.emprestimo.pessoa}"
                                         itemValue="#{pessoa.id}" itemLabel="#{pessoa.toString()}">
                                         <p:ajax event="keyup"
-                                                update="addExem dtDevolucao"
+                                                update="addExem dtDevolucao tableRes gridEmp"
                                                 listener="#{emprestimoControlador.validaDiasDevolucao('Sim')}"/>
                                     </p:autoComplete>
                                     <p:outputLabel value="Obra: " for="obra" />
@@ -77,11 +77,10 @@
 
                                     <p:outputLabel value="Data Devolução: " for="dtDevolucao" />
                                     <p:calendar id="dtDevolucao"
-                                                readonly="#{emprestimoControlador.visualizar}" 
+                                                readonly="true" 
                                                 value="#{emprestimoControlador.itemEmprestimo.prazo}" 
                                                 pattern="dd/MM/yyyy" 
                                                 mask="true" >
-                                        <p:ajax event="dateSelect" listener="#{emprestimoControlador.onDataPrazoSelect}" />
                                     </p:calendar>
                                 </p:panelGrid>
                                 <p:dataTable id="tableRes"
@@ -93,19 +92,22 @@
                                              resizeMode="fit"
                                              scrollable="true"
                                              scrollHeight="60"
+                                             value="#{emprestimoControlador.reservasAbertas}"
                                              emptyMessage="Nenhum registro encontrado">
                                     <f:facet name="header">
                                         Reservas Abertas
                                     </f:facet>
-                                    <p:column filterStyle="width: auto" filterBy="#" headerText="Publicação">
-                                        <h:outputText value="#" />
+                                    <p:column filterStyle="width: auto" headerText="Publicação">
+                                        <h:outputText value="#{itemreserva.publicacao.titulo}" />
                                     </p:column>
-                                    <p:column filterStyle="width: auto" filterBy="#" headerText="Data Prevista">
-                                        <h:outputText value="#" />
+                                    <p:column filterStyle="width: auto" headerText="Data Prevista">
+                                        <h:outputText value="#{itemreserva.previsao}">
+                                            <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                        </h:outputText>
                                     </p:column>
-                                    <f:facet name="footer">
-                                        Total de reservas: .
-                                    </f:facet>
+                                    <p:column style="width: auto" headerText="Gerencial">
+                                        <p:commandButton id="btnEfetiva" icon="ui-icon-check" update="tableRes gridEmp" action="#{emprestimoControlador.onEfetivaReserva(itemreserva)}"/>
+                                    </p:column>
                                 </p:dataTable>
                             </p:panelGrid>
                             <p:commandButton  

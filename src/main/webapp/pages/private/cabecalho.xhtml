@@ -7,9 +7,13 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
         <ui:composition>
+            
             <h:form>  
+                <p:commandButton style="width: 99%" 
+                                 value="Inicio" 
+                                 icon="ui-icon-home"
+                                 action="/pages/private/indexscb.xhtml"/>
                 <p:panelMenu stateful="false" id="menu" >
-
                     <p:submenu label="Colégio" icon="ui-icon-folder-open">
                         <p:submenu label="Cadastros" icon="ui-icon-folder-open" >
                             <p:menuitem title="Cadastrar Turnos do Colégio" 
@@ -39,13 +43,13 @@
                                         icon="ui-icon-document" 
                                         value="Instituição" 
                                         action="/pages/private/admin/instituicao/lista.xhtml" />
-                            
+
                             <p:menuitem title="Cadastrar Permissões de Acesso" 
                                         process="@this" 
                                         icon="ui-icon-document" 
                                         value="Permissões de Login" 
                                         action="/pages/private/admin/role/lista.xhtml" />
-                            
+
                             <p:menuitem title="Cadastrar Usuário do Sistema" 
                                         process="@this" 
                                         icon="ui-icon-document" 
@@ -121,7 +125,6 @@
                                         action="/pages/private/admin/endereco/pais/lista.xhtml" />
                         </p:submenu>
                     </p:submenu>
-
                     <p:submenu label="Gerencial" icon="ui-icon-document">
                         <p:menuitem title="Emprestimo de Livro" 
                                     process="@this"  
@@ -161,6 +164,10 @@
                     </f:facet>
                 </p:panelMenu>
             </h:form>
+            <form action="${request.contextPath}/applogout" method="POST">
+                <button type="submit" class="btn  btn-block">Logout</button>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>		
+            </form> 
         </ui:composition>
     </h:body>
 </html>

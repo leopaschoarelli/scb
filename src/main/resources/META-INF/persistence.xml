@@ -1,50 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="scbPU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>br.com.gori.scb.entidade.Estado</class>
-    <class>br.com.gori.scb.entidade.Cidade</class>
-    <class>br.com.gori.scb.entidade.Endereco</class>
-    <class>br.com.gori.scb.entidade.Pessoa</class>
-    <class>br.com.gori.scb.entidade.Telefone</class>
-    <class>br.com.gori.scb.entidade.PessoaFisica</class>
-    <class>br.com.gori.scb.entidade.Usuario</class>
-    <class>br.com.gori.scb.entidade.TipoPessoa</class>
-    <class>br.com.gori.scb.entidade.Turno</class>
-    <class>br.com.gori.scb.entidade.Turma</class>
-    <class>br.com.gori.scb.entidade.Aluno</class>
-    <class>br.com.gori.scb.entidade.Penalidade</class>
-    <class>br.com.gori.scb.entidade.ConfiguracaoEmprestimo</class>
-    <class>br.com.gori.scb.entidade.util.TipoPublicacao</class>
-    <class>br.com.gori.scb.entidade.Autor</class>
-    <class>br.com.gori.scb.entidade.TipoAutor</class>
-    <class>br.com.gori.scb.entidade.Autoria</class>
-    <class>br.com.gori.scb.entidade.Categoria</class>
-    <class>br.com.gori.scb.entidade.GrupoEmprestimo</class>
-    <class>br.com.gori.scb.entidade.Publicacao</class>
-    <class>br.com.gori.scb.entidade.Editora</class>
-    <class>br.com.gori.scb.entidade.Exemplar</class>
-    <class>br.com.gori.scb.entidade.Emprestimo</class>
-    <class>br.com.gori.scb.entidade.ItemEmprestimo</class>
-    <class>br.com.gori.scb.entidade.Reserva</class>
-    <class>br.com.gori.scb.entidade.ItemReserva</class>
-    <class>br.com.gori.scb.entidade.Instituicao</class>
-    <class>br.com.gori.scb.entidade.ComprovanteEmprestimo</class>
-    <class>br.com.gori.scb.entidade.Role</class>
-<<<<<<< HEAD
-    <class>br.com.gori.scb.entidade.User</class>
-=======
->>>>>>> 128b16fa51eb205ffe2b1c7d4de252494255cc97
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-      <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/scb"/>
-      <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
-      <property name="hibernate.connection.password" value="postgres"/>
-      <property name="hibernate.connection.username" value="postgres"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
-      <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.format_sql" value="true"/>
-    </properties>
-  </persistence-unit>
+    <persistence-unit name="scbPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>br.com.gori.scb.entidade.Estado</class>
+        <class>br.com.gori.scb.entidade.Cidade</class>
+        <class>br.com.gori.scb.entidade.Endereco</class>
+        <class>br.com.gori.scb.entidade.Pessoa</class>
+        <class>br.com.gori.scb.entidade.Telefone</class>
+        <class>br.com.gori.scb.entidade.PessoaFisica</class>
+        <class>br.com.gori.scb.entidade.Usuario</class>
+        <class>br.com.gori.scb.entidade.TipoPessoa</class>
+        <class>br.com.gori.scb.entidade.Turno</class>
+        <class>br.com.gori.scb.entidade.Turma</class>
+        <class>br.com.gori.scb.entidade.Aluno</class>
+        <class>br.com.gori.scb.entidade.Penalidade</class>
+        <class>br.com.gori.scb.entidade.ConfiguracaoEmprestimo</class>
+        <class>br.com.gori.scb.entidade.util.TipoPublicacao</class>
+        <class>br.com.gori.scb.entidade.Autor</class>
+        <class>br.com.gori.scb.entidade.TipoAutor</class>
+        <class>br.com.gori.scb.entidade.Autoria</class>
+        <class>br.com.gori.scb.entidade.Categoria</class>
+        <class>br.com.gori.scb.entidade.GrupoEmprestimo</class>
+        <class>br.com.gori.scb.entidade.Publicacao</class>
+        <class>br.com.gori.scb.entidade.Editora</class>
+        <class>br.com.gori.scb.entidade.Exemplar</class>
+        <class>br.com.gori.scb.entidade.Emprestimo</class>
+        <class>br.com.gori.scb.entidade.ItemEmprestimo</class>
+        <class>br.com.gori.scb.entidade.Reserva</class>
+        <class>br.com.gori.scb.entidade.ItemReserva</class>
+        <class>br.com.gori.scb.entidade.Instituicao</class>
+        <class>br.com.gori.scb.entidade.ComprovanteEmprestimo</class>
+        <class>br.com.gori.scb.entidade.Role</class>
+        <class>br.com.gori.scb.entidade.User</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/scb"/>
+            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+            <property name="hibernate.connection.password" value="postgres"/>
+            <property name="hibernate.connection.username" value="postgres"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
 </persistence>
