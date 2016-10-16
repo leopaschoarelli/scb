@@ -10,6 +10,7 @@
                 <h:form id="form-user" prependId="false">
                     <div class="ui-fluid">
                         <p:panel id="panelAutor" header="#{autorControlador.header}">
+                            <p:defaultCommand target="nom"/>
                             <p:messages id="messagesAutor" autoUpdate="true" closable="true" />
                             <p:focus context="panelAutor"/>
                             <p:panelGrid id="gridAutor" 
@@ -36,9 +37,9 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton process="@form" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{autorControlador.salvar()}" 
+                                <p:commandButton process="@form" id="botaoSalvar" ajax="false" icon="ui-icon-check" value="Salvar" action="#{autorControlador.salvar()}" 
                                                  update="@form" disabled="#{autorControlador.visualizar}"/>
-                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{autorControlador.prepararLista()}" update="@form" />
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/autor/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
                     </div>

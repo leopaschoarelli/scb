@@ -7,7 +7,7 @@
     <h:body>
         <ui:composition template="/pages/private/template.xhtml">
             <ui:define name="conteudo">
-                <h:form id="form-user" prependId="false">
+                <h:form id="form-user">
                     <div class="ui-fluid">
                         <p:panel id="panelTurno" header="Cadastro de Turno">
                             <p:messages id="messagesTurno" showDetail="true" closable="true" autoUpdate="true" />
@@ -34,7 +34,6 @@
                                 <p:outputLabel value="Hora Término:" for="termino" />
                                 <p:calendar id="termino"
                                             mask="true"
-                                            
                                             placeholder="Hora de Término do Turno"
                                             maskSlotChar="  :  :  " 
                                             value="#{turnoControlador.turno.termino}" readonly="#{turnoControlador.visualiza}"  pattern="HH:mm:ss" timeOnly="#{!turnoControlador.visualiza}"  />
@@ -45,11 +44,13 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton id="botaoSalvar" process="@form" icon="ui-icon-check" value="Salvar" action="#{turnoControlador.salvar()}" 
-                                                 update="@form" disabled="#{turnoControlador.visualiza}"/>
-                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{turnoControlador.prepararLista()}" update="@form" />
+                                <p:commandButton id="botaoSalvar" process="@this" ajax="false" action="#{turnoControlador.salvar()}" icon="ui-icon-check" value="Salvar"
+                                                 update="@form" disabled="#{turnoControlador.visualiza}" />
+                                
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/turno/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
+                        <p:defaultCommand target="descricao" />
                     </div>
                 </h:form>
             </ui:define>

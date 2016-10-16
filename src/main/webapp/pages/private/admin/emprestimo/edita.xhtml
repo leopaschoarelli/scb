@@ -9,8 +9,10 @@
         <ui:composition template="/pages/private/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="form-user" prependId="false" >
+                    <p:defaultCommand target="pessoa" />
                     <div class="ui-fluid">
                         <p:panel id="panelEmprestimo" header="#{emprestimoControlador.header}">
+
                             <p:messages id="messagesEmprestimo" showDetail="true" closable="true" autoUpdate="true" />
                             <p:focus context="panelEmprestimo"/>
                             <p:panelGrid id="gridEmprestimo" 
@@ -23,7 +25,7 @@
                                              styleClass="panelgrid-noborder"
                                              layout="grid"
                                              style="margin-top: 5px; margin-bottom: 10px"
-                                             columnClasses="ui-grid-col-2, ui-grid-col-10">
+                                             columnClasses="ui-grid-col-3, ui-grid-col-9">
                                     <p:outputLabel value="Pessoa: " for="pessoa" />
                                     <p:autoComplete 
                                         readonly="#{emprestimoControlador.visualizar}"
@@ -120,8 +122,9 @@
                                 process="@this"
                                 title="Realizar Pesquisa"/>
 
-                            <h:panelGrid id="gridEmp" 
+                            <p:panelGrid id="gridEmp" 
                                          columns="2"
+                                         layout="grid"
                                          styleClass="panelgrid-noborder"
                                          style="margin-top: 5px; margin-bottom: 10px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6">
@@ -182,53 +185,50 @@
                                 <p:droppable  for="exemplaresSelecionados" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="tableExemDisp" onDrop="handleDrop">
                                     <p:ajax listener="#{emprestimoControlador.onExemplarDrop}" update="dropArea tableExemDisp addExem" />
                                 </p:droppable>
-                            </h:panelGrid>
-                            <p:separator/>
-                            <p:panelGrid id="gridBotoes" columns="2"
-                                         layout="grid"
-                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
-                                         styleClass="panelgrid-noborder">
-                                <p:commandButton id="botaoSalvar1" type="button" icon="ui-icon-check" value="Salvar" onclick="PF('salvarEmp').show();"/>
-                                <p:commandButton id="botaoCancelar1" process="@this" icon="ui-icon-close" value="Cancelar" action="#{emprestimoControlador.prepararLista()}" update="@form" />
-
                             </p:panelGrid>
-                            <p:dialog responsive="true" dynamic="true" 
-                                      header="Imprimir Comprovante?" 
-                                      widgetVar="salvarEmp" 
-                                      onHide="#{emprestimoControlador.prepararLista()}"
-                                      width="350"
-                                      resizable="false"
-                                      height="100">
-
-                                <p:outputLabel value="Deseja realizar a impressão do comprovante de empréstimo?" />
-
-                                <p:panelGrid id="gridBotoes2" columns="2"
-                                             layout="grid"
-                                             style="margin-top: 20px"
-                                             columnClasses="ui-grid-col-6, ui-grid-col-6"
-                                             styleClass="panelgrid-noborder">
-
-                                    <p:commandButton id="botaoSim" 
-                                                     ajax="false" 
-                                                     actionListener="#{emprestimoControlador.salvar('Sim')}" 
-                                                     action="#{comprovanteControlador.emitir()}"
-                                                     async="true"
-                                                     onclick="PF('salvarEmp').hide();"
-                                                     process="@this"
-                                                     update="@form"
-                                                     icon="ui-icon-check" 
-                                                     value="Sim" 
-                                                     />
-
-                                    <p:commandButton id="botaoNao" process="@this" 
-                                                     icon="ui-icon-close" 
-                                                     value="Não" 
-                                                     action="#{emprestimoControlador.salvar('Nao')}" 
-                                                     update="@form" />
-                                </p:panelGrid>
-                            </p:dialog>
                         </p:panel>
+                        <p:separator/>
+                        <p:panelGrid id="gridBotoes" columns="2"
+                                     layout="grid"
+                                     columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                     styleClass="panelgrid-noborder">
+                            <p:commandButton id="botaoSalvar1" ajax="true" icon="ui-icon-check" value="Salvar" onclick="PF('salvarEmp').show();"/>
+                            <p:commandButton id="botaoCancelar1" process="@this" icon="ui-icon-close" value="Cancelar" action="#{emprestimoControlador.prepararLista()}" update="@form" />
+                        </p:panelGrid>
                     </div>
+                    <p:dialog responsive="true"
+                              header="Imprimir Comprovante?" 
+                              widgetVar="salvarEmp" 
+                              visible="false"
+                              width="350"
+                              resizable="false"
+                              height="100">
+
+                        <p:outputLabel value="Deseja realizar a impressão do comprovante de empréstimo?" />
+
+                        <p:panelGrid id="gridBotoes2" columns="2"
+                                     layout="grid"
+                                     style="margin-top: 20px"
+                                     columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                     styleClass="panelgrid-noborder">
+
+                            <p:commandButton id="botaoSim" 
+                                             ajax="false" 
+                                             actionListener="#{emprestimoControlador.salvar('Sim')}" 
+                                             action="#{comprovanteControlador.emitir()}"
+                                             onclick="PF('salvarEmp').hide();"
+                                             process="@this"
+                                             icon="ui-icon-check" 
+                                             value="Sim" 
+                                             />
+
+                            <p:commandButton id="botaoNao" process="@this" 
+                                             icon="ui-icon-close" 
+                                             value="Não" 
+                                             ajax="false"
+                                             action="#{emprestimoControlador.salvar('Nao')}" />
+                        </p:panelGrid>
+                    </p:dialog>
                 </h:form>
             </ui:define>
         </ui:composition>

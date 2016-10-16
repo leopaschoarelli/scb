@@ -1,49 +1,124 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:b="http://bootsfaces.net/ui"    
-                xmlns:ui="http://java.sun.com/jsf/facelets">
-    <h:form>
-        <b:container fluid="true">
-            <a href="#" style="visibility: collapse" class="navbar-right dropdown-toggle" data-toggle="dropdown">
-                <i style="visibility: collapse" class="fa fa-envelope-o"></i>    
-            </a>
-            <p:accordionPanel styleClass="btn-default navbar-right" style="width: 200px;text-align: center" activeIndex="1" dynamic="true">
-                <p:tab titletip="Opções" titleStyle="font-size: 13px" titleStyleClass="center-block fa fa-home" closable="true" title=" Perfil">
-                    <li class="user-header">
-                        <center>
-                            <h:graphicImage height="100" library="images" name="user.png" class="img-circle" alt="User Image"/>
-                            <h4>
-                                Usuário
-                            </h4>
-                        </center>
-                    </li>
-                    <li class="user-footer">
-                        <div class="pull-left">
-                            <p:commandButton id="perfil" 
-                                             process="@this"
-                                             value="Perfil"
-                                             action="/index.xhtml" 
-                                             icon="ui-icon-person"  />
-                        </div>
-                        <div class="pull-right">
-                            <form action="${request.contextPath}/applogout" method="POST">
-                                <p:commandButton id="logout" 
-                                                 value="Logout"
-                                                 type="submit"
-                                                 ajax="false"
-                                                 icon="ui-icon-power"  >
-                                </p:commandButton>
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>		
-                            </form> 
-                        </div>
-                    </li>
-                </p:tab>
-            </p:accordionPanel>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <h:body>
+        <ui:composition >
+            <h:form class="skin-blue sidebar-mini">
+                <div class="wrapper">
 
+                    <!-- Main Header -->
+                    <header class="main-header">
 
-        </b:container>
-    </h:form>
-</ui:composition>
+                        <!-- Logo -->
+                        <a class="logo">
+                            <!-- mini logo for sidebar mini 50x50 pixels -->
+                            <span class="logo-mini"><b>S</b>CB</span>
+                            <!-- logo for regular state and mobile devices -->
+                            <span class="logo-lg"><b>Colégio</b> Gori</span>
+                        </a>
 
+                        <!-- Header Navbar -->
+                        <nav class="navbar navbar-static-top" role="navigation">
+                            <!-- Sidebar toggle button-->
+                            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                                <span class="sr-only">Toggle navigation</span>
+                            </a>
+                            <!-- Navbar Right Menu -->
+                            <div class="navbar-custom-menu">
+                                <ul class="nav navbar-nav">
+                                    <!-- Messages: style can be found in dropdown.less-->
+                                    <form action="${request.contextPath}/applogout" method="POST">
+                                        <button type="submit" class="btn btn-primary btn-block">Logout</button>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>		
+                                    </form> 
+                                </ul>
+                            </div>
+                        </nav>
+                    </header>
+                    <!-- Left side column. contains the logo and sidebar -->
+                    <aside class="main-sidebar">
+
+                        <!-- sidebar: style can be found in sidebar.less -->
+                        <section class="sidebar">
+
+                            <!-- Sidebar user panel (optional) -->
+
+                            <!-- Sidebar Menu -->
+                            <ul class="sidebar-menu">
+                                <li class="header">Sistema de Controle Bibliotecário</li>
+                                <!-- Optionally, you can add icons to the links -->
+                                <li class="active"><p:link outcome="/pages/private/indexscb.xhtml"><i class="fa fa-home"></i> <span>Início</span></p:link></li>
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                                    <li class="treeview">
+                                        <a href="#"><i class="fa fa-folder-open"></i> <span>Colégio</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                        <ul class="treeview-menu">
+                                            <li><p:link outcome="/pages/private/admin/turno/lista.xhtml"><i class="fa fa-file"></i>Turnos</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/turma/lista.xhtml"><i class="fa fa-file"></i>Turmas</p:link></li>									
+                                            <li><p:link outcome="/pages/private/admin/tipopessoa/lista.xhtml"><i class="fa fa-file"></i>Tipos de Pessoas</p:link></li>										
+                                            <li><p:link outcome="/pages/private/admin/pessoa/lista.xhtml"><i class="fa fa-file"></i>Pessoas</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/instituicao/lista.xhtml"><i class="fa fa-file"></i>Instituição</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/role/lista.xhtml"><i class="fa fa-file"></i>Permissões de Login</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/usuario/lista.xhtml"><i class="fa fa-file"></i>Usuário</p:link></li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-folder-open"></i>Endereços
+                                                    <span class="pull-right-container">
+                                                        <i class="fa fa-angle-left pull-right"></i>
+                                                    </span>
+                                                </a>
+                                                <ul class="treeview-menu">
+                                                    <li><p:link outcome="/pages/private/admin/endereco/cidade/lista.xhtml"><i class="fa fa-file"></i>Cidades</p:link></li>	
+                                                    <li><p:link outcome="/pages/private/admin/endereco/estado/lista.xhtml"><i class="fa fa-file"></i>Estados</p:link></li>	
+                                                    <li><p:link outcome="/pages/private/admin/endereco/pais/lista.xhtml"><i class="fa fa-file"></i>Países</p:link></li>	
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </sec:authorize>
+                                <li class="treeview">
+                                    <a href="#"><i class="fa fa-folder-open"></i> <span>Biblioteca</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                    <ul class="treeview-menu">
+                                        <li><p:link outcome="/pages/private/admin/grupoemprestimo/lista.xhtml"><i class="fa fa-file"></i>Grupo Emp.</p:link></li>		
+                                        <li><p:link outcome="/pages/private/admin/configuracaoemprestimo/lista.xhtml"><i class="fa fa-file"></i>Config. Emp.</p:link></li>
+                                        <li><p:link outcome="/pages/private/admin/penalidade/lista.xhtml"><i class="fa fa-file"></i>Penalidades</p:link></li>
+                                        <li><p:link outcome="/pages/private/admin/categoria/lista.xhtml"><i class="fa fa-file"></i>Categorias</p:link></li>
+                                        <li><p:link outcome="/pages/private/admin/publicacao/lista.xhtml"><i class="fa fa-file"></i>Obra Literária</p:link></li>
+                                        <li><p:link outcome="/pages/private/admin/editora/lista.xhtml"><i class="fa fa-file"></i>Editora</p:link></li>
+                                        <li><p:link outcome="/pages/private/admin/autor/lista.xhtml"><i class="fa fa-file"></i>Autor</p:link></li>
+                                        <li><p:link outcome="/pages/private/admin/tipoautor/lista.xhtml"><i class="fa fa-file"></i>Tipo de Autor</p:link></li>
+                                    </ul>
+                                </li>
+                                <li class="treeview">
+                                    <a href="#"><i class="fa fa-folder-open"></i> <span>Gerencial</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                    <ul class="treeview-menu">
+                                        <li><p:link outcome="/pages/private/admin/emprestimo/lista.xhtml"><i class="fa fa-file"></i>Empréstimo</p:link></li>	
+                                        <li><p:link outcome="/pages/private/admin/emprestimo/lista.xhtml"><i class="fa fa-file"></i>Devolução</p:link></li>	
+                                        <li><p:link outcome="/pages/private/admin/reserva/lista.xhtml"><i class="fa fa-file"></i>Reserva</p:link></li>	
+                                    </ul>
+                                </li>
+                                <li class="treeview">
+                                    <a href="#"><i class="fa fa-folder-open"></i> <span>Relatórios</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="#">Link in level 2</a></li>
+                                        <li><a href="#">Link in level 2</a></li>
+                                    </ul>
+                                </li>
+
+                                <form action="${request.contextPath}/applogout" method="POST">
+                                    <button type="submit" class="btn btn-primary btn-block">Logout</button>
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>		
+                                </form> 
+                            </ul><!-- /.sidebar-menu -->
+                        </section>
+                        <!-- /.sidebar -->
+                    </aside>
+
+                </div><!-- ./wrapper -->
+            </h:form>
+        </ui:composition>
+    </h:body>
+</html>

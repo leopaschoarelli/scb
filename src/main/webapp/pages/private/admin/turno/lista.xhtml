@@ -9,13 +9,14 @@
         <ui:composition template="/pages/private/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/turno/lista.xhtml/" />
                     <p:panel  id="turno" header="Turnos">
                         <p:toolbar id="toolbarTurno">
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo"
                                                  icon="ui-icon-plus"
+                                                 ajax="false"
                                                  title="Adicionar novo Turno"
                                                  action="#{turnoControlador.prepararNovo()}" />
                                 <span class="ui-separator">
@@ -27,14 +28,14 @@
                                                  disabled="#{turnoControlador.turnoSelecionado == null}"
                                                  title="Editar #{turnoControlador.turnoSelecionado.descricao}" 
                                                  action="#{turnoControlador.prepararEdicao()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
                                                  process="@this"
                                                  disabled="#{turnoControlador.turnoSelecionado == null}"
                                                  title="Visualizar as informações de: #{turnoControlador.turnoSelecionado.descricao}" 
                                                  action="#{turnoControlador.prepararVer()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -49,6 +50,7 @@
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      reflow="true"
                                      rows="10" 

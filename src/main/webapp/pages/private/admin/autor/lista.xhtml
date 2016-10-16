@@ -15,6 +15,7 @@
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo"
+                                                 ajax="false"
                                                  icon="ui-icon-plus"
                                                  title="Adicionar novo Autor"
                                                  action="#{autorControlador.prepararNovo()}" />
@@ -27,14 +28,14 @@
                                                  disabled="#{autorControlador.autorSelecionado == null}"
                                                  title="Editar #{autorControlador.autorSelecionado.nome}" 
                                                  action="#{autorControlador.prepararEdicao()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
                                                  process="@this"
                                                  disabled="#{autorControlador.autorSelecionado == null}"
                                                  title="Visualizar as informações de: #{autorControlador.autorSelecionado.nome}"
                                                  action="#{autorControlador.prepararVer()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"

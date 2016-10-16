@@ -3,10 +3,12 @@ package br.com.gori.scb.controle;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.entidade.Turno;
 import br.com.gori.scb.dao.impl.TurnoDAOImpl;
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -34,11 +36,15 @@ public class TurnoControlador implements Serializable {
     public String salvar() {
         try {
             if (edicao) {
+                System.out.println("Update");
                 turnoDAO.update(turno);
             } else {
+                System.out.println("Save");
                 turnoDAO.save(turno);
             }
             JsfUtil.addSuccessMessage("Turno salvo com sucesso!");
+            System.out.println("Retornar");
+            visualiza = true;
             return prepararLista();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao salvar turno");
@@ -60,7 +66,9 @@ public class TurnoControlador implements Serializable {
 
     public String prepararLista() {
         newInstances();
-        if (turnoSelecionado != null) turnoSelecionado = null;
+        if (turnoSelecionado != null) {
+            turnoSelecionado = null;
+        }
         return "lista";
     }
 
@@ -85,6 +93,10 @@ public class TurnoControlador implements Serializable {
         edicao = false;
         visualiza = true;
         return "edita";
+    }
+
+    public void reset() {
+        RequestContext.getCurrentInstance().reset("form-user:panelTurno");
     }
 
     public List<Turno> getTurnos() {

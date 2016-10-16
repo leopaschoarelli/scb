@@ -18,6 +18,9 @@
         <h:outputScript target="body" library="primefaces" name="jquery/jquery.js" />
         <h:outputScript target="body" library="javascripts" name="app.js" />
 
+
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/dist/css/skins/skin-blue.min.css" />
         <link rel="stylesheet" type="text/css"
               href="#{request.contextPath}/resources/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css"
@@ -31,59 +34,51 @@
         </script>
     </h:head>
     <h:body>
-        <p:layout  fullPage="true">
-            <p:layoutUnit gutter="3" position="north" size="62">
-                <ui:insert name="header">
-                    <ui:include src="/pages/private/header.xhtml" />
-                </ui:insert>
-            </p:layoutUnit>
+        <ui:insert name="header">
+            <ui:include src="/pages/private/header.xhtml" />
+        </ui:insert>
 
 
-            <p:ajaxStatus  styleClass="ajax-status">
-                <f:facet name="start">
-                    <h:graphicImage library="images" name="status.gif" />
-                    <h:outputText style="font-style: oblique;font-weight: bold;text-align: center" value="Carregando..."/>
-                </f:facet>
-                <f:facet name="complete">
-                    <h:outputText value="" />
-                </f:facet>
-            </p:ajaxStatus>
+        <p:ajaxStatus  styleClass="ajax-status">
+            <f:facet name="start">
+                <h:graphicImage library="images" name="status.gif" />
+                <h:outputText style="font-style: oblique;font-weight: bold;text-align: center" value="Carregando..."/>
+            </f:facet>
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
 
-            <p:layoutUnit collapsible="true" position="west" size="160" header="Menu"  gutter="3">
-                <ui:insert name="cabecalho">
+        <!--        <ui:insert name="cabecalho">
                     <ui:include src="/pages/private/cabecalho.xhtml" />
-                </ui:insert>
-            </p:layoutUnit>
+                </ui:insert>-->
 
-            <p:layoutUnit gutter="3" position="center" size="50">
-
+     
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
                 <ui:insert name="conteudo"/>
+            </div><!-- /.content-wrapper -->
 
-            </p:layoutUnit>
 
+        <h:form id="conf-dialog" prependId="false">
 
-            <h:form id="conf-dialog" prependId="false">
+            <p:confirmDialog closeOnEscape="true" global="true">
+                <div style="text-align: center">
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </div>
+            </p:confirmDialog>
+        </h:form>
 
-                <p:confirmDialog closeOnEscape="true" global="true">
-                    <div style="text-align: center">
-                        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                    </div>
-                </p:confirmDialog>
-            </h:form>
+        <h:form>
+            <p:hotkey bind="shift+e" action="/pages/private/admin/emprestimo/lista.xhtml" />
+            <p:hotkey bind="shift+r" action="/pages/private/admin/reserva/lista.xhtml" />
+            <p:hotkey bind="shift+a" action="/pages/private/admin/publicacao/lista.xhtml" />
+        </h:form>
 
-            <h:form>
-                <p:hotkey bind="shift+e" action="/pages/private/admin/emprestimo/lista.xhtml" />
-                <p:hotkey bind="shift+r" action="/pages/private/admin/reserva/lista.xhtml" />
-                <p:hotkey bind="shift+a" action="/pages/private/admin/publicacao/lista.xhtml" />
-            </h:form>
-
-            <p:layoutUnit gutter="3" position="south" size="50">
-                <ui:insert name="rodape">
+<!--                <ui:insert name="rodape">
                     <ui:include src="/pages/private/rodape.xhtml" />
-                </ui:insert>
-            </p:layoutUnit>
-        </p:layout>
+                </ui:insert>-->
         <script type="text/javascript" src="#{request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="#{request.contextPath}/resources/dist/js/app.min.js"></script>
     </h:body>

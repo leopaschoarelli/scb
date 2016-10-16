@@ -15,6 +15,11 @@
     <listener> 
         <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
     </listener>
+    
+    <context-param>
+        <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+        <param-value>/WEB-INF/springsecurity.taglib.xml</param-value>
+    </context-param>
 
     <resource-env-ref>
         <resource-env-ref-name>BeanManager</resource-env-ref-name>
