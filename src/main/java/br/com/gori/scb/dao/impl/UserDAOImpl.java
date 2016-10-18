@@ -6,7 +6,6 @@ import br.com.gori.scb.entidade.User;
 import java.util.List;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -49,6 +48,16 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
         } else {
             throw new NonUniqueResultException(username);
         }
+    }
+
+    public User getLogin(String nome) {
+        String sql;
+        sql = "select u.* from users u where lower(u.username) like :parte";
+        Query q = getEntityManager().createNativeQuery(sql, User.class);
+        q.setParameter("parte", "%" + nome + "%");
+        q.setMaxResults(MAX_RESULTS_QUERY);
+        System.out.println("LOGIN!!!::: "+q.toString());
+        return (User) q.getSingleResult();
     }
 
 }

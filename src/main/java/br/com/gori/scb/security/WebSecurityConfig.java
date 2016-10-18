@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 /**
  *
  * @author Leonardo
@@ -32,13 +33,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/pages/private/**").permitAll()
+                .antMatchers("/pages/private/admin/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT') or hasRole('ROLE_MOD')")
                 .and().formLogin()
                 .loginPage("/public/index.xhtml")
                 .loginProcessingUrl("/applogin")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/pages/private/indexscb.xhtml")
+                .defaultSuccessUrl("/pages/private/admin/indexscb.xhtml")
                 .and().logout()
                 .logoutUrl("/applogout")
                 .logoutSuccessUrl("/public/index.xhtml");

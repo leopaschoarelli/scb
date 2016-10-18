@@ -6,19 +6,21 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
-        <ui:composition template="/pages/private/template.xhtml">
+        <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/pessoa/lista.xhtml/" />
                     <p:panel id="Pessoas" header="Pessoas">
                         <p:toolbar id="toolbarPessoa">
                             <f:facet name="left">
                                 <p:splitButton icon="ui-icon-plus" title="Adicionar Pessoas"  value="Novo">
                                     <p:menuitem title="Adicionar novo Aluno" 
                                                 id="novoAluno" value="Aluno" 
+                                                ajax="false"
                                                 action="#{pessoaControlador.prepararNovoAluno}" />
                                     <p:menuitem title="Adicionar novas Pessoas" 
                                                 id="novaPessoa" value="Outros"
+                                                ajax="false"
                                                 action="#{pessoaControlador.prepararNovaPessoa}" />
                                 </p:splitButton>
                                 <span class="ui-separator">
@@ -30,14 +32,14 @@
                                                  disabled="#{pessoaControlador.pessoaSelecionada == null}"
                                                  title="Editar Pessoa" 
                                                  action="#{pessoaControlador.prepararEdicao()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
                                                  process="@this"
                                                  disabled="#{pessoaControlador.pessoaSelecionada == null}"
                                                  title="Visualizar as informações" 
                                                  action="#{pessoaControlador.prepararVer()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -52,6 +54,7 @@
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      rows="10" 
                                      resizeMode="fit"
@@ -85,7 +88,7 @@
                                     <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
                                 </h:outputText>
                             </p:column>
-                            
+
                             <p:column filterStyle="width: auto" filterBy="#{pessoa.rg}" headerText="RG">
                                 <h:outputText value="#{pessoa.rg}" />
                             </p:column>

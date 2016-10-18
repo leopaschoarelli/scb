@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
-        <ui:composition template="/pages/private/template.xhtml">
+        <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="form-user" prependId="false">
                     <div class="ui-fluid">
@@ -15,7 +15,7 @@
                             <p:panelGrid id="gridTipoPessoa" columns="2"
                                          layout="grid" 
                                          style="margin-top: 20px; margin-bottom: 40px"
-                                         columnClasses="ui-grid-col-1, ui-grid-col-11"
+                                         columnClasses="ui-grid-col-2, ui-grid-col-10"
                                          styleClass="panelgrid-noborder">
                                 <p:outputLabel value="Descrição: " for="descricao" />
                                 <p:inputText id="descricao"
@@ -30,11 +30,12 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton process="@form" id="botaoSalvar" ajax="true" update="@form" icon="ui-icon-check" value="Salvar" action="#{tipoPessoaControlador.salvar()}" 
+                                <p:commandButton process="@this" id="botaoSalvar" ajax="false" update="@form" icon="ui-icon-check" value="Salvar" action="#{tipoPessoaControlador.salvar()}" 
                                                  disabled="#{tipoPessoaControlador.visualiza}"/>
-                                <p:commandButton process="@this" id="botaoCancelar" ajax="true" icon="ui-icon-close" value="Cancelar" action="#{tipoPessoaControlador.prepararLista()}" />
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/tipopessoa/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
+                        <p:defaultCommand target="descricao" />
                     </div>
                 </h:form>
             </ui:define>

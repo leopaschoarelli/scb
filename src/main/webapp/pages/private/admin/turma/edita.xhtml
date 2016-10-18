@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
-        <ui:composition template="/pages/private/template.xhtml">
+        <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="form-user" prependId="false"> 
                     <div class="ui-fluid">
@@ -55,11 +55,12 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton id="botaoSalvar" process="@form" icon="ui-icon-check" value="Salvar" action="#{turmaControlador.salvar()}" 
+                                <p:commandButton id="botaoSalvar" process="@this" ajax="false" icon="ui-icon-check" value="Salvar" action="#{turmaControlador.salvar()}" 
                                                  update="@form" disabled="#{turmaControlador.visualiza}"/>
-                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{turmaControlador.prepararLista()}" update="@form" />
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/turma/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
+                        <p:defaultCommand target="descricao" />
                     </div>
                 </h:form>
             </ui:define>

@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -49,7 +50,7 @@ public class User implements Serializable {
                 @JoinColumn(name = "role_id", nullable = false, updatable = false)
             })
     private Set<Role> roles = new HashSet<>(0);
-
+    
     public User() {
     }
 
@@ -110,7 +111,7 @@ public class User implements Serializable {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 3;

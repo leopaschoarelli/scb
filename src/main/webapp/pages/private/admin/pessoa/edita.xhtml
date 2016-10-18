@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
-        <ui:composition template="/pages/private/template.xhtml">
+        <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="form-pessoa" prependId="false">
                     <div class="ui-fluid">
@@ -50,6 +50,7 @@
                                             <p:outputLabel value="Data de Nascimento: " for="dtnasc" />
                                             <p:calendar id="dtnasc"
                                                         required="true"
+                                                        disabled="#{pessoaControlador.visualiza}"
                                                         placeholder="Data de Nascimento"
                                                         readonly="#{pessoaControlador.visualiza}" 
                                                         value="#{pessoaControlador.pessoa.nascimento}" 
@@ -82,16 +83,7 @@
                                                 emptyMessage="Nenhum resultado encontrado"
                                                 value="#{pessoaControlador.pessoa.turma}"
                                                 itemValue="#{turma.id}" itemLabel="#{turma.toString()}"/>
-                                            <p:outputLabel value="Usuário: " for="usuario" />
-                                            <p:inputText id="usuario" 
-                                                         placeholder="Login para acesso"
-                                                         readonly="#{pessoaControlador.visualiza}" 
-                                                         value="#{pessoaControlador.usuario.login}" />
-                                            <p:outputLabel value="Senha Usuário: " for="senha" />
-                                            <p:password id="senha" 
-                                                        placeholder="Senha de Acesso"
-                                                        readonly="#{pessoaControlador.visualiza}"
-                                                        value="#{pessoaControlador.usuario.senha}" />
+
 
                                             <p:outputLabel rendered="#{pessoaControlador.ativo}" value="Situação: " for="situacao" />
                                             <p:selectBooleanButton id="situacao"
@@ -107,7 +99,7 @@
                                     <p:panel id="enderecos">
                                         <p:panelGrid columns="2"
                                                      layout="grid" 
-                                                     style="margin-top: 20px; margin-bottom: 40px"
+                                                     style="margin-bottom: 5px"
                                                      columnClasses="ui-grid-col-2, ui-grid-col-11"
                                                      styleClass="panelgrid-noborder">
                                             <p:outputLabel value="Tipo Endereço: " for="tpend" />
@@ -117,25 +109,21 @@
                                             </p:selectOneMenu>
                                             <p:outputLabel value="Logradouro: " for="lograd" />
                                             <p:inputText id="lograd" 
-                                                         required="true"
                                                          placeholder="Descrição do Logradouro"
                                                          readonly="#{pessoaControlador.visualiza}" 
                                                          value="#{pessoaControlador.endereco.logradouro}" />
                                             <p:outputLabel  value="Número: " for="numero" />
                                             <p:inputText id="numero" 
-                                                         required="true" 
                                                          placeholder="Número da Residência" 
                                                          readonly="#{pessoaControlador.visualiza}"
                                                          value="#{pessoaControlador.endereco.numero}" />
                                             <p:outputLabel value="Bairro: " for="bairro" />
                                             <p:inputText id="bairro" 
-                                                         required="true"
                                                          placeholder="Nome do Bairro"
                                                          readonly="#{pessoaControlador.visualiza}" 
                                                          value="#{pessoaControlador.endereco.bairro}" />
                                             <p:outputLabel value="CEP: " for="cep" />
                                             <p:inputMask id="cep"
-                                                         required="true"
                                                          placeholder="Código de Endereçamento Postal (CEP)"
                                                          readonly="#{pessoaControlador.visualiza}"
                                                          value="#{pessoaControlador.endereco.cep}"
@@ -144,7 +132,6 @@
                                             <p:autoComplete 
                                                 readonly="#{pessoaControlador.visualiza}"
                                                 id="cidade"
-                                                required="true"
                                                 var="cidade"
                                                 placeholder="Digite o nome da Cidade do Endereço"
                                                 completeMethod="#{pessoaControlador.completaCidade}" 
@@ -153,7 +140,6 @@
                                                 value="#{pessoaControlador.endereco.cidade}"
                                                 itemValue="#{cidade.id}" itemLabel="#{cidade.toString()}"/>
                                         </p:panelGrid>
-
                                         <p:commandButton disabled="#{pessoaControlador.visualiza}" 
                                                          actionListener="#{pessoaControlador.adicionaEndereco}" 
                                                          id="addEnd" 
@@ -163,7 +149,6 @@
                                                          process="@parent"
                                                          update="enderecos"/>
 
-                                        <br/>
                                         <br/>
                                         <p:dataTable id="tableEnd" 
                                                      var="end" 
@@ -251,21 +236,22 @@
                                     </p:panel>
                                 </p:tab>
                             </p:tabView>
+                            <p:separator/>
+                            <p:panelGrid id="gridBotoes" columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                         styleClass="panelgrid-noborder">
+                                <p:commandButton disabled="#{pessoaControlador.visualiza}" 
+                                                 id="botaoSalvar" 
+                                                 icon="ui-icon-check" 
+                                                 value="Salvar"
+                                                 ajax="false"
+                                                 process="@none"
+                                                 action="#{pessoaControlador.salvar}"/>
+                               <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/pessoa/lista.xhtml" />
+                            </p:panelGrid>
                         </p:panel>
-                        <p:separator/>
-                        <p:panelGrid id="gridBotoes" columns="2"
-                                     layout="grid"
-                                     style="margin-top: 20px; margin-bottom: 40px"
-                                     columnClasses="ui-grid-col-6, ui-grid-col-6"
-                                     styleClass="panelgrid-noborder">
-                            <p:commandButton disabled="#{pessoaControlador.visualiza}" 
-                                             id="botaoSalvar" 
-                                             icon="ui-icon-check" 
-                                             value="Salvar"
-                                             process="@this,complemento:tabDados"
-                                             action="#{pessoaControlador.salvar}"/>
-                            <p:commandButton id="botaoCancelar" icon="ui-icon-close" value="Cancelar" action="#{pessoaControlador.prepararLista}" process="@this"/>
-                        </p:panelGrid>
+                        <p:defaultCommand target="complemento" />
                     </div>
                 </h:form>
             </ui:define>

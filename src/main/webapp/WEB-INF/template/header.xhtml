@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <h:body>
+        <ui:composition >
+            <h:form class="skin-blue sidebar-mini">
+                <div class="wrapper">
+
+                    <!-- Main Header -->
+                    <header class="main-header">
+
+                        <!-- Logo -->
+                        <a class="logo">
+                            <!-- mini logo for sidebar mini 50x50 pixels -->
+                            <span class="logo-mini"><b>S</b>CB</span>
+                            <!-- logo for regular state and mobile devices -->
+                            <span class="logo-lg"><b>Colégio</b> Gori</span>
+                        </a>
+
+                        <!-- Header Navbar -->
+                        <nav class="navbar navbar-static-top" role="navigation">
+                            <!-- Sidebar toggle button-->
+                            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                                <span class="sr-only">Toggle navigation</span>
+                            </a>
+                            <!-- Navbar Right Menu -->
+                            <center>
+                                <h:graphicImage library="images" name="colegio.png" height="45"/>
+                            </center>
+                        </nav>
+                    </header>
+                    <!-- Left side column. contains the logo and sidebar -->
+                    <aside class="main-sidebar">
+
+                        <!-- sidebar: style can be found in sidebar.less -->
+                        <section class="sidebar">
+
+                            <!-- Sidebar user panel (optional) -->
+                            <sec:authorize access="isAuthenticated()" >
+                                <div class="user-panel">
+                                    <div class="pull-left image">
+                                        <h:graphicImage library="images" name="user.png" class="img-circle" alt="User Image"/>
+                                    </div>
+                                    <div class="pull-left info">
+                                        <p style="white-space: initial">#{usuarioSistema.nomeUsuario}</p>
+                                        <!-- Status -->
+                                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                                    </div>
+                                </div>
+                            </sec:authorize>
+                            <!-- Sidebar Menu -->
+                            <ul class="sidebar-menu">
+                                <li style="text-align: center" class="header">Sistema de Controle Bibliotecário</li>
+                                <!-- Optionally, you can add icons to the links -->
+                                <sec:authorize access="isAuthenticated()" >
+                                    <li class="active"><p:link outcome="/pages/private/admin/indexscb.xhtml"><i class="fa fa-home"></i> <span>Início</span></p:link></li>
+                                </sec:authorize>
+                                <sec:authorize access="!isAuthenticated()" >
+                                    <li class="active"><p:link outcome="/public/index.xhtml"><i class="fa fa-home"></i> <span>Início</span></p:link></li>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                                    <li class="treeview">
+                                        <a href="#"><i class="fa fa-folder-open"></i> <span>Colégio</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                        <ul class="treeview-menu">
+                                            <li><p:link outcome="/pages/private/admin/turno/lista.xhtml"><i class="fa fa-file"></i>Turnos</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/turma/lista.xhtml"><i class="fa fa-file"></i>Turmas</p:link></li>									
+                                            <li><p:link outcome="/pages/private/admin/tipopessoa/lista.xhtml"><i class="fa fa-file"></i>Tipos de Pessoas</p:link></li>										
+                                            <li><p:link outcome="/pages/private/admin/pessoa/lista.xhtml"><i class="fa fa-file"></i>Pessoas</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/instituicao/lista.xhtml"><i class="fa fa-file"></i>Instituição</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/role/lista.xhtml"><i class="fa fa-file"></i>Permissões de Login</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/usuario/lista.xhtml"><i class="fa fa-file"></i>Usuário</p:link></li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-folder-open"></i>Endereços
+                                                    <span class="pull-right-container">
+                                                        <i class="fa fa-angle-left pull-right"></i>
+                                                    </span>
+                                                </a>
+                                                <ul class="treeview-menu">
+                                                    <li><p:link outcome="/pages/private/admin/endereco/cidade/lista.xhtml"><i class="fa fa-file"></i>Cidades</p:link></li>	
+                                                    <li><p:link outcome="/pages/private/admin/endereco/estado/lista.xhtml"><i class="fa fa-file"></i>Estados</p:link></li>	
+                                                    <li><p:link outcome="/pages/private/admin/endereco/pais/lista.xhtml"><i class="fa fa-file"></i>Países</p:link></li>	
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                                    <li class="treeview">
+                                        <a href="#"><i class="fa fa-folder-open"></i> <span>Biblioteca</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                        <ul class="treeview-menu">
+                                            <li><p:link outcome="/pages/private/admin/grupoemprestimo/lista.xhtml"><i class="fa fa-file"></i>Grupo Emp.</p:link></li>		
+                                            <li><p:link outcome="/pages/private/admin/configuracaoemprestimo/lista.xhtml"><i class="fa fa-file"></i>Config. Emp.</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/penalidade/lista.xhtml"><i class="fa fa-file"></i>Penalidades</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/categoria/lista.xhtml"><i class="fa fa-file"></i>Categorias</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/publicacao/lista.xhtml"><i class="fa fa-file"></i>Obra Literária</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/editora/lista.xhtml"><i class="fa fa-file"></i>Editora</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/autor/lista.xhtml"><i class="fa fa-file"></i>Autor</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/tipoautor/lista.xhtml"><i class="fa fa-file"></i>Tipo de Autor</p:link></li>
+                                        </ul>
+                                    </li>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                                    <li class="treeview">
+                                        <a href="#"><i class="fa fa-folder-open"></i> <span>Gerencial</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                        <ul class="treeview-menu">
+                                            <li><p:link outcome="/pages/private/admin/emprestimo/lista.xhtml"><i class="fa fa-file"></i>Empréstimo</p:link></li>	
+                                            <li><p:link outcome="/pages/private/admin/emprestimo/lista.xhtml"><i class="fa fa-file"></i>Devolução</p:link></li>	
+                                            <li><p:link outcome="/pages/private/admin/reserva/lista.xhtml"><i class="fa fa-file"></i>Reserva</p:link></li>	
+                                        </ul>
+                                    </li>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_ROOT','ROOT_MOD')" >
+                                    <li class="treeview">
+                                        <a href="#"><i class="fa fa-folder-open"></i> <span>Relatórios</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                        <ul class="treeview-menu">
+                                            <li><a href="#">Link in level 2</a></li>
+                                            <li><a href="#">Link in level 2</a></li>
+                                        </ul>
+                                    </li>
+                                </sec:authorize>
+                                <sec:authorize access="isAuthenticated()" >
+                                    <li><h:outputLink value="${request.contextPath}/applogout"><i class="fa fa-power-off"></i> <span>Logout</span></h:outputLink></li>
+                                </sec:authorize>
+                            </ul><!-- /.sidebar-menu -->
+                        </section>
+                        <!-- /.sidebar -->
+                    </aside>
+
+                </div><!-- ./wrapper -->
+            </h:form>
+        </ui:composition>
+    </h:body>
+</html>

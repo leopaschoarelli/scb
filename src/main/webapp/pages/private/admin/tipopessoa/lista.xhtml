@@ -6,17 +6,17 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
-        <ui:composition template="/pages/private/template.xhtml">
+        <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/tipopessoa/lista.xhtml/" />
                     <p:panel  id="tipoPessoa" header="Tipo de Pessoas">
                         <p:toolbar id="toolbarTipoPessoa">
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo" 
                                                  icon="ui-icon-plus" 
-                                                 ajax="true"
+                                                 ajax="false"
                                                  title="Adicionar novo Tipo de Pessoa"
                                                  action="#{tipoPessoaControlador.prepararNovo}" />
                                 <span class="ui-separator">
@@ -28,14 +28,14 @@
                                                  disabled="#{tipoPessoaControlador.tipoPessoaSelecionada == null}"
                                                  title="Editar #{tipoPessoaControlador.tipoPessoaSelecionada.descricao}" 
                                                  action="#{tipoPessoaControlador.prepararEdicao()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
                                                  process="@this"
                                                  disabled="#{tipoPessoaControlador.tipoPessoaSelecionada == null}"
                                                  title="Visualizar as informações de: #{tipoPessoaControlador.tipoPessoaSelecionada.descricao}" 
                                                  action="#{tipoPessoaControlador.prepararVer()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -50,6 +50,7 @@
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      reflow="true"
                                      rows="10" 

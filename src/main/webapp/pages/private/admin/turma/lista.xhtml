@@ -6,16 +6,17 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
-        <ui:composition template="/pages/private/template.xhtml">
+        <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/turma/lista.xhtml/" />
                     <p:panel  id="turma" header="Turmas">
                         <p:toolbar id="toolbarTurma">
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo" 
                                                  icon="ui-icon-plus"
+                                                 ajax="false"
                                                  title="Adicionar nova Turma"
                                                  action="#{turmaControlador.prepararNovo()}" />
                                 <span class="ui-separator">
@@ -27,14 +28,14 @@
                                                  process="@this"
                                                  title="Editar #{turmaControlador.turmaSelecionada.descricao}" 
                                                  action="#{turmaControlador.prepararEdicao()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnVisualizar" 
                                                  disabled="#{turmaControlador.turmaSelecionada == null}"
                                                  icon="ui-icon-search" 
                                                  process="@this"
                                                  title="Visualizar as informações de: #{turmaControlador.turmaSelecionada.descricao}" 
                                                  action="#{turmaControlador.prepararVer()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  disabled="#{turmaControlador.turmaSelecionada == null}"
@@ -49,6 +50,7 @@
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      reflow="true"
                                      rows="10" 

@@ -64,7 +64,7 @@ public class PessoaControlador implements Serializable {
 
     public String salvar() {
         try {
-            if (validaEndereco()) {
+//            if (validaEndereco()) {
                 if (edicao) {
                     pessoaDAO.update(pessoa);
                 } else {
@@ -72,9 +72,9 @@ public class PessoaControlador implements Serializable {
                 }
                 JsfUtil.addSuccessMessage("Pessoa salva com sucesso!");
                 return prepararLista();
-            } else {
-                return null;
-            }
+//            } else {
+//                return null;
+//            }
         } catch (Exception ex) {
             JsfUtil.addErrorMessage("Erro ao salvar pessoa: " + ex.getMessage());
             return null;
