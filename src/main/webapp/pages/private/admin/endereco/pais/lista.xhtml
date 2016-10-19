@@ -9,14 +9,14 @@
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/endereco/pais/lista.xhtml/" />
                     <p:panel  id="pais" header="Países">
                         <p:toolbar id="toolbarPais"  >
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo" 
                                                  icon="ui-icon-plus" 
-                                                 ajax="true"
+                                                 ajax="false"
                                                  title="Adicionar novo país"
                                                  action="#{paisControlador.prepararNovo}" />
 
@@ -30,7 +30,7 @@
                                                  process="@this"
                                                  title="Editar" 
                                                  action="#{paisControlador.prepararEdicao}" 
-                                                 ajax="true">
+                                                 ajax="false">
                                 </p:commandButton>
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
@@ -38,7 +38,7 @@
                                                  disabled="#{paisControlador.paisSelecionado == null}"
                                                  title="Visualizar as informações de: #{pais.nome}" 
                                                  action="#{paisControlador.prepararVer}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -53,6 +53,7 @@
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      reflow="true"
                                      rows="10"

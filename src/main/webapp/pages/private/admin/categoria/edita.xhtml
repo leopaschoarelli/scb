@@ -43,11 +43,12 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton process="@form" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{categoriaControlador.salvar()}" 
+                                <p:commandButton process="@this" ajax="false" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{categoriaControlador.salvar()}" 
                                                  update="@form" disabled="#{categoriaControlador.visualizar}"/>
-                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{categoriaControlador.prepararLista()}" update="@form" />
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/categoria/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
+                        <p:defaultCommand target="sup" />
                     </div>
                 </h:form>
             </ui:define>

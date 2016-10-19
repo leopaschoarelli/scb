@@ -59,7 +59,7 @@
                                             value="#{reservaControlador.itemReserva.previsao}" 
                                             mask="true" 
                                             pattern="dd/MM/yyyy" />
-                                            
+
                                 <p:outputLabel />
                             </p:panelGrid>
 
@@ -104,11 +104,11 @@
                                      layout="grid"
                                      columnClasses="ui-grid-col-6, ui-grid-col-6"
                                      styleClass="panelgrid-noborder">
-                            <p:commandButton id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{reservaControlador.salvar}" 
+                            <p:commandButton id="botaoSalvar" ajax="false" icon="ui-icon-check" value="Salvar" action="#{reservaControlador.salvar}" 
                                              update="@form" disabled="#{reservaControlador.visualizar}"/>
-                            <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{reservaControlador.prepararLista()}" update="@form" />
-
+                            <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/reserva/lista.xhtml" />
                         </p:panelGrid>
+                        <p:defaultCommand target="pessoa" />
                     </div>
                 </h:form>
             </ui:define>

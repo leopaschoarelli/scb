@@ -9,12 +9,13 @@
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/configuracaoemprestimo/lista.xhtml/" />
                     <p:panel  id="configuracaoEmprestimo" header="Configurações">
                         <p:toolbar id="toolbarConfig">
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo"
+                                                 ajax="false"
                                                  icon="ui-icon-plus"
                                                  title="Adicionar nova Configuração de Emprestimo"
                                                  action="#{configuracaoEmprestimoControlador.prepararNovo()}" />
@@ -26,13 +27,13 @@
                                                  title="Editar Configuração de Emprestimo" 
                                                  disabled="#{configuracaoEmprestimoControlador.configuracaoSelecionada == null}"
                                                  action="#{configuracaoEmprestimoControlador.prepararEdicao()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search"
                                                  disabled="#{configuracaoEmprestimoControlador.configuracaoSelecionada == null}"
                                                  title="Visualizar as informações da Configuração de Emprestimo" 
                                                  action="#{configuracaoEmprestimoControlador.prepararVer()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -48,6 +49,7 @@
 
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      reflow="true"
                                      rows="10" 

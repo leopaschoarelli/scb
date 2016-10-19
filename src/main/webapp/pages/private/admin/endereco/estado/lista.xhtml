@@ -9,32 +9,32 @@
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/endereco/estado/lista.xhtml/" />
                     <p:panel  id="estado" header="Estados">
                         <p:toolbar id="toolbarEstado">
                             <f:facet name="left">
-                                <p:commandButton ajax="true" 
+                                <p:commandButton ajax="false" 
                                                  value="Novo" 
                                                  icon="ui-icon-plus"
                                                  title="Adicionar novo estado"
                                                  action="#{estadoControlador.prepararNovo()}" />
-                                
+
                                 <span class="ui-separator">
                                     <span class="ui-icon ui-icon-grip-dotted-vertical" />
                                 </span>
-                                    
+
                                 <p:commandButton id="btnEditar" 
                                                  icon="ui-icon-pencil" 
                                                  process="@this"
                                                  disabled="#{estadoControlador.estadoSelecionado == null}"
                                                  action="#{estadoControlador.prepararEdicao()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search"
                                                  process="@this"
                                                  disabled="#{estadoControlador.estadoSelecionado == null}"
                                                  action="#{estadoControlador.prepararVer()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -48,6 +48,7 @@
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      rows="10" 
                                      reflow="true"
@@ -62,7 +63,7 @@
                                      rowKey="#{estado.id}"
                                      var="estado" 
                                      emptyMessage="Nenhum registro encontrado">
-                            
+
                             <p:ajax event="rowSelect" update=":formLista:toolbarEstado"/>
                             <p:ajax event="rowUnselect" update=":formLista:toolbarEstado" />
                             <f:facet name="header">

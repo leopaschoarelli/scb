@@ -9,14 +9,14 @@
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/grupoemprestimo/lista.xhtml/" />
                     <p:panel  id="grupoEmprestimo" header="Grupos">
                         <p:toolbar id="toolbarGrpEmp">
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo" 
                                                  icon="ui-icon-plus" 
-                                                 ajax="true"
+                                                 ajax="false"
                                                  title="Adicionar novo Grupo de Emprestimo"
                                                  action="#{grupoEmprestimoControlador.prepararNovo}" />
                                 <span class="ui-separator">
@@ -28,14 +28,14 @@
                                                  disabled="#{grupoEmprestimoControlador.grupoSelecionado == null}"
                                                  title="Editar #{grupoEmprestimo.nome}" 
                                                  action="#{grupoEmprestimoControlador.prepararEdicao()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
                                                  process="@this"
                                                  disabled="#{grupoEmprestimoControlador.grupoSelecionado == null}"
                                                  title="Visualizar as informações de: #{grupoEmprestimo.nome}" 
                                                  action="#{grupoEmprestimoControlador.prepararVer()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -50,6 +50,7 @@
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      reflow="true"
                                      rows="10" 

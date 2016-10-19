@@ -9,13 +9,14 @@
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/categoria/lista.xhtml/" />
                     <p:panel  id="cat" header="Categorias">
                         <p:toolbar id="toolbarCategoria">
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo"
                                                  icon="ui-icon-plus"
+                                                 ajax="false"
                                                  title="Adicionar nova Categoria"
                                                  action="#{categoriaControlador.prepararNovo}"/>
                                 <span class="ui-separator">
@@ -27,14 +28,14 @@
                                                  disabled="#{categoriaControlador.categoriaSelecionada == null}"
                                                  title="Editar #{categoriaControlador.categoriaSelecionada}" 
                                                  action="#{categoriaControlador.prepararEdicao()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
                                                  process="@this"
                                                  disabled="#{categoriaControlador.categoriaSelecionada == null}"
                                                  title="Visualizar as informações de: #{categoriaControlador.categoriaSelecionada}" 
                                                  action="#{categoriaControlador.prepararVer()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -53,13 +54,13 @@
                                      resizableColumns="true"
                                      liveResize="true"
                                      scrollable="true"
-                                     scrollHeight="255"
+                                     scrollHeight="350"
                                      selection="#{categoriaControlador.categoriaSelecionada}"
                                      selectionMode="single"
                                      emptyMessage="Nenhum registro encontrado"
                                      value="#{categoriaControlador.raiz}" 
                                      var="categoria">
-                            
+
                             <p:ajax event="select" update=":formLista:toolbarCategoria"/>
                             <p:ajax event="unselect" update=":formLista:toolbarCategoria"/>
                             <f:facet name="header">
@@ -68,6 +69,9 @@
                             <p:column priority="1" filterBy="#{categoria.descricao}" headerText="Categorias e Subcategorias">
                                 <h:outputText value="#{categoria.descricao}" />
                             </p:column>
+                            <f:facet name="footer">
+                                Total de categorias: #{categoriaControlador.raiz.childCount}.
+                            </f:facet>
                         </p:treeTable>
                     </p:panel>
                 </h:form>

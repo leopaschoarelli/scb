@@ -37,12 +37,13 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton process="@form" id="botaoSalvar" ajax="true" update="@form" icon="ui-icon-check" value="Salvar" action="#{paisControlador.salvar()}" 
+                                <p:commandButton process="@this" id="botaoSalvar" ajax="false" update="@form" icon="ui-icon-check" value="Salvar" action="#{paisControlador.salvar()}" 
                                                  disabled="#{paisControlador.visualizar}"/>
-                                <p:commandButton id="botaoCancelar" ajax="true" process="@this" icon="ui-icon-close" value="Cancelar" action="#{paisControlador.prepararLista()}" />
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/endereco/pais/lista.xhtml" />
 
                             </p:panelGrid>
                         </p:panel>
+                        <p:defaultCommand target="nomep" />
                     </div>
                 </h:form>
             </ui:define>

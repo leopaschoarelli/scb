@@ -15,6 +15,7 @@
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo"
+                                                 ajax="false"
                                                  icon="ui-icon-plus"
                                                  title="Adicionar novo Tipo de Autor"
                                                  action="#{tipoAutorControlador.prepararNovo()}" />
@@ -27,14 +28,14 @@
                                                  icon="ui-icon-pencil" 
                                                  title="Editar #{tipoAutorControlador.tipoAutorSelecionado.descricao}" 
                                                  action="#{tipoAutorControlador.prepararEdicao()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnVisualizar" 
                                                  process="@this"
                                                  disabled="#{tipoAutorControlador.tipoAutorSelecionado == null}"
                                                  icon="ui-icon-search" 
                                                  title="Visualizar as informações de: #{tipoAutorControlador.tipoAutorSelecionado.descricao}" 
                                                  action="#{tipoAutorControlador.prepararVer()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  disabled="#{tipoAutorControlador.tipoAutorSelecionado == null}"
@@ -49,6 +50,7 @@
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      reflow="true"
                                      rows="10" 

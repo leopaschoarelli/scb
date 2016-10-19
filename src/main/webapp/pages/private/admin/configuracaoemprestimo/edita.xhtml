@@ -104,17 +104,18 @@
                                     </p:panel>
                                 </p:tab>
                             </p:tabView>
+                            <p:separator/>
+                            <p:panelGrid id="gridBotoes" columns="2"
+                                         layout="grid"
+                                         style="margin-top: 20px; margin-bottom: 40px"
+                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                         styleClass="panelgrid-noborder">
+                                <p:commandButton process="@this,complemento:tabDados" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{configuracaoEmprestimoControlador.salvar()}" 
+                                                 ajax="false" update="@form" disabled="#{configuracaoEmprestimoControlador.visualizar}"/>
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/configuracaoemprestimo/lista.xhtml" />
+                            </p:panelGrid>
+                            <p:defaultCommand target="complemento" />
                         </p:panel>
-                        <p:separator/>
-                        <p:panelGrid id="gridBotoes" columns="2"
-                                     layout="grid"
-                                     style="margin-top: 20px; margin-bottom: 40px"
-                                     columnClasses="ui-grid-col-6, ui-grid-col-6"
-                                     styleClass="panelgrid-noborder">
-                            <p:commandButton process="@this,complemento:tabDados" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{configuracaoEmprestimoControlador.salvar()}" 
-                                             ajax="true" update="@form" disabled="#{configuracaoEmprestimoControlador.visualizar}"/>
-                            <p:commandButton process="@this" id="botaoCancelar" icon="ui-icon-close" value="Cancelar" action="#{configuracaoEmprestimoControlador.prepararLista()}" ajax="true" />
-                        </p:panelGrid>
                     </div>
                 </h:form>
             </ui:define>

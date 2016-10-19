@@ -40,7 +40,6 @@
                                                 readonly="#{grupoEmprestimoControlador.visualizar}"
                                                 id="tipoPessoa"
                                                 var="tipoPessoa" 
-                                                required="true"
                                                 placeholder="Digite o Tipo de Pessoa"
                                                 completeMethod="#{grupoEmprestimoControlador.completaTipoPessoa}" 
                                                 converter="#{grupoEmprestimoControlador.converterTipoPessoa}"
@@ -145,12 +144,14 @@
                                                  id="botaoSalvar" 
                                                  icon="ui-icon-check" 
                                                  value="Salvar" 
+                                                 ajax="false"
                                                  action="#{grupoEmprestimoControlador.salvar}" 
                                                  update="@form" disabled="#{grupoEmprestimoControlador.visualizar}"/>
-                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{grupoEmprestimoControlador.prepararLista}" update="@form" />
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/grupoemprestimo/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
                     </div>
+                    <p:defaultCommand target="grp" />
                 </h:form>
             </ui:define>
         </ui:composition>

@@ -9,12 +9,13 @@
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/reserva/lista.xhtml/" />
                     <p:panel  id="reserva" header="Reservas">
                         <p:toolbar id="toolbarReserva">
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo"
+                                                 ajax="false"
                                                  icon="ui-icon-plus"
                                                  title="Adicionar nova Reserva"
                                                  action="#{reservaControlador.prepararNovo()}" />
@@ -27,14 +28,14 @@
                                                  title="Editar reserva" 
                                                  process="@this"
                                                  action="#{reservaControlador.prepararEdicao()}" 
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
                                                  process="@this"
                                                  disabled="#{reservaControlador.reservaSelecionada == null}"
                                                  title="Visualizar as informações de: #{reserva.nome}" 
                                                  action="#{reservaControlador.prepararVer()}"
-                                                 ajax="true"/>
+                                                 ajax="false"/>
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -48,6 +49,7 @@
                                 </p:commandButton>
                             </f:facet>
                         </p:toolbar>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <div class="ui-fluid">
                             <p:panelGrid columns="4" 
                                          id="panelPesq" 

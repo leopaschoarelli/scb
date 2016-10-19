@@ -50,11 +50,12 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton process="@form" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{instituicaoControlador.salvar()}" 
+                                <p:commandButton process="@this" ajax="false" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{instituicaoControlador.salvar()}" 
                                                  update="@form" disabled="#{instituicaoControlador.visualizar}"/>
-                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{instituicaoControlador.prepararLista()}" update="@form" />
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/instituicao/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
+                        <p:defaultCommand target="nomeFanta" />
                     </div>
                 </h:form>
             </ui:define>

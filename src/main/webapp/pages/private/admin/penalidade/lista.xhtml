@@ -9,14 +9,14 @@
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/penalidade/lista.xhtml/" />
                     <p:panel  id="penalidade" header="Penalidades">
                         <p:toolbar id="toolbarPenalidade">
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo" 
                                                  icon="ui-icon-plus" 
-                                                 ajax="true"
+                                                 ajax="false"
                                                  title="Adicionar nova Penalidade"
                                                  action="#{penalidadeControlador.prepararNovo}" />
                                 <span class="ui-separator">
@@ -28,14 +28,14 @@
                                                  disabled="#{penalidadeControlador.penalidadeSelecionada == null}"
                                                  title="Editar Penalidade" 
                                                  action="#{penalidadeControlador.prepararEdicao()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
                                                  process="@this"
                                                  disabled="#{penalidadeControlador.penalidadeSelecionada == null}"
                                                  title="Visualizar as informações da penalidade" 
                                                  action="#{penalidadeControlador.prepararVer()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"
@@ -50,6 +50,7 @@
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <p:dataTable paginator="true" 
                                      reflow="true"
                                      rows="10" 

@@ -30,11 +30,12 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton id="botaoSalvar" process="@form" icon="ui-icon-check" value="Salvar" action="#{editoraControlador.salvar()}" 
+                                <p:commandButton id="botaoSalvar" process="@this" ajax="false" icon="ui-icon-check" value="Salvar" action="#{editoraControlador.salvar()}" 
                                                  update="@form" disabled="#{editoraControlador.visualizar}"/>
-                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{editoraControlador.prepararLista()}" update="@form" />
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/editora/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
+                        <p:defaultCommand target="nom" />
                     </div>
                 </h:form>
             </ui:define>

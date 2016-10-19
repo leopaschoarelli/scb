@@ -17,12 +17,13 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-1, ui-grid-col-11"
                                          styleClass="panelgrid-noborder">
-                                <h:outputLabel value="Nome:" />
+                                <p:outputLabel value="Nome:" for="nomec" />
                                 <p:inputText required="true" 
+                                             id="nomec"
                                              placeholder="Nome da Cidade"
                                              readonly="#{cidadeControlador.visualiza}" 
                                              value="#{cidadeControlador.cidade.nome}" />
-                                <h:outputLabel value="Estado:" for="estado"/>
+                                <p:outputLabel value="Estado:" for="estado"/>
                                 <p:autoComplete 
                                     readonly="#{cidadeControlador.visualiza}"
                                     id="estado"
@@ -41,11 +42,12 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton process="@form" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{cidadeControlador.salvar()}" 
-                                                 ajax="true" update="@form" disabled="#{cidadeControlador.visualiza}"/>
-                                <p:commandButton id="botaoCancelar" process="@this" icon="ui-icon-close" value="Cancelar" action="#{cidadeControlador.prepararLista()}" ajax="true" />
+                                <p:commandButton process="@this" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{cidadeControlador.salvar()}" 
+                                                 ajax="false" update="@form" disabled="#{cidadeControlador.visualiza}"/>
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/endereco/cidade/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
+                        <p:defaultCommand target="nomec" />
                     </div>
                 </h:form>
             </ui:define>

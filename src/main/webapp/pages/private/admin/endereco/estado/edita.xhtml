@@ -48,12 +48,12 @@
                                          style="margin-top: 20px; margin-bottom: 40px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6"
                                          styleClass="panelgrid-noborder">
-                                <p:commandButton id="botaoSalvar" process="@form" ajax="true" icon="ui-icon-check" value="Salvar" action="#{estadoControlador.salvar}" 
+                                <p:commandButton id="botaoSalvar" process="@this" ajax="false" icon="ui-icon-check" value="Salvar" action="#{estadoControlador.salvar}" 
                                                  update="@form" disabled="#{estadoControlador.visualiza}"/>
-                                <p:commandButton id="botaoCancelar" process="@this" ajax="true" icon="ui-icon-close" value="Cancelar" action="#{estadoControlador.prepararLista}"/>
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/endereco/estado/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
-
+                        <p:defaultCommand target="nomee" />
                     </div>
                 </h:form>
             </ui:define>
