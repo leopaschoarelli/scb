@@ -43,10 +43,12 @@ public class EmprestimoControlador implements Serializable {
     private List<ItemEmprestimo> emprestimoFiltrado;
     private List<ItemEmprestimo> itensSelecionados;
     private List<ItemEmprestimo> itensEmprestado;
+    private List<ItemEmprestimo> itensDevolFiltro;
+    private List<ItemEmprestimo> itensDevolucao;
     private List<ItemReserva> reservasAbertas;
     private ItemReserva itemReserva;
     private ItemReservaDAOImpl itemReservaDAO;
-    
+
     private EmprestimoDAOImpl emprestimoDAO;
     private ItemEmprestimo itemEmprestimo;
     private ItemEmprestimoDAOImpl itemEmprestimoDAO;
@@ -83,6 +85,13 @@ public class EmprestimoControlador implements Serializable {
     private ConverterAutoComplete converterObra;
     private PublicacaoDAOImpl publicacaoDAO;
 
+    private Date dataInicial;
+    private Date dataFinal;
+
+    private String publicacaoPesquisa;
+    private String pessoaPesquisa;
+    private String tomboPesquisa;
+
     public EmprestimoControlador() {
         newInstances();
     }
@@ -104,7 +113,7 @@ public class EmprestimoControlador implements Serializable {
         this.exemplarFiltro = new Exemplar();
         this.exemplaresFiltrados = new ArrayList<Exemplar>();
         this.exemplarDrop = new ArrayList<Exemplar>();
-        this.reservasAbertas = new  ArrayList<>();
+        this.reservasAbertas = new ArrayList<>();
         this.obra = "";
         this.emprestar = true;
         this.prazo = new Date();
@@ -115,6 +124,10 @@ public class EmprestimoControlador implements Serializable {
         this.comprovanteDAO = new ComprovanteDAOImpl();
         this.itemReserva = new ItemReserva();
         this.itemReservaDAO = new ItemReservaDAOImpl();
+        this.itensDevolFiltro = new ArrayList<>();
+        this.itensEmprestado = new ArrayList<>();
+        this.publicacaoPesquisa = "";
+        this.pessoaPesquisa = "";
     }
 
     public void salvarSemSair() {
@@ -341,14 +354,14 @@ public class EmprestimoControlador implements Serializable {
         itemEmprestimo.setPrazo(dataDevol);
     }
 
-    public void onEfetivaReserva(ItemReserva reserva){
+    public void onEfetivaReserva(ItemReserva reserva) {
         this.itemReserva = new ItemReserva();
         this.itemReserva = reserva;
         this.itemReserva.setEfetivado(true);
         this.reservasAbertas.remove(reserva);
         this.exemplaresFiltrados = emprestimoDAO.getExemplares(this.itemReserva.getPublicacao().getId());
     }
-    
+
     public void onExemplarAdiciona() {
         exemplarDrop.add(itemEmprestimo.getExemplar());
 //        itemEmprestimo.setPrazo(prazo);
@@ -448,6 +461,10 @@ public class EmprestimoControlador implements Serializable {
         return emprestimoDAO.getPublicacoes(value.toLowerCase());
     }
 
+    public List<Exemplar> completaExem(String value) {
+        return emprestimoDAO.getAllExemplares(value.toLowerCase());
+    }
+
     public ConverterAutoComplete getConverterPessoa() {
         if (converterPessoa == null) {
             converterPessoa = new ConverterAutoComplete(Pessoa.class, pessoaDAO);
@@ -465,6 +482,14 @@ public class EmprestimoControlador implements Serializable {
 
     public void setExemplar(Exemplar exemplar) {
         this.exemplar = exemplar;
+    }
+
+    public void completarExemp() {
+        nomeExemplar = null;
+
+        if (tomboPesquisa != null) {
+            System.out.println("TOMBO: " + tomboPesquisa);
+        }
     }
 
     public void completarExemplar() {
@@ -663,6 +688,120 @@ public class EmprestimoControlador implements Serializable {
         this.itemReservaDAO = itemReservaDAO;
     }
 
-    
-    
+    public List<ItemEmprestimo> getItensDevolFiltro() {
+        return itensDevolFiltro;
+    }
+
+    public void setItensDevolFiltro(List<ItemEmprestimo> itensDevolFiltro) {
+        this.itensDevolFiltro = itensDevolFiltro;
+    }
+
+    public List<ItemEmprestimo> getItensDevolucao() {
+        return itensDevolucao;
+    }
+
+    public void setItensDevolucao(List<ItemEmprestimo> itensDevolucao) {
+        this.itensDevolucao = itensDevolucao;
+    }
+
+    public Date getDataInicial() {
+        return dataInicial;
+    }
+
+    public void setDataInicial(Date dataInicial) {
+        this.dataInicial = dataInicial;
+    }
+
+    public Date getDataFinal() {
+        return dataFinal;
+    }
+
+    public void setDataFinal(Date dataFinal) {
+        this.dataFinal = dataFinal;
+    }
+
+    private boolean validarDatas() {
+        if (dataInicial != null) {
+            if (dataFinal == null) {
+                JsfUtil.addErrorMessage("Informe uma data final para continuar com a pesquisa");
+                return false;
+            } else if (dataFinal.before(dataInicial)) {
+                JsfUtil.addErrorMessage("Data final menor que a data inicial, verifique!");
+                return false;
+            } else {
+                return true;
+            }
+        } else if (dataFinal != null) {
+            JsfUtil.addErrorMessage("Informe uma data inicial para continuar com a pesquisa");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void pesquisarDevol() {
+        if (validarDatas()) {
+            if (!"".equals(tomboPesquisa)) {
+                publicacaoPesquisa = "";
+                pessoaPesquisa = "";
+                dataInicial = null;
+                dataFinal = null;
+            }
+            itensDevolFiltro = itemEmprestimoDAO.filtrarDevolPendente(publicacaoPesquisa, pessoaPesquisa, tomboPesquisa, dataInicial, dataFinal);
+            if (itensDevolFiltro.isEmpty()) {
+                JsfUtil.addSuccessMessage("Não foram encontradas devoluções pendentes com os parâmetros informados!");
+            }
+            publicacaoPesquisa = "";
+            pessoaPesquisa = "";
+            dataInicial = null;
+            dataFinal = null;
+            tomboPesquisa = "";
+        }
+    }
+
+    public String realizaDevolucao() {
+        if (itensDevolFiltro.isEmpty()) {
+            JsfUtil.addErrorMessage("Recupere e selecione pelo menos um emprestimo a ser devolvido");
+            return null;
+        }
+        if (itensDevolucao.isEmpty()) {
+            JsfUtil.addErrorMessage("Selecione pelo menos um emprestimo para realizar a devolução");
+            return null;
+        }
+        for (ItemEmprestimo it : itensDevolucao) {
+            it.getExemplar().setEstadoExemplar(EstadoExemplar.DISPONIVEL);
+            it.setDevolucao(new Date());
+        }
+        emprestimoDAO.update(emprestimo);
+        return null;
+    }
+
+    public void testando(String numero) {
+        System.out.println("Caiu aqui: " + numero);
+    }
+
+    public String getPublicacaoPesquisa() {
+        return publicacaoPesquisa;
+    }
+
+    public void setPublicacaoPesquisa(String publicacaoPesquisa) {
+        this.publicacaoPesquisa = publicacaoPesquisa;
+    }
+
+    public String getPessoaPesquisa() {
+        return pessoaPesquisa;
+    }
+
+    public void setPessoaPesquisa(String pessoaPesquisa) {
+        this.pessoaPesquisa = pessoaPesquisa;
+    }
+
+    public String getTomboPesquisa() {
+        return tomboPesquisa;
+    }
+
+    public void setTomboPesquisa(String tomboPesquisa) {
+        this.tomboPesquisa = tomboPesquisa;
+    }
+
 }

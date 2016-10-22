@@ -92,4 +92,49 @@ public class ItemEmprestimoDAOImpl extends AbstractDAO<ItemEmprestimo> implement
         q.setParameter("parte", pessoa.getId());
         return q.getResultList();
     }
+
+    public List<ItemEmprestimo> filtrarDevolPendente(String publicacao, String pessoa, String tombo, Date dataInicial, Date dataFinal) {
+        String sql = "select b.* from emprestimo a, itememprestimo b, publicacao c, pessoa d, exemplar e "
+                + "where b.emprestimo_id = a.id "
+                + "and b.exemplar_id = e.id "
+                + "and a.pessoa_id = d.id "
+                + "and c.id = e.publicacao_id "
+                + "and b.devolucao is null ";
+        if (!"".equals(publicacao)) {
+            sql = sql + "and lower(c.titulo) like :publicacao ";
+        }
+        if (!"".equals(pessoa)) {
+            sql = sql + "and lower(d.nome) like :pessoa ";
+        }
+        if (!"".equals(tombo)) {
+            sql = sql + "and e.tombo like :tombo ";
+        }
+        if (dataInicial != null) {
+            System.out.println("Data Inicial: " + dataInicial);
+            sql = sql + "and a.criacao >= :inicial ";
+        }
+        if (dataFinal != null) {
+            System.out.println("Data Final: " + dataFinal);
+            sql = sql + "and a.criacao <= :final ";
+        }
+        System.out.println("SQL: " + sql);
+        Query q = getEntityManager().createNativeQuery(sql, ItemEmprestimo.class);
+        if (!"".equals(publicacao)) {
+            q.setParameter("publicacao", "%" + publicacao.toLowerCase() + "%");
+        }
+        if (!"".equals(pessoa)) {
+            q.setParameter("pessoa", "%" + pessoa.toLowerCase() + "%");
+        }
+        if (!"".equals(tombo)) {
+            q.setParameter("tombo", "%" + tombo + "%");
+        }
+        if (dataInicial != null) {
+            q.setParameter("inicial", dataInicial);
+        }
+
+        if (dataFinal != null) {
+            q.setParameter("final", dataFinal);
+        }
+        return q.getResultList();
+    }
 }

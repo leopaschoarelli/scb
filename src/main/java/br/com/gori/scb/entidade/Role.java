@@ -1,11 +1,14 @@
 package br.com.gori.scb.entidade;
 
+import br.com.gori.scb.entidade.util.RoleUser;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "roles")
-@NamedQuery(name = "Role.findRoleByName", query = "select r from Role r where r.name = :name")
+@NamedQuery(name = "Role.findRoleByType", query = "select r from Role r where r.typeRole = :type")
 @SequenceGenerator(name = "ROLE_SEQUENCE", sequenceName = "ROLE_SEQUENCE", allocationSize = 1, initialValue = 0)
 public class Role implements Serializable {
 
@@ -31,14 +34,17 @@ public class Role implements Serializable {
     private Long id;
     @Column(length = 255, nullable = false, unique = true)
     private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleUser typeRole;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     private Set<User> users = new HashSet<>(0);
 
     public Role() {
     }
 
-    public Role(String name) {
+    public Role(String name, RoleUser typeRole) {
         this.name = name;
+        this.typeRole = typeRole;
     }
 
     public Long getId() {
@@ -63,6 +69,14 @@ public class Role implements Serializable {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public RoleUser getTypeRole() {
+        return typeRole;
+    }
+
+    public void setTypeRole(RoleUser typeRole) {
+        this.typeRole = typeRole;
     }
 
     @Override

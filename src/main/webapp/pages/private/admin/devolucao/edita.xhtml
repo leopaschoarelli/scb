@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="/WEB-INF/template/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="formLista" prependId="false">
+
+                    <div class="ui-fluid">
+                        <p:panel id="panelDevolucao" header="Realizar Devolução de Exemplares">
+                            <p:messages id="messagesDevolucao" autoUpdate="true" closable="true" />
+                            <p:defaultCommand target="panelPesq" />
+                            <p:focus context="exemplar"/>
+                            <p:panelGrid columns="4" 
+                                         id="panelPesq" 
+                                         layout="grid" 
+                                         styleClass="panelgrid-noborder"
+                                         style="margin-top: 5px; margin-bottom: 3px"
+                                         columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-0, ui-grid-col-4">
+
+                                <p:outputLabel value="Obra Literária: " for="obra" />
+                                <p:autoComplete 
+                                    id="obra"
+                                    var="obra" 
+                                    forceSelection="true"
+                                    completeMethod="#{emprestimoControlador.completaObra}" 
+                                    converter="#{emprestimoControlador.converterObra}"
+                                    emptyMessage="Nenhum resultado encontrado"
+                                    value="#{emprestimoControlador.publicacaoPesquisa}"
+                                    itemValue="#{obra.id}" itemLabel="#{obra.toString()}"/>
+                                <p:outputLabel />
+                                <p:outputLabel />
+                                <p:outputLabel value="Pessoa: " for="pessoa" />
+                                <p:autoComplete 
+                                    readonly="#{emprestimoControlador.visualizar}"
+                                    id="pessoa"
+                                    var="pessoa" 
+                                    forceSelection="true"
+                                    completeMethod="#{emprestimoControlador.completaPessoa}" 
+                                    converter="#{emprestimoControlador.converterPessoa}"
+                                    emptyMessage="Nenhum resultado encontrado"
+                                    value="#{emprestimoControlador.pessoaPesquisa}"
+                                    itemValue="#{pessoa.id}" itemLabel="#{pessoa.toString()}"/>
+                                <p:outputLabel  />
+                                <p:outputLabel  />
+                                <p:outputLabel value="Data Emprestimo: " />
+                                <p:calendar id="dtInicial"
+                                            value="#{reservaControlador.dataInicial}" 
+                                            mask="true" 
+                                            pattern="dd/MM/yyyy" />
+                                <p:outputLabel value="até"/>
+                                <p:calendar id="dtFinal"
+                                            value="#{reservaControlador.dataFinal}" 
+                                            mask="true" 
+                                            pattern="dd/MM/yyyy" />
+
+                            </p:panelGrid>
+                            <p:commandButton id="btnPesquisa"
+                                             icon="ui-icon-search" 
+                                             actionListener="#{emprestimoControlador.pesquisarDevol}"
+                                             update="panelPesq panelDevol"
+                                             ajax="false"
+                                             process="@this,panelPesq"
+                                             value="Pesquisar"/>
+                            <p:separator/>
+                            <p:panelGrid columns="4" 
+                                         id="panelDevol" 
+                                         layout="grid" 
+                                         styleClass="panelgrid-noborder"
+                                         style="margin-top: 5px; margin-bottom: 5px"
+                                         columnClasses="ui-grid-col-1, ui-grid-col-2, ui-grid-col-8, ui-grid-col-1">
+                                <p:outputLabel value="Exemplar: " for="exemplar" />
+                                <p:autoComplete 
+                                    id="exemplar"
+                                    var="exemplar" 
+                                    forceSelection="true"
+                                    completeMethod="#{emprestimoControlador.completaExem}" 
+                                    converter="#{emprestimoControlador.converterPublicacao}"
+                                    emptyMessage="Nenhum resultado encontrado"
+                                    value="#{emprestimoControlador.tomboPesquisa}"
+                                    itemValue="#{exemplar.id}" itemLabel="#{exemplar.toString()}">
+                                    <p:ajax event="itemSelect" 
+                                            update="nomeExem"
+                                            listener="#{emprestimoControlador.completarExemplar}"/>
+                                    <p:ajax event="keyup" 
+                                            update="nomeExem"
+                                            listener="#{emprestimoControlador.completarExemplar}"/>
+                                </p:autoComplete>
+                                <p:inputText readonly="true" value="#{emprestimoControlador.nomeExemplar}" id="nomeExem" />
+                                <p:commandButton id="botaoAdd" actionListener="#{emprestimoControlador.testando('2')}" process="@this" ajax="false" icon="ui-icon-check" 
+                                                 update="@form"/>
+                            </p:panelGrid>
+                            <p:dataTable paginator="true" 
+                                         reflow="true"
+                                         rows="3" 
+                                         resizeMode="fit"
+                                         scrollable="true"
+                                         scrollHeight="85"
+                                         id="tableDevol" 
+                                         value="#{emprestimoControlador.itensDevolFiltro}" 
+                                         resizableColumns="true"
+                                         selection="#{emprestimoControlador.itensDevolucao}"
+                                         rowKey="#{devolucao.id}"
+                                         var="devolucao" 
+                                         style="margin-top: 5px"
+                                         emptyMessage="Nenhum registro encontrado">
+                                <f:facet name="header">
+                                    Emprestimos a serem devolvidos
+                                </f:facet>
+                                <p:column selectionMode="multiple" style="width:35px;text-align:center"/>
+
+                                <p:column filterStyle="width: auto" filterBy="#{devolucao.emprestimo.pessoa.nome}" headerText="Pessoa">
+                                    <h:outputText value="#{devolucao.emprestimo.pessoa.nome}" />
+                                </p:column>
+                                <p:column filterStyle="width: auto" filterBy="#{devolucao.exemplar.publicacao.titulo}" headerText="Publicação">
+                                    <h:outputText value="#{devolucao.exemplar.publicacao.titulo}" />
+                                </p:column>
+                                <p:column filterStyle="width: auto" filterBy="#{devolucao.emprestimo.criacao}" headerText="Data Emprestimo">
+                                    <h:outputText value="#{devolucao.emprestimo.criacao}">
+                                        <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <f:facet name="footer">
+                                    Total de emprestimos #{emprestimoControlador.itensDevolFiltro.size()}.
+                                </f:facet>
+                            </p:dataTable>
+                            <p:separator/>
+                            <p:panelGrid id="gridBotoes" columns="1"
+                                         layout="grid"
+                                         style="margin-top: 5px; margin-bottom: 3px"
+                                         columnClasses="ui-grid-col-12"
+                                         styleClass="panelgrid-noborder">
+                                <p:commandButton id="botaoSalvar" process="@this" 
+                                                 ajax="false" 
+                                                 actionListener="#{emprestimoControlador.testando('3')}"
+                                                 icon="ui-icon-check" 
+                                                 value="Devolver" 
+                                                 action="#{emprestimoControlador.realizaDevolucao}"
+                                                 />
+                            </p:panelGrid>
+
+
+                        </p:panel>
+
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

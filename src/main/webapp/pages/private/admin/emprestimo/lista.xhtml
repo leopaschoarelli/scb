@@ -9,12 +9,13 @@
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/emprestimo/lista.xhtml/" />
                     <p:panel  id="emprestimo" header="Emprestimos">
                         <p:toolbar id="toolbarEmprestimo"  >
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo" 
+                                                 ajax="false"
                                                  icon="ui-icon-plus" 
                                                  title="Realizar novo Emprestimo"
                                                  action="#{emprestimoControlador.prepararNovo()}" />
@@ -22,22 +23,10 @@
                                 <span class="ui-separator">
                                     <span class="ui-icon ui-icon-grip-dotted-vertical" />
                                 </span>
-
-                                <p:commandButton id="btnEditar" 
-                                                 icon="ui-icon-transferthick-e-w"
-                                                 process="@this"
-                                                 title="Realizar Devolução dos Itens Selecionados" 
-                                                 action="#{emprestimoControlador.devolucao()}" >
-                                </p:commandButton>
-                                <p:commandButton id="btnVisualizar" 
-                                                 icon="ui-icon-search" 
-                                                 process="@this"
-                                                 title="Visualizar as informações de: #" 
-                                                 action="#" 
-                                                 ajax="true" />
                             </f:facet>
                         </p:toolbar>
                         <br/>
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
                         <h:panelGrid columns="3" id="panelPesq" style="bottom: 10px">
                             <p:outputLabel value="Leitor:"/>
                             <p:spacer height="10"/>

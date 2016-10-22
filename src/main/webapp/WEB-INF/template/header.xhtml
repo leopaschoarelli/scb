@@ -47,7 +47,7 @@
                                         <h:graphicImage library="images" name="user.png" class="img-circle" alt="User Image"/>
                                     </div>
                                     <div class="pull-left info">
-                                        <p style="white-space: initial">#{usuarioSistema.nomeUsuario}</p>
+                                        <p:link outcome="/pages/private/admin/perfil.xhtml"><p style="font-weight: bold;white-space: initial">#{usuarioSistema.usuarioLogado.name}</p></p:link>
                                         <!-- Status -->
                                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                                     </div>
@@ -109,7 +109,7 @@
                                         <a href="#"><i class="fa fa-folder-open"></i> <span>Gerencial</span> <i class="fa fa-angle-left pull-right"></i></a>
                                         <ul class="treeview-menu">
                                             <li><p:link outcome="/pages/private/admin/emprestimo/lista.xhtml"><i class="fa fa-file"></i>Empréstimo</p:link></li>	
-                                            <li><p:link outcome="/pages/private/admin/emprestimo/lista.xhtml"><i class="fa fa-file"></i>Devolução</p:link></li>	
+                                            <li><p:link outcome="/pages/private/admin/devolucao/edita.xhtml"><i class="fa fa-file"></i>Devolução</p:link></li>	
                                             <li><p:link outcome="/pages/private/admin/reserva/lista.xhtml"><i class="fa fa-file"></i>Reserva</p:link></li>	
                                         </ul>
                                     </li>

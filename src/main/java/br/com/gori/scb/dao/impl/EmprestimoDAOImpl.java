@@ -131,6 +131,26 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
         return q.getResultList();
     }
 
+    public List<Exemplar> getAllExemplares(String tombo) {
+        String sql;
+        Boolean caracter;
+        if (tombo == null || " ".equals(tombo)) {
+            sql = "select e.* from exemplar e";
+            caracter = false;
+        } else {
+            sql = "select e.* from publicacao p, exemplar e "
+                    + "where e.publicacao_id = p.id "
+                    + "and e.tombo like :parte";
+            caracter = true;
+        }
+        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        if (caracter) {
+            q.setParameter("parte", "%" + tombo + "%");
+        }
+        q.setMaxResults(MAX_RESULTS_QUERY);
+        return q.getResultList();
+    }
+
     @Override
     public List<ItemEmprestimo> listarFiltros(String nomel, String obralit, Date dtEmp) {
         String sql = ""

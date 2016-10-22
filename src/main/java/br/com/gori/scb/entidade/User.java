@@ -42,7 +42,7 @@ public class User implements Serializable {
     @Column(length = 255, nullable = false)
     private String password;
     private boolean enabled;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",
             joinColumns = {
                 @JoinColumn(name = "user_id", nullable = false, updatable = false)},
@@ -50,8 +50,11 @@ public class User implements Serializable {
                 @JoinColumn(name = "role_id", nullable = false, updatable = false)
             })
     private Set<Role> roles = new HashSet<>(0);
-    
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    private Pessoa pessoa;
+
     public User() {
+        this.enabled = true;
     }
 
     public User(String username, String password) {
@@ -111,7 +114,15 @@ public class User implements Serializable {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-    
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -135,6 +146,13 @@ public class User implements Serializable {
             return false;
         }
         return true;
+    }
+
+    public String getName() {
+        if (this.pessoa != null) {
+            return this.pessoa.getNome();
+        }
+        return this.username;
     }
 
     @Override

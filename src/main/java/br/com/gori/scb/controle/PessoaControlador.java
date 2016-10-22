@@ -3,14 +3,19 @@ package br.com.gori.scb.controle;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.dao.impl.CidadeDAOImpl;
 import br.com.gori.scb.dao.impl.PessoaDAOImpl;
+import br.com.gori.scb.dao.impl.RoleDAOImpl;
 import br.com.gori.scb.dao.impl.TipoPessoaDAOImpl;
 import br.com.gori.scb.dao.impl.TurmaDAOImpl;
+import br.com.gori.scb.dao.impl.UserDAOImpl;
 import br.com.gori.scb.entidade.Cidade;
 import br.com.gori.scb.entidade.Endereco;
 import br.com.gori.scb.entidade.Pessoa;
+import br.com.gori.scb.entidade.Role;
 import br.com.gori.scb.entidade.Telefone;
 import br.com.gori.scb.entidade.TipoPessoa;
 import br.com.gori.scb.entidade.Turma;
+import br.com.gori.scb.entidade.User;
+import br.com.gori.scb.entidade.util.RoleUser;
 import br.com.gori.scb.entidade.util.Sexo;
 import br.com.gori.scb.entidade.util.TipoEndereco;
 import br.com.gori.scb.entidade.util.TipoLogradouro;
@@ -18,6 +23,7 @@ import br.com.gori.scb.entidade.util.TipoTelefone;
 import br.com.gori.scb.util.ConverterAutoComplete;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -47,6 +53,11 @@ public class PessoaControlador implements Serializable {
     private ConverterAutoComplete converterTipoPessoa;
     private ConverterAutoComplete converterCidade;
     private CidadeDAOImpl cidadeDAO;
+    private User user;
+    private UserDAOImpl userDAO;
+    private RoleUser roleUser;
+    private Role role;
+    private RoleDAOImpl roleDAO;
 
     public PessoaControlador() {
         newInstances();
@@ -60,18 +71,35 @@ public class PessoaControlador implements Serializable {
         this.cidadeDAO = new CidadeDAOImpl();
         this.endereco = new Endereco();
         this.telefone = new Telefone();
+        this.user = new User();
+        this.userDAO = new UserDAOImpl();
+        this.role = new Role();
+        this.roleDAO = new RoleDAOImpl();
+    }
+
+    public void role() {
+        System.out.println("ROLE!: " + roleUser);
+        System.out.println("ROLEE!: " + roleUser.getDescricao());
     }
 
     public String salvar() {
         try {
 //            if (validaEndereco()) {
-                if (edicao) {
-                    pessoaDAO.update(pessoa);
-                } else {
-                    pessoaDAO.save(pessoa);
-                }
-                JsfUtil.addSuccessMessage("Pessoa salva com sucesso!");
-                return prepararLista();
+            role = new Role();
+            role = roleDAO.buscarRolePorTipo(roleUser);
+            if (!user.getRoles().isEmpty()) {
+                user.getRoles().clear();
+                user.setRoles(new HashSet<>());
+            }
+            user.getRoles().add(role);
+            pessoa.setUser(user);
+            if (edicao) {
+                pessoaDAO.update(pessoa);
+            } else {
+                pessoaDAO.save(pessoa);
+            }
+            JsfUtil.addSuccessMessage("Pessoa salva com sucesso!");
+            return prepararLista();
 //            } else {
 //                return null;
 //            }
@@ -95,13 +123,20 @@ public class PessoaControlador implements Serializable {
 
     public String prepararLista() {
         newInstances();
-        if (pessoaSelecionada != null) pessoaSelecionada = null;
+        if (pessoaSelecionada != null) {
+            pessoaSelecionada = null;
+        }
         return "lista";
     }
 
     public String prepararEdicao() {
         newInstances();
         pessoa = pessoaSelecionada;
+        if (pessoa.getUser() != null) {
+            user = pessoa.getUser();
+            role = roleDAO.buscarRolePorUsuario(user);
+            roleUser = role.getTypeRole();
+        }
         ativo = true;
         visualiza = false;
         edicao = true;
@@ -128,6 +163,7 @@ public class PessoaControlador implements Serializable {
     public String prepararVer() {
         newInstances();
         pessoa = pessoaSelecionada;
+        user = pessoaSelecionada.getUser();
         ativo = true;
         edicao = false;
         isAluno = false;
@@ -150,6 +186,14 @@ public class PessoaControlador implements Serializable {
         List<SelectItem> toReturn = new ArrayList<SelectItem>();
         for (Sexo sx : Sexo.values()) {
             toReturn.add(new SelectItem(sx, sx.getDescricao()));
+        }
+        return toReturn;
+    }
+
+    public List<SelectItem> getTypeRole() {
+        List<SelectItem> toReturn = new ArrayList<SelectItem>();
+        for (RoleUser ru : RoleUser.values()) {
+            toReturn.add(new SelectItem(ru, ru.getDescricao()));
         }
         return toReturn;
     }
@@ -368,6 +412,46 @@ public class PessoaControlador implements Serializable {
 
     public void setPessoaSelecionada(Pessoa pessoaSelecionada) {
         this.pessoaSelecionada = pessoaSelecionada;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public UserDAOImpl getUserDAO() {
+        return userDAO;
+    }
+
+    public void setUserDAO(UserDAOImpl userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public RoleUser getRoleUser() {
+        return roleUser;
+    }
+
+    public void setRoleUser(RoleUser roleUser) {
+        this.roleUser = roleUser;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public RoleDAOImpl getRoleDAO() {
+        return roleDAO;
+    }
+
+    public void setRoleDAO(RoleDAOImpl roleDAO) {
+        this.roleDAO = roleDAO;
     }
 
 }

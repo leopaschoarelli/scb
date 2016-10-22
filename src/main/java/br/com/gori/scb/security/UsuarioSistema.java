@@ -1,6 +1,8 @@
 package br.com.gori.scb.security;
 
+import br.com.gori.scb.dao.impl.PessoaDAOImpl;
 import br.com.gori.scb.dao.impl.UserDAOImpl;
+import br.com.gori.scb.entidade.Pessoa;
 import br.com.gori.scb.entidade.User;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -11,12 +13,19 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class UsuarioSistema {
 
+    private boolean visualiza;
+    
+    public UsuarioSistema(){
+        getUsuarioLogado();
+        this.visualiza = true;
+    }
+    
     private br.com.gori.scb.entidade.User usuarioLogado = null;
     
-    public String getNomeUsuario(){
-        getUsuarioLogado();
-        return usuarioLogado.getUsername();
-    }
+//    public String getNomeUsuario(){
+//        getUsuarioLogado();
+//        return usuarioLogado.getName();
+//    }
 
     public br.com.gori.scb.entidade.User getUsuarioLogado() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -32,4 +41,13 @@ public class UsuarioSistema {
         }
         return usuarioLogado;
     }
+
+    public boolean isVisualiza() {
+        return visualiza;
+    }
+
+    public void setVisualiza(boolean visualiza) {
+        this.visualiza = visualiza;
+    }
+
 }

@@ -43,7 +43,6 @@
                                                          value="#{pessoaControlador.pessoa.nome}"/>
                                             <p:outputLabel value="RG: " for="rg" />
                                             <p:inputText id="rg"
-                                                         required="true"
                                                          placeholder="Registro Geral (RG)"
                                                          readonly="#{pessoaControlador.visualiza}" 
                                                          value="#{pessoaControlador.pessoa.rg}" />
@@ -235,6 +234,32 @@
                                         </p:dataTable>
                                     </p:panel>
                                 </p:tab>
+                                <p:tab id="tabUser" title="Usuário">
+                                    <p:panel id="users">
+                                        <p:panelGrid columns="2" layout="grid" 
+                                                     style="margin-top: 20px; margin-bottom: 40px"
+                                                     columnClasses="ui-grid-col-2, ui-grid-col-11"
+                                                     styleClass="panelgrid-noborder">
+                                            <p:outputLabel value="Permissão de Acesso: " for="tpRole"/>
+                                            <p:selectOneMenu id="tpRole" disabled="#{pessoaControlador.visualiza}" style="width: 130px" value="#{pessoaControlador.roleUser}" >
+                                                <f:selectItems var="tipo" itemLabel="#{tipo}" itemValue="#{tipo}"
+                                                               value="#{pessoaControlador.typeRole}"/>
+                                            </p:selectOneMenu>
+                                            <p:outputLabel value="Usuário: " />    
+                                            <p:inputText placeholder="Digite o Login"
+                                                         readonly="#{pessoaControlador.visualiza}" 
+                                                         value="#{pessoaControlador.user.username}" />
+                                            <p:outputLabel value="Senha: " />
+                                            <p:password inline="true" 
+                                                        redisplay="true"
+                                                        weakLabel="Fraco" goodLabel="Médio" strongLabel="Forte" 
+                                                        feedback="#{!pessoaControlador.visualiza}" maxlength="16" 
+                                                        readonly="#{pessoaControlador.visualiza}"
+                                                        placeholder="Digite a Senha"
+                                                        value="#{pessoaControlador.user.password}"  />
+                                        </p:panelGrid>
+                                    </p:panel>
+                                </p:tab>
                             </p:tabView>
                             <p:separator/>
                             <p:panelGrid id="gridBotoes" columns="2"
@@ -245,10 +270,10 @@
                                                  id="botaoSalvar" 
                                                  icon="ui-icon-check" 
                                                  value="Salvar"
-                                                 ajax="false"
-                                                 process="@none"
+                                                 ajax="true"
+                                                 process="@this,complemento:tabDados,complemento:tabUser"
                                                  action="#{pessoaControlador.salvar}"/>
-                               <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/pessoa/lista.xhtml" />
+                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/pessoa/lista.xhtml" />
                             </p:panelGrid>
                         </p:panel>
                         <p:defaultCommand target="complemento" />

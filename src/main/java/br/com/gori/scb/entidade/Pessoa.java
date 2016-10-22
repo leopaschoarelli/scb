@@ -68,6 +68,9 @@ public class Pessoa implements Serializable {
     private Set<Emprestimo> emprestimosAbertos;
     @Transient
     private Set<Reserva> reservasAbertas;
+    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Pessoa() {
         this.endereco = new ArrayList<>();
@@ -75,9 +78,10 @@ public class Pessoa implements Serializable {
         this.emprestimosAbertos = new HashSet<>();
         this.reservasAbertas = new HashSet<>();
         this.ativo = true;
+        this.user = new User();
     }
 
-    public Pessoa(String nome, Date nascimento, Sexo sexo, String rg, Boolean ativo, String email, TipoPessoa tipoPessoa, String cgm, Turma turma) {
+    public Pessoa(String nome, Date nascimento, Sexo sexo, String rg, Boolean ativo, String email, TipoPessoa tipoPessoa, String cgm, Turma turma, User user) {
         this.nome = nome;
         this.nascimento = nascimento;
         this.sexo = sexo;
@@ -87,6 +91,7 @@ public class Pessoa implements Serializable {
         this.tipoPessoa = tipoPessoa;
         this.cgm = cgm;
         this.turma = turma;
+        this.user = user;
     }
 
     public Long getId() {
@@ -206,6 +211,14 @@ public class Pessoa implements Serializable {
 
     public void setReservasAbertas(Set<Reserva> reservasAbertas) {
         this.reservasAbertas = reservasAbertas;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Integer getQtdeItensEmprestimoAbertos() {
