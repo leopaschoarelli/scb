@@ -216,7 +216,7 @@
                                              ajax="false" 
                                              actionListener="#{emprestimoControlador.salvar('Sim')}" 
                                              action="#{comprovanteControlador.emitir()}"
-                                             onclick="PF('salvarEmp').hide();"
+                                             onclick="PF('salvarEmp').hide(); this.form.target = '_blank'"
                                              process="@this"
                                              icon="ui-icon-check" 
                                              value="Sim" 

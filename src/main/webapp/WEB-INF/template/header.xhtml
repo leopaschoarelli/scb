@@ -104,17 +104,34 @@
                                         </ul>
                                     </li>
                                 </sec:authorize>
-                                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                                <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_ROOT','ROLE_MOD')" >
                                     <li class="treeview">
-                                        <a href="#"><i class="fa fa-folder-open"></i> <span>Gerencial</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                        <a href="#"><i class="fa fa-folder-open"></i> <span>Consultas</span> <i class="fa fa-angle-left pull-right"></i></a>
+
                                         <ul class="treeview-menu">
-                                            <li><p:link outcome="/pages/private/admin/emprestimo/lista.xhtml"><i class="fa fa-file"></i>Empréstimo</p:link></li>	
-                                            <li><p:link outcome="/pages/private/admin/devolucao/edita.xhtml"><i class="fa fa-file"></i>Devolução</p:link></li>	
-                                            <li><p:link outcome="/pages/private/admin/reserva/lista.xhtml"><i class="fa fa-file"></i>Reserva</p:link></li>	
+                                            <li><p:link outcome="/pages/private/admin/consulta/emprestimo.xhtml"><i class="fa fa-file"></i>Empréstimos/Devoluções</p:link></li>
+                                            <li><p:link outcome="/pages/private/admin/consulta/reserva.xhtml"><i class="fa fa-file"></i>Reservas</p:link></li>	
                                         </ul>
                                     </li>
                                 </sec:authorize>
-                                <sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_ROOT','ROOT_MOD')" >
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                                    <li class="treeview">
+                                        <a href="#"><i class="fa fa-folder-open"></i> <span>Gerencial</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                        <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                                            <ul class="treeview-menu">
+                                                <li><p:link outcome="/pages/private/admin/emprestimo/edita.xhtml"><i class="fa fa-file"></i>Empréstimo</p:link></li>	
+                                                <li><p:link outcome="/pages/private/admin/devolucao/edita.xhtml"><i class="fa fa-file"></i>Devolução</p:link></li>	
+                                                <li><p:link outcome="/pages/private/admin/reserva/edita.xhtml"><i class="fa fa-file"></i>Reserva</p:link></li>	
+                                            </ul>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                                            <ul class="treeview-menu">
+                                                <li><p:link outcome="/pages/private/admin/gerencial_user/reserva.xhtml"><i class="fa fa-file"></i>Reservar Livro</p:link></li>	
+                                            </ul>
+                                        </sec:authorize>
+                                    </li>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_ROOT','ROLE_MOD')" >
                                     <li class="treeview">
                                         <a href="#"><i class="fa fa-folder-open"></i> <span>Relatórios</span> <i class="fa fa-angle-left pull-right"></i></a>
                                         <ul class="treeview-menu">

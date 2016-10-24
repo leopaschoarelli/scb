@@ -152,22 +152,33 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
     }
 
     @Override
-    public List<ItemEmprestimo> listarFiltros(String nomel, String obralit, Date dtEmp) {
+    public List<ItemEmprestimo> listarFiltros(String nomel, String obralit, Date dtInicial, Date dtFinal, Date dtDevolIni, Date dtDevolFinal, Long idPessoa) {
         String sql = ""
                 + "select b.* from emprestimo a, itememprestimo b, pessoa c, publicacao d, exemplar e "
                 + "where a.id = b.emprestimo_id "
                 + "and a.pessoa_id = c.id "
                 + "and b.exemplar_id = e.id "
-                + "and d.id = e.publicacao_id "
-                + "and b.devolucao is null ";
+                + "and d.id = e.publicacao_id ";
         if (!"".equals(nomel)) {
             sql = sql + "and lower(c.nome) like :nomel ";
         }
         if (!"".equals(obralit)) {
             sql = sql + "and lower(d.titulo) like :obralit ";
         }
-        if (dtEmp != null) {
-            sql = sql + "and a.criacao = :dataEmp";
+        if (dtInicial != null) {
+            sql = sql + "and a.criacao >= :dtInicial ";
+        }
+        if (dtFinal != null) {
+            sql = sql + "and a.cricao <= :dtFinal ";
+        }
+        if (dtDevolIni != null) {
+            sql = sql + "and b.devolucao >= :dtDevolIni ";
+        }
+        if (dtDevolFinal != null) {
+            sql = sql + "and b.devolucao <= :dtDevolFinal ";
+        }
+        if (idPessoa != null) {
+            sql = sql + "and c.id = :idPessoa ";
         }
         Query q = getEntityManager().createNativeQuery(sql, ItemEmprestimo.class);
         if (!"".equals(nomel)) {
@@ -176,10 +187,21 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
         if (!"".equals(obralit)) {
             q.setParameter("obralit", "%" + obralit.toLowerCase() + "%");
         }
-        if (dtEmp != null) {
-            q.setParameter("dataEmp", dtEmp, TemporalType.DATE);
+        if (dtInicial != null) {
+            q.setParameter("dtInicial", dtInicial, TemporalType.DATE);
         }
-        System.out.println("SQL: " + q.toString());
+        if (dtInicial != null) {
+            q.setParameter("dtFinal", dtFinal, TemporalType.DATE);
+        }
+        if (dtDevolIni != null) {
+            q.setParameter("dtDevolIni", dtDevolIni, TemporalType.DATE);
+        }
+        if (dtDevolFinal != null) {
+            q.setParameter("dtDevolFinal", dtDevolFinal, TemporalType.DATE);
+        }
+        if (idPessoa != null) {
+            q.setParameter("idPessoa", idPessoa);
+        }
         return q.getResultList();
     }
 

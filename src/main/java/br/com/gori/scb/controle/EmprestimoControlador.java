@@ -87,6 +87,8 @@ public class EmprestimoControlador implements Serializable {
 
     private Date dataInicial;
     private Date dataFinal;
+    private Date dtDevolIni;
+    private Date dtDevolFinal;
 
     private String publicacaoPesquisa;
     private String pessoaPesquisa;
@@ -128,6 +130,8 @@ public class EmprestimoControlador implements Serializable {
         this.itensEmprestado = new ArrayList<>();
         this.publicacaoPesquisa = "";
         this.pessoaPesquisa = "";
+        dtDevolIni = null;
+        dtDevolFinal = null;
     }
 
     public void salvarSemSair() {
@@ -291,12 +295,25 @@ public class EmprestimoControlador implements Serializable {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public void pesquisar() {
-        emprestimoFiltrado = emprestimoDAO.listarFiltros(nome, obra, dataEmprestimo);
-    }
-
-    public void pesquisar(String n) {
-        emprestimoFiltrado = emprestimoDAO.listarFiltros(nome, obra, dataEmprestimo);
+    public void pesquisar(Long idPessoa) {
+        if (validarDatas()) {
+            if (idPessoa == 0) {
+                idPessoa = null;
+            }
+            emprestimoFiltrado.clear();
+            emprestimoFiltrado = new ArrayList<>();
+            emprestimoFiltrado = emprestimoDAO.listarFiltros(nome, obra, dataInicial, dataFinal, dtDevolIni, dtDevolFinal, idPessoa);
+            if (emprestimoFiltrado.isEmpty()) {
+                JsfUtil.addSuccessMessage("Não foram encontradas informações referente a emprestimo/devolução com os parâmetros informados!");
+            }
+        }
+        nome = "";
+        obra = "";
+        dataInicial = null;
+        dataFinal = null;
+        dtDevolIni = null;
+        dtDevolFinal = null;
+        idPessoa = null;
     }
 
     public ItemEmprestimoDAOImpl getItemEmprestimoDAO() {
@@ -459,6 +476,10 @@ public class EmprestimoControlador implements Serializable {
 
     public List<Exemplar> completaPublicacao(String value) {
         return emprestimoDAO.getPublicacoes(value.toLowerCase());
+    }
+
+    public List<Publicacao> completaAllPublicacao(String value) {
+        return emprestimoDAO.getPublic(value.toLowerCase());
     }
 
     public List<Exemplar> completaExem(String value) {
@@ -771,8 +792,14 @@ public class EmprestimoControlador implements Serializable {
         for (ItemEmprestimo it : itensDevolucao) {
             it.getExemplar().setEstadoExemplar(EstadoExemplar.DISPONIVEL);
             it.setDevolucao(new Date());
+            itensDevolFiltro.remove(it);
         }
-        emprestimoDAO.update(emprestimo);
+        try {
+            emprestimoDAO.update(emprestimo);
+            JsfUtil.addSuccessMessage("Devolução realizada com sucesso!");
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage(e, "Erro ao salvar devolução");
+        }
         return null;
     }
 
@@ -802,6 +829,22 @@ public class EmprestimoControlador implements Serializable {
 
     public void setTomboPesquisa(String tomboPesquisa) {
         this.tomboPesquisa = tomboPesquisa;
+    }
+
+    public Date getDtDevolIni() {
+        return dtDevolIni;
+    }
+
+    public void setDtDevolIni(Date dtDevolIni) {
+        this.dtDevolIni = dtDevolIni;
+    }
+
+    public Date getDtDevolFinal() {
+        return dtDevolFinal;
+    }
+
+    public void setDtDevolFinal(Date dtDevolFinal) {
+        this.dtDevolFinal = dtDevolFinal;
     }
 
 }

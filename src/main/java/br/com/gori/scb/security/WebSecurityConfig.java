@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/pages/private/admin/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT') or hasRole('ROLE_MOD')")
+                .antMatchers("/pages/private/admin/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT') or hasRole('ROLE_MOD') or hasRole('ROLE_USER')")
                 .and().formLogin()
                 .loginPage("/public/index.xhtml")
                 .loginProcessingUrl("/applogin")

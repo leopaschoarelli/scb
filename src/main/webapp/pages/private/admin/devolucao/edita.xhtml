@@ -8,7 +8,7 @@
     <h:body>
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form id="formLista" prependId="false">
+                <h:form id="formLista" onkeypress="return event.keyCode !== 13;" prependId="false">
 
                     <div class="ui-fluid">
                         <p:panel id="panelDevolucao" header="Realizar Devolução de Exemplares">
@@ -61,10 +61,10 @@
                             </p:panelGrid>
                             <p:commandButton id="btnPesquisa"
                                              icon="ui-icon-search" 
-                                             actionListener="#{emprestimoControlador.pesquisarDevol}"
+                                             action="#{emprestimoControlador.pesquisarDevol()}"
                                              update="panelPesq panelDevol"
                                              ajax="false"
-                                             process="@this,panelPesq"
+                                             process="@this"
                                              value="Pesquisar"/>
                             <p:separator/>
                             <p:panelGrid columns="4" 
@@ -136,7 +136,7 @@
                                          styleClass="panelgrid-noborder">
                                 <p:commandButton id="botaoSalvar" process="@this" 
                                                  ajax="false" 
-                                                 actionListener="#{emprestimoControlador.testando('3')}"
+                                                 update="panelDevolucao tableDevol"
                                                  icon="ui-icon-check" 
                                                  value="Devolver" 
                                                  action="#{emprestimoControlador.realizaDevolucao}"

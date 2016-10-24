@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprovante" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ad014aa3-d8a8-4c79-b1ea-9143a71bec6b">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="21"/>
+	<property name="ireport.y" value="26"/>
 	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -27,6 +27,7 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
+	<parameter name="IMAGEM" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select c.nome,d.titulo,e.tombo,e.numexe,b.prazo from emprestimo a, itememprestimo b, pessoa c, publicacao d, exemplar e, comprovanteemprestimo f
 where b.emprestimo_id = a.id
@@ -51,15 +52,15 @@ and f.emprestimo_id = (select MAX(g.emprestimo_id) from comprovanteemprestimo g)
 				<staticText>
 					<reportElement x="2" y="13" width="555" height="51" uuid="b06e7262-6a8f-4770-8fa9-806ca7b876c6"/>
 					<textElement textAlignment="Justified"/>
-					<text><![CDATA[Por este termo declaro estar ciente das regras para realização do empréstimo de obras e materiais junto a Biblioteca, e me compromento em manter o livro ora emprestado em bom estado, e a devolvê-lo dentro do prazo previsto. Bem como, autorio o Colégio Estadual José Luiz Gori, a efetuar sempre que necessário, penalidades que me for atribuído a título de multa por não realizar a devolução do empréstimo no prazo.]]></text>
+					<text><![CDATA[Por este termo declaro estar ciente das regras para realização do empréstimo de obras e materiais junto a Biblioteca, e me compromento em manter o livro ora emprestado em bom estado, e a devolvê-lo dentro do prazo previsto. Bem como, autorizo o Colégio Estadual José Luiz Gori, a efetuar sempre que necessário, penalidades que me for atribuído a título de multa por não realizar a devolução do empréstimo no prazo.]]></text>
 				</staticText>
 				<textField>
-					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="186" y="119" width="247" height="20" uuid="c2b8587a-4733-4595-9e95-745cf41be1d8"/>
+					<reportElement isPrintRepeatedValues="false" mode="Transparent" x="167" y="123" width="247" height="20" uuid="c2b8587a-4733-4595-9e95-745cf41be1d8"/>
 					<textElement textAlignment="Center" verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement x="158" y="118" width="294" height="1" uuid="b161d77b-aa05-4d96-829f-bcbe0fc0bdbd"/>
+					<reportElement x="139" y="122" width="294" height="1" uuid="b161d77b-aa05-4d96-829f-bcbe0fc0bdbd"/>
 				</line>
 				<line>
 					<reportElement x="-23" y="161" width="617" height="1" uuid="4798bed5-ac32-4b7a-87d4-d5ea63251c18"/>
@@ -74,16 +75,23 @@ and f.emprestimo_id = (select MAX(g.emprestimo_id) from comprovanteemprestimo g)
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="59" splitType="Stretch">
+		<band height="69" splitType="Stretch">
 			<staticText>
-				<reportElement style="Title" x="119" y="0" width="350" height="34" uuid="2f88c46f-16e0-4a01-b3ca-145688f2cb1f"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement style="Title" x="0" y="1" width="555" height="34" uuid="2f88c46f-16e0-4a01-b3ca-145688f2cb1f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="28" isBold="true" isUnderline="false"/>
+					<paragraph lineSpacing="Proportional"/>
+				</textElement>
 				<text><![CDATA[Termo de Responsabilidade]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="SubTitle" x="176" y="34" width="238" height="24" uuid="49f95d08-a245-4631-90b2-0619e907017a"/>
-				<text><![CDATA[Comprovante de Emprestimo]]></text>
+				<reportElement style="SubTitle" x="211" y="35" width="238" height="21" uuid="49f95d08-a245-4631-90b2-0619e907017a"/>
+				<text><![CDATA[Comprovante de Empréstimo]]></text>
 			</staticText>
+			<image>
+				<reportElement x="2" y="1" width="143" height="58" uuid="56d75ad2-29f3-49ec-91fa-86cdc2e09cce"/>
+				<imageExpression><![CDATA[$P{IMAGEM} + "gori.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -92,15 +100,18 @@ and f.emprestimo_id = (select MAX(g.emprestimo_id) from comprovanteemprestimo g)
 	<columnHeader>
 		<band height="46" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" x="0" y="0" width="197" height="19" uuid="3724bd64-3668-4059-937c-fd335803a596"/>
-				<text><![CDATA[Exemplares]]></text>
+				<reportElement style="Column header" x="0" y="0" width="555" height="19" uuid="3724bd64-3668-4059-937c-fd335803a596"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lista de Exemplares - Empréstimo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="25" width="76" height="20" uuid="7d5a8bf2-bf48-434f-920a-b7916db0a2ce"/>
+				<reportElement x="2" y="25" width="84" height="20" uuid="7d5a8bf2-bf48-434f-920a-b7916db0a2ce"/>
 				<text><![CDATA[Acervo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="76" y="25" width="325" height="20" uuid="5fa310ab-59ee-4970-85fe-53972daf2342"/>
+				<reportElement x="86" y="25" width="315" height="20" uuid="5fa310ab-59ee-4970-85fe-53972daf2342"/>
 				<text><![CDATA[Nome do Acervo]]></text>
 			</staticText>
 			<staticText>
@@ -114,7 +125,7 @@ and f.emprestimo_id = (select MAX(g.emprestimo_id) from comprovanteemprestimo g)
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="25" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="555" height="1" uuid="2bb3ba48-9ccf-47f2-8be7-6d4a1b6c570d"/>
 				<graphicElement>
@@ -122,11 +133,11 @@ and f.emprestimo_id = (select MAX(g.emprestimo_id) from comprovanteemprestimo g)
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="1" width="74" height="20" uuid="6f5b02c8-a667-480d-bd4e-66c3b8632a25"/>
+				<reportElement x="2" y="1" width="84" height="20" uuid="6f5b02c8-a667-480d-bd4e-66c3b8632a25"/>
 				<textFieldExpression><![CDATA[$F{tombo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="76" y="1" width="325" height="20" uuid="0b7dd682-296c-427d-8e8d-0bb61d13f2a3"/>
+				<reportElement x="86" y="1" width="315" height="20" uuid="0b7dd682-296c-427d-8e8d-0bb61d13f2a3"/>
 				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
 			</textField>
 			<textField>

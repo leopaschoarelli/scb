@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,18 @@ public class ComprovanteControlador implements Serializable {
 
     @Autowired
     private EntityManager manager;
-    
+
     private EmprestimoDAOImpl emprestimoDAO;
-    
-    public ComprovanteControlador(){
+
+    public ComprovanteControlador() {
         this.emprestimoDAO = new EmprestimoDAOImpl();
     }
 
     public void emitir() {
 
-        System.out.println("Chegou aqui");
         Map<String, Object> parametros = new HashMap<>();
+
+        parametros.put("IMAGEM", getCaminho());
 //        parametros.put("SQL", gerarSql());
 //        System.out.println(parametros.toString());
         ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/report2.jasper",
@@ -70,7 +72,12 @@ public class ComprovanteControlador implements Serializable {
     public void setEmprestimoDAO(EmprestimoDAOImpl emprestimoDAO) {
         this.emprestimoDAO = emprestimoDAO;
     }
-    
-    
+
+    private String getCaminho() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        String caminho = ((ServletContext) facesContext.getExternalContext().getContext()).getRealPath("/WEB-INF/images/");
+        caminho += "/";
+        return caminho;
+    }
 
 }
