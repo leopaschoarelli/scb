@@ -124,10 +124,11 @@
                                             Lista de Exemplares
                                         </f:facet>
                                         <p:column selectionMode="multiple" style="width:35px;text-align:center"/>
-                                        <p:column filterStyle="width: auto" filterBy="#{exe.tombo}" headerText="Tombo">
+                                        <p:column filterStyle="width: auto" id="tomboedita" filterBy="#{exe.tombo}" headerText="Tombo">
                                             <p:cellEditor>
                                                 <f:facet name="output"><h:outputText value="#{exe.tombo}" /></f:facet>
                                                 <f:facet name="input"><p:inputText id="modelInput" value="#{exe.tombo}" style="width:96%"/></f:facet>
+
                                             </p:cellEditor>
                                         </p:column>
 
@@ -147,10 +148,16 @@
                                                 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
                                             </h:outputText>
                                         </p:column>
+                                        <p:column filterStyle="width: auto" filterBy="#{exe.observacao}" headerText="Observação">
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{exe.observacao}" /></f:facet>
+                                                <f:facet name="input"><p:inputText id="modelInput2" value="#{exe.observacao}" style="width:96%"/></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
                                         <p:column filterStyle="width: auto" filterBy="#{exe.estadoExemplar.descricao}" headerText="Situação">
                                             <h:outputText value="#{exe.estadoExemplar.descricao}" />
                                         </p:column>
-                                        <p:column style="width: 140px" headerText="Gerencial">
+                                        <p:column style="width: 100px" headerText="Gerencial">
                                             <p:commandButton disabled="#{publicacaoControlador.visualizar}" 
                                                              action="#{publicacaoControlador.excluirExemplar(exe)}" 
                                                              id="btnExcluir" 

@@ -63,28 +63,26 @@ public class ItemReservaDAOImpl extends AbstractDAO<ItemReserva> implements Item
         return q.getResultList();
     }
 
-    public List<ItemReserva> filtrarReservas(String publicacao, String pessoa, Date dataInicial, Date dataFinal) {
+    public List<ItemReserva> filtrarReservas(String publicacao, String pessoa, Date dataInicial, Date dataFinal, Long idPessoa) {
         String sql = "select b.* from reserva a, itemreserva b, publicacao c, pessoa d "
                 + "where b.reserva_id = a.id "
                 + "and b.publicacao_id = c.id "
                 + "and a.pessoa_id = d.id ";
         if (!"".equals(publicacao)) {
-            System.out.println("Publicação: " + publicacao);
             sql = sql + "and lower(c.titulo) like :publicacao ";
         }
         if (!"".equals(pessoa)) {
-            System.out.println("Pessoa: " + pessoa);
             sql = sql + "and lower(d.nome) like :pessoa ";
         }
         if (dataInicial != null) {
-            System.out.println("Data Inicial: " + dataInicial);
             sql = sql + "and b.previsao >= :inicial ";
         }
         if (dataFinal != null) {
-            System.out.println("Data Final: " + dataFinal);
             sql = sql + "and b.previsao <= :final ";
         }
-        System.out.println("SQL: " + sql);
+        if (idPessoa != null) {
+            sql = sql + "and d.id = :idPessoa ";
+        }
         Query q = getEntityManager().createNativeQuery(sql, ItemReserva.class);
         if (!"".equals(publicacao)) {
             q.setParameter("publicacao", "%" + publicacao.toLowerCase() + "%");
@@ -98,6 +96,9 @@ public class ItemReservaDAOImpl extends AbstractDAO<ItemReserva> implements Item
 
         if (dataFinal != null) {
             q.setParameter("final", dataFinal);
+        }
+        if (idPessoa != null) {
+            q.setParameter("idPessoa", idPessoa);
         }
         return q.getResultList();
     }

@@ -15,6 +15,7 @@ import br.com.gori.scb.entidade.ItemReserva;
 import br.com.gori.scb.entidade.Pessoa;
 import br.com.gori.scb.entidade.Publicacao;
 import br.com.gori.scb.entidade.Reserva;
+import br.com.gori.scb.security.UsuarioSistema;
 import br.com.gori.scb.util.ConverterAutoComplete;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.persistence.Temporal;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -72,6 +74,7 @@ public class ReservaControlador implements Serializable {
 
     private String publicacaoPesquisa;
     private String pessoaPesquisa;
+    private UsuarioSistema usuarioSistema;
 
     public ReservaControlador() {
         newInstances();
@@ -98,21 +101,32 @@ public class ReservaControlador implements Serializable {
         this.publicacaoPesquisa = "";
         this.pessoaPesquisa = "";
         this.qtdDispReserva = 0;
+        this.usuarioSistema = new UsuarioSistema();
     }
 
     public String salvar() {
         try {
+            System.out.println("Pessoa: " + usuarioSistema.getUsuarioLogado().getName());
+            if (reserva.getPessoa() == null) {
+                System.out.println("Tava nulo");
+                reserva.setPessoa(usuarioSistema.getUsuarioLogado().getPessoa());
+            }
             if (edicao) {
                 reservaDAO.update(reserva);
             } else {
                 reservaDAO.save(reserva);
             }
             JsfUtil.addSuccessMessage("Reserva salva com sucessa!");
-            return prepararLista();
+            newInstances();
+            return null;
         } catch (Exception ex) {
             JsfUtil.addErrorMessage("Erro ao salvar reserva: " + ex.getMessage());
             return null;
         }
+    }
+
+    public void resetFields() {
+        RequestContext.getCurrentInstance().reset("form-user:panelReserva");
     }
 
     public String excluir() {
@@ -127,9 +141,22 @@ public class ReservaControlador implements Serializable {
         }
     }
 
-    public void pesquisar() {
+    public void pesquisar(Long idPessoa) {
         if (validarDatas()) {
-            itensFiltrados = itemReservaDAO.filtrarReservas(publicacaoPesquisa, pessoaPesquisa, dataInicial, dataFinal);
+            if (idPessoa == 0) {
+                idPessoa = null;
+            }
+            itensFiltrados.clear();
+            itensFiltrados = new ArrayList<>();
+            itensFiltrados = itemReservaDAO.filtrarReservas(publicacaoPesquisa, pessoaPesquisa, dataInicial, dataFinal, idPessoa);
+            if (itensFiltrados.isEmpty()) {
+                JsfUtil.addSuccessMessage("Não foram encontradas informações referente a reservas com os parâmetros informados!");
+            }
+            publicacaoPesquisa = "";
+            pessoaPesquisa = "";
+            dataInicial = null;
+            dataFinal = null;
+            idPessoa = null;
         }
     }
 
@@ -378,6 +405,10 @@ public class ReservaControlador implements Serializable {
     }
 
     public void adicionaReserva() {
+        if (reserva.getPessoa() == null) {
+            reserva.setPessoa(usuarioSistema.getUsuarioLogado().getPessoa());
+            recuperaEmprestimoReserva("Sim");
+        }
         dataDevol = itemReserva.getPrevisao();
         dataDevol = addDays(dataDevol, diasDevolucao);
         itemReserva.setDevolucao(dataDevol);
@@ -408,11 +439,11 @@ public class ReservaControlador implements Serializable {
         if (itemReserva != null) {
             Publicacao pub = itemReserva.getPublicacao();
             if (pub != null) {
-                listaDisponibilidade = exemplarDAO.verificarDisponibilidade(pub, itemReserva);
+                listaDisponibilidade = exemplarDAO.verificarDisponibilidade(pub, itemReserva, null);
                 qtdDisponivel = listaDisponibilidade.size();
                 System.out.println("Disponivel 1: " + qtdDisponivel);
                 listaDisponibilidade = new ArrayList<>();
-                listaDisponibilidade = exemplarDAO.verificarDispReserva(pub, itemReserva);
+                listaDisponibilidade = exemplarDAO.verificarDispReserva(pub, itemReserva, null);
                 qtdDispReserva = listaDisponibilidade.size();
                 System.out.println("Disponibilidade 2: " + qtdDispReserva);
             }
@@ -547,6 +578,14 @@ public class ReservaControlador implements Serializable {
 
     public void setDataDevol(Date dataDevol) {
         this.dataDevol = dataDevol;
+    }
+
+    public UsuarioSistema getUsuarioSistema() {
+        return usuarioSistema;
+    }
+
+    public void setUsuarioSistema(UsuarioSistema usuarioSistema) {
+        this.usuarioSistema = usuarioSistema;
     }
 
 }

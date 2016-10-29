@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.Temporal;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.event.SelectEvent;
@@ -48,6 +49,10 @@ public class EmprestimoControlador implements Serializable {
     private List<ItemReserva> reservasAbertas;
     private ItemReserva itemReserva;
     private ItemReservaDAOImpl itemReservaDAO;
+
+    private List<Exemplar> listaDisponibilidade;
+    private Integer qtdDisponivel;
+    private Integer qtdDispReserva;
 
     private EmprestimoDAOImpl emprestimoDAO;
     private ItemEmprestimo itemEmprestimo;
@@ -94,6 +99,8 @@ public class EmprestimoControlador implements Serializable {
     private String pessoaPesquisa;
     private String tomboPesquisa;
 
+    private String tomboEmprestimo;
+
     public EmprestimoControlador() {
         newInstances();
     }
@@ -132,6 +139,13 @@ public class EmprestimoControlador implements Serializable {
         this.pessoaPesquisa = "";
         dtDevolIni = null;
         dtDevolFinal = null;
+        this.qtdDispReserva = 0;
+        this.listaDisponibilidade = new ArrayList<>();
+        tomboEmprestimo = "";
+    }
+
+    public void inicializar() {
+        newInstances();
     }
 
     public void salvarSemSair() {
@@ -227,9 +241,10 @@ public class EmprestimoControlador implements Serializable {
     }
 
     public void pesquisaEmprestimo() {
+        validarDisponibilidade();
         if (publicacaoFiltro != null && itemEmprestimo.getExemplar() != null) {
             JsfUtil.addErrorMessage("Selecione ou livro ou exemplar para pesquisa");
-        } else {
+        } else if (qtdDisponivel > 0 && qtdDispReserva > 0) {
             if (exemplaresFiltrados == null || exemplaresFiltrados.isEmpty()) {
                 exemplaresFiltrados = new ArrayList<Exemplar>();
             }
@@ -240,6 +255,11 @@ public class EmprestimoControlador implements Serializable {
             } else {
                 JsfUtil.addErrorMessage("Informe algum argumento de pesquisa para os livros");
             }
+        } else {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            String data = format.format(new Date());
+            String data2 = format.format(itemEmprestimo.getPrazo());
+            JsfUtil.addErrorMessage("Esta publicação não tem disponilidade de emprestimo para data: " + data + " e prazo devolução: " + data2 + ". Verifique Emprestimos/Reservas");
         }
     }
 
@@ -306,14 +326,15 @@ public class EmprestimoControlador implements Serializable {
             if (emprestimoFiltrado.isEmpty()) {
                 JsfUtil.addSuccessMessage("Não foram encontradas informações referente a emprestimo/devolução com os parâmetros informados!");
             }
+
+            nome = "";
+            obra = "";
+            dataInicial = null;
+            dataFinal = null;
+            dtDevolIni = null;
+            dtDevolFinal = null;
+            idPessoa = null;
         }
-        nome = "";
-        obra = "";
-        dataInicial = null;
-        dataFinal = null;
-        dtDevolIni = null;
-        dtDevolFinal = null;
-        idPessoa = null;
     }
 
     public ItemEmprestimoDAOImpl getItemEmprestimoDAO() {
@@ -845,6 +866,89 @@ public class EmprestimoControlador implements Serializable {
 
     public void setDtDevolFinal(Date dtDevolFinal) {
         this.dtDevolFinal = dtDevolFinal;
+    }
+
+    public void validarDisponibilidade() {
+        if (publicacaoFiltro != null || itemEmprestimo.getExemplar() != null) {
+            listaDisponibilidade = new ArrayList<>();
+            Publicacao pub = new Publicacao();
+            if (publicacaoFiltro != null) {
+                pub = publicacaoFiltro;
+            } else if (itemEmprestimo.getExemplar() != null) {
+                pub = itemEmprestimo.getExemplar().getPublicacao();
+            }
+            if (pub != null) {
+                listaDisponibilidade = exemplarDAO.verificarDisponibilidade(pub, null, itemEmprestimo);
+                qtdDisponivel = listaDisponibilidade.size();
+                listaDisponibilidade = new ArrayList<>();
+                listaDisponibilidade = exemplarDAO.verificarDispReserva(pub, null, itemEmprestimo);
+                qtdDispReserva = listaDisponibilidade.size();
+            }
+        }
+    }
+
+    public List<Exemplar> getListaDisponibilidade() {
+        return listaDisponibilidade;
+    }
+
+    public void setListaDisponibilidade(List<Exemplar> listaDisponibilidade) {
+        this.listaDisponibilidade = listaDisponibilidade;
+    }
+
+    public Integer getQtdDisponivel() {
+        return qtdDisponivel;
+    }
+
+    public void setQtdDisponivel(Integer qtdDisponivel) {
+        this.qtdDisponivel = qtdDisponivel;
+    }
+
+    public Integer getQtdDispReserva() {
+        return qtdDispReserva;
+    }
+
+    public void setQtdDispReserva(Integer qtdDispReserva) {
+        this.qtdDispReserva = qtdDispReserva;
+    }
+
+    public void completarExemplarTeste() {
+        nomeExemplar = null;
+        if (tomboEmprestimo != null) {
+            List<Exemplar> exem = new ArrayList<>();
+            exem = exemplarDAO.recuperaExemplarPorTombo(tomboEmprestimo);
+            if (!exem.isEmpty()) {
+                Publicacao obraLit = exem.get(0).getPublicacao();
+                if (obraLit != null) {
+                    nomeExemplar = "Nº Exe: " + itemEmprestimo.getExemplar().getNumExe()
+                            + ". " + itemEmprestimo.getExemplar().getPublicacao().getTitulo()
+                            + ", " + itemEmprestimo.getExemplar().getPublicacao().getSubtitulo();
+                }
+            }
+        }
+    }
+
+    public String getTomboEmprestimo() {
+        return tomboEmprestimo;
+    }
+
+    public void setTomboEmprestimo(String tomboEmprestimo) {
+        this.tomboEmprestimo = tomboEmprestimo;
+    }
+
+    public void completaExemplarEmp(AjaxBehaviorEvent e) {
+        nomeExemplar = null;
+
+        if (itemEmprestimo != null) {
+            Exemplar exem = itemEmprestimo.getExemplar();
+            if (exem != null) {
+                Publicacao obraLit = exem.getPublicacao();
+                if (obraLit != null) {
+                    nomeExemplar = "Nº Exe: " + itemEmprestimo.getExemplar().getNumExe()
+                            + ". " + itemEmprestimo.getExemplar().getPublicacao().getTitulo()
+                            + ", " + itemEmprestimo.getExemplar().getPublicacao().getSubtitulo();
+                }
+            }
+        }
     }
 
 }

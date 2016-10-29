@@ -169,7 +169,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
             sql = sql + "and a.criacao >= :dtInicial ";
         }
         if (dtFinal != null) {
-            sql = sql + "and a.cricao <= :dtFinal ";
+            sql = sql + "and a.criacao <= :dtFinal ";
         }
         if (dtDevolIni != null) {
             sql = sql + "and b.devolucao >= :dtDevolIni ";

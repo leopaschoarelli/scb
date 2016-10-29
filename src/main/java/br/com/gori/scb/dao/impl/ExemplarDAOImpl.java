@@ -3,8 +3,10 @@ package br.com.gori.scb.dao.impl;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.ExemplarDAO;
 import br.com.gori.scb.entidade.Exemplar;
+import br.com.gori.scb.entidade.ItemEmprestimo;
 import br.com.gori.scb.entidade.ItemReserva;
 import br.com.gori.scb.entidade.Publicacao;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
@@ -41,25 +43,43 @@ public class ExemplarDAOImpl extends AbstractDAO<Exemplar> implements ExemplarDA
         }
     }
 
-    public List<Exemplar> verificarDispReserva(Publicacao publicacao, ItemReserva itemReserva) {
+    public List<Exemplar> recuperaExemplarPorTombo(String tombo) {
+        String sql = "select b.* from publicacao a, exemplar b "
+                + "where b.publicacao_id = a.id "
+                + "and b.databaixa is null "
+                + "and b.tombo like :parte ";
+        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        q.setParameter("parte", "%" + tombo + "%");
+        return q.getResultList();
+    }
+
+    public List<Exemplar> verificarDispReserva(Publicacao publicacao, ItemReserva itemReserva, ItemEmprestimo itemEmprestimo) {
         String sql = "select b.* from publicacao a, exemplar b "
                 + "where a.id = b.publicacao_id "
                 + "and a.id = :public "
                 + "and (select count(d.id) from exemplar d "
                 + "     where d.publicacao_id = :public) > (select count(f.id) from itemreserva f "
                 + "					 where f.publicacao_id = :public "
-                + "					 and f.previsao between :inicio and :fim "
+                + "					 and (f.previsao between :inicio and :fim "
+                + "					 or f.devolucao between :inicio and :fim )"
                 + "					 and f.efetivado = 'false') ";
-        System.out.println("Inicio: "+itemReserva.getPrevisao()+" - Fim: "+itemReserva.getDevolucao());
-        System.out.println("SQL: "+sql);
+        if (itemReserva != null) {
+            System.out.println("Inicio: " + itemReserva.getPrevisao() + " - Fim: " + itemReserva.getDevolucao());
+        }
+        System.out.println("SQL: " + sql);
         Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
         q.setParameter("public", publicacao.getId());
-        q.setParameter("inicio", itemReserva.getPrevisao());
-        q.setParameter("fim", itemReserva.getDevolucao());
+        if (itemReserva != null) {
+            q.setParameter("inicio", itemReserva.getPrevisao());
+            q.setParameter("fim", itemReserva.getDevolucao());
+        } else if (itemEmprestimo != null) {
+            q.setParameter("inicio", new Date());
+            q.setParameter("fim", itemEmprestimo.getPrazo());
+        }
         return q.getResultList();
     }
 
-    public List<Exemplar> verificarDisponibilidade(Publicacao publicacao, ItemReserva itemReserva) {
+    public List<Exemplar> verificarDisponibilidade(Publicacao publicacao, ItemReserva itemReserva, ItemEmprestimo itemEmprestimo) {
         String sql = "select ex.* from publicacao pub "
                 + "inner join exemplar ex on ex.publicacao_id = pub.id "
                 + "where ex.estadoexemplar = 'DISPONIVEL' "
@@ -73,7 +93,11 @@ public class ExemplarDAOImpl extends AbstractDAO<Exemplar> implements ExemplarDA
                 + "and it.prazo <= :previsao ";
         Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
         q.setParameter("public", publicacao.getId());
-        q.setParameter("previsao", itemReserva.getPrevisao());
+        if (itemReserva != null) {
+            q.setParameter("previsao", itemReserva.getPrevisao());
+        } else if (itemEmprestimo != null) {
+            q.setParameter("previsao", new Date());
+        }
         return q.getResultList();
     }
 }

@@ -1,6 +1,5 @@
 package br.com.gori.scb.controle;
 
-import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.entidade.Exemplar;
 import br.com.gori.scb.entidade.Publicacao;
@@ -22,27 +21,13 @@ import br.com.gori.scb.entidade.Editora;
 import br.com.gori.scb.entidade.TipoAutor;
 import br.com.gori.scb.entidade.util.TipoPublicacao;
 import br.com.gori.scb.util.ConverterAutoComplete;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import org.postgresql.core.ConnectionFactory;
 import org.primefaces.event.CellEditEvent;
 
 /**
@@ -250,6 +235,17 @@ public class PublicacaoControlador implements Serializable {
     public void onTomboEdit(CellEditEvent event) {
         Object novoValor = event.getNewValue();
         exemplar.setTombo((String) novoValor);
+
+    }
+
+    public void onObservacaoEdit(CellEditEvent event) {
+        Object novoValor = event.getNewValue();
+        exemplar.setObservacao((String) novoValor);
+    }
+
+    public void onDataBaixaEdit(CellEditEvent event) {
+        Object novoValor = event.getNewValue();
+        exemplar.setDataBaixa((Date) novoValor);
     }
 
     public void gerarExemplar() {

@@ -1,12 +1,124 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
-        Hello from Facelets
+        <ui:composition template="/WEB-INF/template/template.xhtml">
+            <ui:define name="conteudo">
+                <h:form id="formLista" prependId="false">
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/consulta/reserva.xhtml/" />
+                    <p:panel  id="reserva" header="Reservas">
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="4" 
+                                         id="panelPesq" 
+                                         layout="grid" 
+                                         styleClass="panelgrid-noborder"
+                                         style="margin-top: 5px; margin-bottom: 5px"
+                                         columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-0, ui-grid-col-4">
+
+                                <p:outputLabel value="Obra Literária: " for="obra" />
+                                <p:autoComplete 
+                                    id="obra"
+                                    var="obra" 
+                                    forceSelection="true"
+                                    completeMethod="#{reservaControlador.completaPublicacao}" 
+                                    converter="#{reservaControlador.converterPublicacao}"
+                                    emptyMessage="Nenhum resultado encontrado"
+                                    value="#{reservaControlador.publicacaoPesquisa}"
+                                    itemValue="#{obra.id}" itemLabel="#{obra.toString()}"/>
+                                <p:outputLabel />
+                                <p:outputLabel />
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+                                    <p:outputLabel value="Pessoa: " for="pessoa" />
+                                    <p:autoComplete 
+                                        readonly="#{reservaControlador.visualizar}"
+                                        id="pessoa"
+                                        var="pessoa" 
+                                        forceSelection="true"
+                                        completeMethod="#{reservaControlador.completaPessoa}" 
+                                        converter="#{reservaControlador.converterPessoa}"
+                                        emptyMessage="Nenhum resultado encontrado"
+                                        value="#{reservaControlador.pessoaPesquisa}"
+                                        itemValue="#{pessoa.id}" itemLabel="#{pessoa.toString()}"/>
+                                    <p:outputLabel  />
+                                    <p:outputLabel  />
+                                </sec:authorize>
+                                <p:outputLabel value="Data Prevista de Emprestimo: " />
+                                <p:calendar id="dtInicial"
+                                            value="#{reservaControlador.dataInicial}" 
+                                            mask="true" 
+                                            pattern="dd/MM/yyyy" />
+                                <p:outputLabel value="até"/>
+                                <p:calendar id="dtFinal"
+                                            value="#{reservaControlador.dataFinal}" 
+                                            mask="true" 
+                                            pattern="dd/MM/yyyy" />
+
+                            </p:panelGrid>
+                            <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+                                <p:commandButton id="btnPesquisar"
+                                                 icon="ui-icon-search" 
+                                                 action="#{reservaControlador.pesquisar(0)}" 
+                                                 update="tableReserva"
+                                                 process="@parent"
+                                                 value="Pesquisar"/>
+                            </sec:authorize>
+                            <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                                <p:commandButton id="btnPesquisar"
+                                                 icon="ui-icon-search" 
+                                                 action="#{reservaControlador.pesquisar(usuarioSistema.usuarioLogado.pessoa.id)}" 
+                                                 update="tableReserva"
+                                                 process="@parent"
+                                                 value="Pesquisar"/>
+                            </sec:authorize>
+                        </div>
+                        <p:dataTable paginator="true" 
+                                     reflow="true"
+                                     rows="10" 
+                                     resizeMode="fit"
+                                     scrollable="true"
+                                     scrollHeight="200"
+                                     id="tableReserva" 
+                                     value="#{reservaControlador.itensFiltrados}" 
+                                     resizableColumns="true"
+                                     var="reserva" 
+                                     style="margin-top: 10px"
+                                     emptyMessage="Nenhum registro encontrado">
+                            <f:facet name="header">
+                                Lista de Reservas
+                            </f:facet>
+                            <p:column filterStyle="width: auto" filterBy="#{reserva.reserva.pessoa.nome}" headerText="Pessoa">
+                                <h:outputText value="#{reserva.reserva.pessoa.nome}" />
+                            </p:column>
+                            <p:column filterStyle="width: auto" filterBy="#{reserva.publicacao.titulo}" headerText="Publicação">
+                                <h:outputText value="#{reserva.publicacao.titulo}" />
+                            </p:column>
+                            <p:column filterStyle="width: auto" filterBy="#{reserva.reserva.criacao}" headerText="Data Criação">
+                                <h:outputText value="#{reserva.reserva.criacao}">
+                                    <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterStyle="width: auto" filterBy="#{reserva.previsao}" headerText="Data Prevista">
+                                <h:outputText value="#{reserva.previsao}">
+                                    <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterStyle="width: auto" filterBy="#{reserva.efetivo}" headerText="Efetivo?">
+                                <h:outputText value="#{reserva.efetivo}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                Total de reservas: #{reservaControlador.itensFiltrados.size()}.
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
     </h:body>
 </html>
 

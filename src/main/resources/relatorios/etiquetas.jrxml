@@ -88,7 +88,7 @@ and 1=1 $P!{SQL}]]>
 			</line>
 			<componentElement>
 				<reportElement mode="Transparent" x="121" y="42" width="138" height="44" uuid="8fe9f760-e3cf-400c-b370-b7e387a47472"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39 (Extended)" drawText="false" checksumRequired="false" barWidth="0" barHeight="0">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="0" barHeight="0">
 					<jr:codeExpression><![CDATA[$F{tombo}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>

@@ -8,12 +8,14 @@
     <h:body class="skin-blue sidebar-mini">
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form class="skin-blue sidebar-mini" id="form-user" prependId="false" >
-                    <p:defaultCommand target="pessoa" />
+                <h:form  id="form-user" prependId="false" >
+                    <f:metadata>
+                        <f:viewAction action="#{emprestimoControlador.inicializar}" />
+                    </f:metadata>
                     <div class="ui-fluid">
                         <p:panel id="panelEmprestimo" header="#{emprestimoControlador.header}">
 
-                            <p:messages id="messagesEmprestimo" showDetail="true" closable="true" autoUpdate="true" />
+                            <p:messages id="messagesEmprestimo" showDetail="false" closable="true" autoUpdate="true" />
                             <p:focus context="panelEmprestimo"/>
                             <p:panelGrid id="gridEmprestimo" 
                                          columns="2"
@@ -60,6 +62,8 @@
                                         id="exemplar"
                                         var="exemplar" 
                                         forceSelection="true"
+                                        immediate="true"
+                                        cache="true"
                                         completeMethod="#{emprestimoControlador.completaPublicacao}" 
                                         converter="#{emprestimoControlador.converterPublicacao}"
                                         emptyMessage="Nenhum resultado encontrado"
@@ -76,6 +80,7 @@
 
                                     <p:outputLabel/>
                                     <p:inputText readonly="true" value="#{emprestimoControlador.nomeExemplar}" id="nomeExem" />
+
 
                                     <p:outputLabel value="Data Devolução: " for="dtDevolucao" />
                                     <p:calendar id="dtDevolucao"
@@ -193,7 +198,6 @@
                                      columnClasses="ui-grid-col-6, ui-grid-col-6"
                                      styleClass="panelgrid-noborder">
                             <p:commandButton id="botaoSalvar1" ajax="true" icon="ui-icon-check" value="Salvar" onclick="PF('salvarEmp').show();"/>
-                            <p:commandButton id="botaoCancelar1" process="@this" icon="ui-icon-close" value="Cancelar" action="#{emprestimoControlador.prepararLista()}" update="@form" />
                         </p:panelGrid>
                     </div>
                     <p:dialog responsive="true"
