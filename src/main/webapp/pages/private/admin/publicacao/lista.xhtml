@@ -9,13 +9,14 @@
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
                 <h:form id="formLista" prependId="false">
-                    <p:growl autoUpdate="true" life="7000"  />
+                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/publicacao/lista.xhtml/" />
                     <p:panel  id="publicacao" header="Publicações">
                         <p:toolbar id="toolbarPublicacao">
                             <f:facet name="left">
                                 <p:commandButton id="botaoNovo" 
                                                  value="Novo" 
                                                  icon="ui-icon-plus"
+                                                 ajax="false"
                                                  title="Adicionar nova Publicação"
                                                  action="#{publicacaoControlador.prepararNovo()}" />
                                 <span class="ui-separator">
@@ -26,13 +27,13 @@
                                                  title="Editar Obra"
                                                  disabled="#{publicacaoControlador.publicacaoSelecionada == null}"
                                                  action="#{publicacaoControlador.prepararEdicao()}"
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnVisualizar" 
                                                  icon="ui-icon-search" 
                                                  disabled="#{publicacaoControlador.publicacaoSelecionada == null}"
                                                  title="Visualizar as informações da Obra" 
                                                  action="#{publicacaoControlador.prepararVer()}" 
-                                                 ajax="true" />
+                                                 ajax="false" />
                                 <p:commandButton id="btnExcluir" 
                                                  icon="ui-icon-trash" 
                                                  process="@this"

@@ -23,11 +23,12 @@
                                          styleClass="panelgrid-noborder"
                                          style="margin-top: 5px; margin-bottom: 1px"
                                          columnClasses="ui-grid-col-6, ui-grid-col-6">
-                                <p:panelGrid columns="2" id="camposEmp"
+                                <p:panelGrid columns="3" id="camposEmp"
                                              styleClass="panelgrid-noborder"
                                              layout="grid"
                                              style="margin-top: 5px; margin-bottom: 10px"
-                                             columnClasses="ui-grid-col-3, ui-grid-col-9">
+                                             columnClasses="ui-grid-col-3, ui-grid-col-8, ui-grid-col-1">
+
                                     <p:outputLabel value="Pessoa: " for="pessoa" />
                                     <p:autoComplete 
                                         readonly="#{emprestimoControlador.visualizar}"
@@ -43,6 +44,8 @@
                                                 update="addExem dtDevolucao tableRes gridEmp"
                                                 listener="#{emprestimoControlador.validaDiasDevolucao('Sim')}"/>
                                     </p:autoComplete>
+                                    <p:outputLabel value="" />
+
                                     <p:outputLabel value="Obra: " for="obra" />
                                     <p:autoComplete 
                                         id="obra"
@@ -57,38 +60,26 @@
                                         <p:ajax event="itemUnselect" />
                                         <p:ajax event="keyup" />
                                     </p:autoComplete>
-                                    <p:outputLabel value="Exemplar: " for="exemplar" />
-                                    <p:autoComplete 
-                                        id="exemplar"
-                                        var="exemplar" 
-                                        forceSelection="true"
-                                        immediate="true"
-                                        cache="true"
-                                        completeMethod="#{emprestimoControlador.completaPublicacao}" 
-                                        converter="#{emprestimoControlador.converterPublicacao}"
-                                        emptyMessage="Nenhum resultado encontrado"
-                                        value="#{emprestimoControlador.itemEmprestimo.exemplar}"
-                                        itemValue="#{exemplar.id}" itemLabel="#{exemplar.toString()}">
+                                    <p:outputLabel value="" />
 
-                                        <p:ajax event="itemSelect" 
-                                                update="nomeExem addExem"
-                                                listener="#{emprestimoControlador.completarExemplar}"/>
-                                        <p:ajax event="keyup" 
-                                                update="nomeExem addExem"
-                                                listener="#{emprestimoControlador.completarExemplar}"/>
-                                    </p:autoComplete>
+                                    <p:outputLabel value="Exemplar: " for="exemplar" />
+                                    <p:inputText id="exemplar" valueChangeListener="#{emprestimoControlador.btnSubmit}"
+                                                 value="#{emprestimoControlador.tomboEmprestimo}" />
+                                    <p:commandButton icon="ui-icon-check" update="nomeExem" id="complet" actionListener="#{emprestimoControlador.btnSubmit}" />
 
                                     <p:outputLabel/>
                                     <p:inputText readonly="true" value="#{emprestimoControlador.nomeExemplar}" id="nomeExem" />
-
+                                    <p:outputLabel/>
 
                                     <p:outputLabel value="Data Devolução: " for="dtDevolucao" />
                                     <p:calendar id="dtDevolucao"
                                                 readonly="true" 
+                                                showOn="false"
                                                 value="#{emprestimoControlador.itemEmprestimo.prazo}" 
                                                 pattern="dd/MM/yyyy" 
                                                 mask="true" >
                                     </p:calendar>
+                                    <p:outputLabel/>
                                 </p:panelGrid>
                                 <p:dataTable id="tableRes"
                                              var="itemreserva" 
@@ -207,7 +198,7 @@
                               width="350"
                               resizable="false"
                               height="100">
-
+                        <p:ajax event="close" update="messagesEmprestimo" listener="#{emprestimoControlador.fecharConfirmacao}" />
                         <p:outputLabel value="Deseja realizar a impressão do comprovante de empréstimo?" />
 
                         <p:panelGrid id="gridBotoes2" columns="2"
@@ -223,6 +214,7 @@
                                              onclick="PF('salvarEmp').hide(); this.form.target = '_blank'"
                                              process="@this"
                                              icon="ui-icon-check" 
+                                             update="@form"
                                              value="Sim" 
                                              />
 
@@ -230,6 +222,7 @@
                                              icon="ui-icon-close" 
                                              value="Não" 
                                              ajax="false"
+                                             update="panelEmprestimo"
                                              action="#{emprestimoControlador.salvar('Nao')}" />
                         </p:panelGrid>
                     </p:dialog>

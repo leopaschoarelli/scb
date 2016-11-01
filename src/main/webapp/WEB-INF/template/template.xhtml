@@ -10,8 +10,11 @@
         <title>
             <ui:insert name="title">Sistema Bibliotecário</ui:insert>
         </title>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <ui:insert name="icon"><link rel="icon" href="resources/images/iconGori.png" type="image/ico"/></ui:insert>
         <meta name="author" content="Leonardo Paschoarelli"></meta>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
         <h:outputScript library="js" name="locale-primefaces.js"/>
         <h:outputStylesheet library="css" name="css.css"/>
         <h:outputStylesheet library="css" name="loading.css"/>
@@ -61,7 +64,7 @@
             }
         </style>
     </h:head>
-    <h:body>
+    <h:body >
         <ui:insert name="header">
             <ui:include src="/WEB-INF/template/header.xhtml" />
         </ui:insert>
@@ -82,15 +85,6 @@
                 </ui:insert>-->
 
 
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
-                <ui:insert name="conteudo"/>
-            </sec:authorize>
-            <sec:authorize access="!isAuthenticated()" >
-                <ui:insert name="conteudo-publico"/>
-            </sec:authorize>
-        </div><!-- /.content-wrapper -->
 
         <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
             <h:form id="conf-dialog" prependId="false">

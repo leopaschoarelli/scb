@@ -11,10 +11,10 @@
                 <h:form id="form-pessoa" prependId="false">
                     <div class="ui-fluid">
                         <p:panel id="panelDados" header="#{pessoaControlador.header}">
+                            <p:messages id="messagesPessoa" showDetail="true" closable="true" autoUpdate="true" />
                             <p:tabView id="complemento">
                                 <p:tab id="tabDados" title="Dados Pessoais" >
                                     <p:panel id="dadosPessoas">
-                                        <p:messages id="messagesPessoa" showDetail="true" closable="true" autoUpdate="true" />
                                         <p:focus context="dadosPessoas"/>
                                         <p:panelGrid columns="2"
                                                      layout="grid" 

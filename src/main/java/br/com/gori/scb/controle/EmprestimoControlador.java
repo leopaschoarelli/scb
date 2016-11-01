@@ -29,6 +29,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.Temporal;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.CloseEvent;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.event.SelectEvent;
 
@@ -100,6 +102,7 @@ public class EmprestimoControlador implements Serializable {
     private String tomboPesquisa;
 
     private String tomboEmprestimo;
+    private String btn;
 
     public EmprestimoControlador() {
         newInstances();
@@ -142,6 +145,7 @@ public class EmprestimoControlador implements Serializable {
         this.qtdDispReserva = 0;
         this.listaDisponibilidade = new ArrayList<>();
         tomboEmprestimo = "";
+        btn = "complet";
     }
 
     public void inicializar() {
@@ -181,12 +185,20 @@ public class EmprestimoControlador implements Serializable {
 //            if ("Sim".equals(imprimir)) {
 //                imprimeComprovante.emitir();
 //            }
-            JsfUtil.addSuccessMessage("Emprestimo salva com sucesso!");
-            return prepararLista();
+            newInstances();
+            JsfUtil.addSuccessMessage("Emprestimo realizado com sucesso!");
+            return "edita";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao salvar emprestimo");
             return null;
         }
+    }
+
+    public void fecharConfirmacao(CloseEvent event) {
+        JsfUtil.addSuccessMessage("Emprestimo realizado com sucesso!");
+        RequestContext context = RequestContext.getCurrentInstance();
+        RequestContext.getCurrentInstance().update("form-user:panelEmprestimo");
+        RequestContext.getCurrentInstance().reset("form-user:panelEmprestimo");
     }
 
     public String prepararLista() {
@@ -536,12 +548,15 @@ public class EmprestimoControlador implements Serializable {
 
     public void completarExemplar() {
         nomeExemplar = null;
-
         if (itemEmprestimo != null) {
-            Exemplar exem = itemEmprestimo.getExemplar();
+            Exemplar exem = new Exemplar();
+            exem = itemEmprestimo.getExemplar();
+            System.out.println("Caiu aqui - Passo 1");
             if (exem != null) {
                 Publicacao obraLit = exem.getPublicacao();
+                System.out.println("Caiu aqui - Passo 2");
                 if (obraLit != null) {
+                    System.out.println("Vai escrever o nome!! ");
                     nomeExemplar = "Nº Exe: " + itemEmprestimo.getExemplar().getNumExe()
                             + ". " + itemEmprestimo.getExemplar().getPublicacao().getTitulo()
                             + ", " + itemEmprestimo.getExemplar().getPublicacao().getSubtitulo();
@@ -915,7 +930,6 @@ public class EmprestimoControlador implements Serializable {
         nomeExemplar = null;
         if (tomboEmprestimo != null) {
             List<Exemplar> exem = new ArrayList<>();
-            exem = exemplarDAO.recuperaExemplarPorTombo(tomboEmprestimo);
             if (!exem.isEmpty()) {
                 Publicacao obraLit = exem.get(0).getPublicacao();
                 if (obraLit != null) {
@@ -949,6 +963,37 @@ public class EmprestimoControlador implements Serializable {
                 }
             }
         }
+    }
+
+    public void btnSubmit() {
+        System.out.println("Tombo: " + tomboEmprestimo);
+        if (!"".equals(tomboEmprestimo)) {
+            Exemplar exem = exemplarDAO.recuperaExemplarPorTombo(tomboEmprestimo);
+            if (exem != null) {
+                itemEmprestimo.setExemplar(exem);
+                completarExemplar();
+            } else {
+                JsfUtil.addErrorMessage("Exemplar não encontrado!");
+            }
+        } else {
+            nomeExemplar = "";
+        }
+    }
+
+    public void emitirMensagem() {
+        JsfUtil.addSuccessMessage("Emprestimo realizado com sucesso");
+    }
+
+    public void resetFields() {
+        RequestContext.getCurrentInstance().reset("form-user:panelEmprestimo");
+    }
+
+    public String getBtn() {
+        return btn;
+    }
+
+    public void setBtn(String btn) {
+        this.btn = btn;
     }
 
 }

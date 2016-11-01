@@ -56,7 +56,6 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
         Query q = getEntityManager().createNativeQuery(sql, User.class);
         q.setParameter("parte", "%" + nome + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
-        System.out.println("LOGIN!!!::: "+q.toString());
         return (User) q.getSingleResult();
     }
 

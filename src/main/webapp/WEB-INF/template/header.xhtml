@@ -6,9 +6,9 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:sec="http://www.springframework.org/security/tags">
-    <h:body>
+    <h:body >
         <ui:composition >
-            <h:form class="skin-blue sidebar-mini">
+            <div class="skin-blue sidebar-mini" >
                 <div class="wrapper">
 
                     <!-- Main Header -->
@@ -62,6 +62,7 @@
                                 </sec:authorize>
                                 <sec:authorize access="!isAuthenticated()" >
                                     <li class="active"><p:link outcome="/public/index.xhtml"><i class="fa fa-home"></i> <span>Início</span></p:link></li>
+                                    <li><p:link outcome="/public/consulta.xhtml"><i class="fa fa-search"></i> <span>Consulta de Livros</span></p:link></li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
                                     <li class="treeview">
@@ -107,8 +108,8 @@
                                 <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_ROOT','ROLE_MOD')" >
                                     <li class="treeview">
                                         <a href="#"><i class="fa fa-folder-open"></i> <span>Consultas</span> <i class="fa fa-angle-left pull-right"></i></a>
-
                                         <ul class="treeview-menu">
+                                            <li><p:link outcome="/pages/private/admin/consulta/publicacao.xhtml"><i class="fa fa-file"></i> <span>Consulta de Livros</span></p:link></li>
                                             <li><p:link outcome="/pages/private/admin/consulta/emprestimo.xhtml"><i class="fa fa-file"></i>Empréstimos/Devoluções</p:link></li>
                                             <li><p:link outcome="/pages/private/admin/consulta/reserva.xhtml"><i class="fa fa-file"></i>Reservas</p:link></li>	
                                         </ul>
@@ -147,9 +148,23 @@
                         </section>
                         <!-- /.sidebar -->
                     </aside>
-
+                    <div class="content-wrapper">
+                        <section class="content">
+                            <!-- Content Header (Page header) -->
+                            <sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                                <ui:insert name="conteudo"/>
+                            </sec:authorize>
+                            <sec:authorize access="!isAuthenticated()" >
+                                <ui:insert name="conteudo-publico"/>
+                            </sec:authorize>
+                        </section>
+                    </div><!-- /.content-wrapper -->
+                    
+                    <footer class="main-footer">
+                        <strong>Copyright &copy;</strong>
+                    </footer>
                 </div><!-- ./wrapper -->
-            </h:form>
+            </div>
         </ui:composition>
     </h:body>
 </html>
