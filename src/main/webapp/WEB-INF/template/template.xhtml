@@ -12,7 +12,10 @@
         </title>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <ui:insert name="icon"><link rel="icon" href="resources/images/iconGori.png" type="image/ico"/></ui:insert>
+
+        <link rel="icon" href="resources/images/iconGori.png" type="image/ico">
+            <ui:insert name="icon"/>
+        </link>
         <meta name="author" content="Leonardo Paschoarelli"></meta>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
         <h:outputScript library="js" name="locale-primefaces.js"/>
@@ -21,7 +24,6 @@
         <h:outputStylesheet library="styles" name="custom.css" />
         <h:outputScript target="body" library="primefaces" name="jquery/jquery.js" />
         <h:outputScript target="body" library="javascripts" name="app.js" />
-
 
         <link rel="stylesheet" type="text/css"
               href="#{request.contextPath}/resources/dist/css/skins/skin-blue.min.css" />

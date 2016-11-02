@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="devolatraso" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ae51ed8-b90a-42d9-b372-b4b1fd996e04">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.callouts" value="##Wed Nov 02 00:09:30 BRST 2016"/>
+	<style name="Heading 3" fontSize="14" isBold="true"/>
+	<parameter name="SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[" and 1 = 1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGEM" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select e.tombo,f.titulo,c.nome,b.prazo,(current_date - b.prazo) as dias
+                 from emprestimo a, itememprestimo b, exemplar e, publicacao f, pessoa c
+                 where b.emprestimo_id = a.id
+                 and b.devolucao is null
+                 and b.exemplar_id = e.id
+                 and e.estadoexemplar = 'EMPRESTADO'
+                 and e.publicacao_id = f.id
+                 and b.prazo < current_date
+                 and a.pessoa_id = c.id
+                 $P!{SQL}]]>
+	</queryString>
+	<field name="nome" class="java.lang.String"/>
+	<field name="tombo" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="prazo" class="java.lang.String"/>
+	<field name="dias" class="java.lang.String"/>
+	<group name="Group1"/>
+	<group name="Group2"/>
+	<group name="Group3"/>
+	<group name="Group4"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="71" splitType="Stretch">
+			<image>
+				<reportElement x="220" y="9" width="131" height="62" uuid="15ac9bc9-b7ee-40ee-9cc1-1c9a20b66641"/>
+				<imageExpression><![CDATA[$P{IMAGEM} + "gori.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="52">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="19" forecolor="#666666" uuid="bd695c48-071b-488c-9668-0df1ae487271"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lista de Devoluções Atrasadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="231" y="32" width="193" height="20" uuid="bdfc5f10-ff25-49e6-bc96-7d947652dbb1"/>
+				<text><![CDATA[Nome da Pessoa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="32" width="71" height="20" uuid="3c406d0c-59a4-482c-8af2-0ac27e34e444"/>
+				<text><![CDATA[Tombo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="32" width="160" height="20" uuid="28261b4f-a04b-4cd8-a220-f2b24dd5a1ad"/>
+				<text><![CDATA[Título Livro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="32" width="60" height="20" uuid="75d8b27b-d7d1-4154-a903-c2748d26ffb5"/>
+				<text><![CDATA[Dias Atraso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="424" y="32" width="71" height="20" uuid="5310e83e-1d0c-4630-923c-35307e14ac41"/>
+				<text><![CDATA[Dt. Prevista]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="231" y="0" width="193" height="20" uuid="f4cf0d15-1114-410c-8757-849361491684"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="71" height="20" uuid="6ce8a4be-cb73-416b-97a8-6d12faa0cbbf"/>
+				<textFieldExpression><![CDATA[$F{tombo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="71" y="0" width="160" height="20" uuid="4038ce49-ec66-4f64-a34e-5dca27bd46d6"/>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="495" y="0" width="60" height="20" uuid="81a38023-1c59-4887-b7f4-edd9a5852a42"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{dias}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="424" y="0" width="71" height="20" uuid="ed241fb4-b9b8-4b0a-b71f-2aff1e6d9047"/>
+				<textFieldExpression><![CDATA[$F{prazo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="29c30a14-3f96-47cf-bb9e-b3da180c5a81"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="ebd92578-24d5-4b67-9308-3e40a179c0e4"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="9e5cff2a-8b1a-4a87-a81f-785d0796897a"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
