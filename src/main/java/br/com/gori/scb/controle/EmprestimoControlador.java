@@ -103,6 +103,7 @@ public class EmprestimoControlador implements Serializable {
 
     private String tomboEmprestimo;
     private String btn;
+    private boolean salvo;
 
     public EmprestimoControlador() {
         newInstances();
@@ -146,6 +147,7 @@ public class EmprestimoControlador implements Serializable {
         this.listaDisponibilidade = new ArrayList<>();
         tomboEmprestimo = "";
         btn = "complet";
+        salvo = false;
     }
 
     public void inicializar() {
@@ -171,31 +173,62 @@ public class EmprestimoControlador implements Serializable {
 
     public String salvar(String imprimir) {
         try {
-            comprovante.setEmprestimo(emprestimo);
-            for (ItemEmprestimo it : emprestimo.getItemEmprestimo()) {
-                it.getExemplar().setEstadoExemplar(EstadoExemplar.EMPRESTADO);
-            }
-            if (edicao) {
-                emprestimoDAO.update(emprestimo);
-                comprovanteDAO.update(comprovante);
-            } else {
-                emprestimoDAO.save(emprestimo);
-                comprovanteDAO.save(comprovante);
-            }
+            if (validarCampos()) {
+                comprovante.setEmprestimo(emprestimo);
+                for (ItemEmprestimo it : emprestimo.getItemEmprestimo()) {
+                    it.getExemplar().setEstadoExemplar(EstadoExemplar.EMPRESTADO);
+                }
+                if (edicao) {
+                    emprestimoDAO.update(emprestimo);
+                    comprovanteDAO.update(comprovante);
+                } else {
+                    emprestimoDAO.save(emprestimo);
+                    comprovanteDAO.save(comprovante);
+                }
 //            if ("Sim".equals(imprimir)) {
 //                imprimeComprovante.emitir();
 //            }
-            newInstances();
-            JsfUtil.addSuccessMessage("Emprestimo realizado com sucesso!");
-            return "edita";
+                salvo = true;
+                newInstances();
+                JsfUtil.addSuccessMessage("Emprestimo realizado com sucesso!");
+                return "edita";
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao salvar emprestimo");
             return null;
         }
     }
 
+    private boolean validarCampos() {
+        try {
+            if (emprestimo.getPessoa() == null) {
+                JsfUtil.addErrorMessage("É necessário informar uma pessoa para realizar o empréstimo!");
+                salvo = false;
+                return false;
+            }
+            if (itemEmprestimo.getPrazo() == null) {
+                JsfUtil.addErrorMessage("Verifique a data prazo de devolução!");
+                salvo = false;
+                return false;
+            }
+            if (emprestimo.getItemEmprestimo().isEmpty()) {
+                JsfUtil.addErrorMessage("É necessário incluir ao menos um exemplar na lista de empréstimo!");
+                salvo = false;
+                return false;
+            }
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage(e, "Erro ao validar campos obrigatórios, atualize a página e tente novamente");
+            return false;
+        }
+        return true;
+    }
+
     public void fecharConfirmacao(CloseEvent event) {
-        JsfUtil.addSuccessMessage("Emprestimo realizado com sucesso!");
+        if (salvo == true) {
+            JsfUtil.addSuccessMessage("Emprestimo realizado com sucesso!");
+        }
         RequestContext context = RequestContext.getCurrentInstance();
         RequestContext.getCurrentInstance().update("form-user:panelEmprestimo");
         RequestContext.getCurrentInstance().reset("form-user:panelEmprestimo");
@@ -262,6 +295,9 @@ public class EmprestimoControlador implements Serializable {
             }
             if (publicacaoFiltro != null) {
                 exemplaresFiltrados = emprestimoDAO.getExemplares(publicacaoFiltro.getId());
+                if (exemplaresFiltrados.isEmpty()) {
+                    JsfUtil.addErrorMessage("Não foram encontrados exemplares disponiveis na data atual, verifique empréstimos/devoluções");
+                }
             } else if (itemEmprestimo.getExemplar() != null) {
                 onExemplarAdiciona();
             } else {
@@ -829,6 +865,7 @@ public class EmprestimoControlador implements Serializable {
             it.getExemplar().setEstadoExemplar(EstadoExemplar.DISPONIVEL);
             it.setDevolucao(new Date());
             itensDevolFiltro.remove(it);
+            itensDevolucao.remove(it);
         }
         try {
             emprestimoDAO.update(emprestimo);
@@ -965,15 +1002,33 @@ public class EmprestimoControlador implements Serializable {
         }
     }
 
+    public void btnDevolSubmit() {
+        if (!"".equals(tomboEmprestimo)) {
+            Exemplar exem = exemplarDAO.recuperaExemplarEmpPorTombo(tomboEmprestimo);
+            if (exem != null) {
+                completarExemplar();
+                List<ItemEmprestimo> itemEmp = new ArrayList<>();
+                itemEmp = itemEmprestimoDAO.recuperarEmprestimosAbertosTombo(tomboEmprestimo);
+                itensDevolFiltro.addAll(itemEmp);
+                itensDevolucao.addAll(itemEmp);
+                tomboEmprestimo = "";
+                nomeExemplar = "";
+            } else {
+                JsfUtil.addErrorMessage("Exemplar não encontrado na lista de empréstimo, verifique emprestimos/devolução ou cadastro do código de exemplar!");
+            }
+        } else {
+            nomeExemplar = "";
+        }
+    }
+
     public void btnSubmit() {
-        System.out.println("Tombo: " + tomboEmprestimo);
         if (!"".equals(tomboEmprestimo)) {
             Exemplar exem = exemplarDAO.recuperaExemplarPorTombo(tomboEmprestimo);
             if (exem != null) {
                 itemEmprestimo.setExemplar(exem);
                 completarExemplar();
             } else {
-                JsfUtil.addErrorMessage("Exemplar não encontrado!");
+                JsfUtil.addErrorMessage("Exemplar não está disponível na data atual, verifique emprestimos/devolução ou cadastro do código de exemplar!");
             }
         } else {
             nomeExemplar = "";
@@ -994,6 +1049,14 @@ public class EmprestimoControlador implements Serializable {
 
     public void setBtn(String btn) {
         this.btn = btn;
+    }
+
+    public boolean isSalvo() {
+        return salvo;
+    }
+
+    public void setSalvo(boolean salvo) {
+        this.salvo = salvo;
     }
 
 }

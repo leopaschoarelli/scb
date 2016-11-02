@@ -83,6 +83,18 @@ public class ItemEmprestimoDAOImpl extends AbstractDAO<ItemEmprestimo> implement
         return q.getResultList();
     }
 
+    public List<ItemEmprestimo> recuperarEmprestimosAbertosTombo(String tombo) {
+        String sql = "select b.* from emprestimo a, itememprestimo b, exemplar c "
+                + "where a.id = b.emprestimo_id "
+                + "and b.devolucao is null "
+                + "and b.exemplar_id = c.id "
+                + "and c.tombo like :parte "
+                + "and c.estadoexemplar = 'EMPRESTADO' ";
+        Query q = getEntityManager().createNativeQuery(sql, ItemEmprestimo.class);
+        q.setParameter("parte", "%" + tombo + "%");
+        return q.getResultList();
+    }
+
     public List<ItemEmprestimo> recuperaEmprestimosAbertosPessoa(Pessoa pessoa) {
         String sql = "select b.* from emprestimo a, itememprestimo b "
                 + "where a.id = b.emprestimo_id "

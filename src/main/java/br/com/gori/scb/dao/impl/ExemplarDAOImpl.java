@@ -43,6 +43,21 @@ public class ExemplarDAOImpl extends AbstractDAO<Exemplar> implements ExemplarDA
         }
     }
 
+    public Exemplar recuperaExemplarEmpPorTombo(String tombo) {
+        String sql = "select b.* from publicacao a, exemplar b "
+                + "where b.publicacao_id = a.id "
+                + "and b.databaixa is null "
+                + "and b.estadoexemplar = 'EMPRESTADO' "
+                + "and b.tombo like :parte "
+                + "limit 1 ";
+        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        q.setParameter("parte", "%" + tombo + "%");
+        if (q.getResultList().isEmpty()) {
+            return null;
+        }
+        return (Exemplar) q.getSingleResult();
+    }
+
     public Exemplar recuperaExemplarPorTombo(String tombo) {
         String sql = "select b.* from publicacao a, exemplar b "
                 + "where b.publicacao_id = a.id "

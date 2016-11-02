@@ -13,8 +13,7 @@
                         <f:viewAction action="#{emprestimoControlador.inicializar}" />
                     </f:metadata>
                     <div class="ui-fluid">
-                        <p:panel id="panelEmprestimo" header="#{emprestimoControlador.header}">
-
+                        <p:panel id="panelEmprestimo" header="Realizar Empréstimo">
                             <p:messages id="messagesEmprestimo" showDetail="false" closable="true" autoUpdate="true" />
                             <p:focus context="panelEmprestimo"/>
                             <p:panelGrid id="gridEmprestimo" 
@@ -184,11 +183,15 @@
                             </p:panelGrid>
                         </p:panel>
                         <p:separator/>
-                        <p:panelGrid id="gridBotoes" columns="2"
+                        <p:panelGrid id="gridBotoes" columns="1"
                                      layout="grid"
-                                     columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                     columnClasses="ui-grid-col-12"
                                      styleClass="panelgrid-noborder">
-                            <p:commandButton id="botaoSalvar1" ajax="true" icon="ui-icon-check" value="Salvar" onclick="PF('salvarEmp').show();"/>
+                            <p:commandButton id="botaoSalvar1" 
+                                             ajax="true" 
+                                             icon="ui-icon-check" 
+                                             value="Salvar" 
+                                             onclick="PF('salvarEmp').show();"/>
                         </p:panelGrid>
                     </div>
                     <p:dialog responsive="true"
