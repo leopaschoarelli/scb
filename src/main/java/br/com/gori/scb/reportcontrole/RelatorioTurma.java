@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @ManagedBean
 @SessionScoped
-public class EmprestimoAtrasoControlador implements Serializable {
+public class RelatorioTurma implements Serializable {
 
     @Autowired
     private FacesContext facesContext;
@@ -63,10 +63,13 @@ public class EmprestimoAtrasoControlador implements Serializable {
     private ConverterAutoComplete converterTurno;
     private Date dataInicial;
     private Date dataFinal;
+    private Date dtPrazoIni;
+    private Date dtPrazoFinal;
     private Date dtDevolIni;
     private Date dtDevolFinal;
+    private String console;
 
-    public EmprestimoAtrasoControlador() {
+    public RelatorioTurma() {
         newInstances();
     }
 
@@ -87,6 +90,8 @@ public class EmprestimoAtrasoControlador implements Serializable {
         this.dataFinal = null;
         this.dtDevolIni = null;
         this.dtDevolFinal = null;
+        this.dtPrazoIni = null;
+        this.dtPrazoFinal = null;
     }
 
     public void emitir() {
@@ -95,16 +100,21 @@ public class EmprestimoAtrasoControlador implements Serializable {
 
         parametros.put("IMAGEM", getCaminho());
         parametros.put("SQL", gerarSql());
+        if (!"".equals(console)) {
+            if ("is not null".equals(console)) {
+                parametros.put("DESCRICAO", "Devoluções");
+            } else {
+                parametros.put("DESCRICAO", "Empréstimos");
+            }
+        } else {
+            parametros.put("DESCRICAO", "Empréstimos/Devoluções Por Turma");
+        }
 //        System.out.println(parametros.toString());
-        ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/devolatraso.jasper",
-                this.response, parametros, "Emprestimo em Atraso.pdf");
+        ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/relatturma.jasper",
+                this.response, parametros, "Relatório Por Turma.pdf");
 
         Session session = emprestimoDAO.getEntityManager().unwrap(Session.class);
-//        try {
-            session.doWork(executor);
-//        } catch (Exception ex) {
-//            JsfUtil.addErrorMessage(ex, "Erro ao emitir relatório");
-//        }
+        session.doWork(executor);
 
         if (executor.isRelatorioGerado()) {
             facesContext = FacesContext.getCurrentInstance();
@@ -116,6 +126,9 @@ public class EmprestimoAtrasoControlador implements Serializable {
 
     private String gerarSql() {
         StringBuilder sb = new StringBuilder();
+        if (!"".equals(console)) {
+            sb.append(" and b.devolucao ").append(console);
+        }
         if (exemplar != null) {
             sb.append(" and e.id = ").append(exemplar.getId());
         }
@@ -134,8 +147,11 @@ public class EmprestimoAtrasoControlador implements Serializable {
         if (dataInicial != null && dataFinal != null) {
             sb.append(" and a.criacao between '").append(dataInicial).append("' and '").append(dataFinal).append("' ");
         }
+        if (dtPrazoIni != null && dtPrazoFinal != null) {
+            sb.append(" and b.prazo between '").append(dtPrazoIni).append("' and '").append(dtPrazoFinal).append("' ");
+        }
         if (dtDevolIni != null && dtDevolFinal != null) {
-            sb.append(" and b.prazo between '").append(dtDevolIni).append("' and '").append(dtDevolFinal).append("' ");
+            sb.append(" and b.devolucao between '").append(dtDevolIni).append("' and '").append(dtDevolFinal).append("' ");
         }
         return sb.toString();
     }
@@ -160,7 +176,7 @@ public class EmprestimoAtrasoControlador implements Serializable {
     }
 
     public List<Pessoa> completaPessoa(String value) {
-        return emprestimoDAO.getPessoas(value.toLowerCase());
+        return pessoaDAO.getAlunos(value.toLowerCase());
     }
 
     public List<Publicacao> completaObra(String value) {
@@ -348,6 +364,30 @@ public class EmprestimoAtrasoControlador implements Serializable {
 
     public void setPessoaTurma(Pessoa pessoaTurma) {
         this.pessoaTurma = pessoaTurma;
+    }
+
+    public String getConsole() {
+        return console;
+    }
+
+    public void setConsole(String console) {
+        this.console = console;
+    }
+
+    public Date getDtPrazoIni() {
+        return dtPrazoIni;
+    }
+
+    public void setDtPrazoIni(Date dtPrazoIni) {
+        this.dtPrazoIni = dtPrazoIni;
+    }
+
+    public Date getDtPrazoFinal() {
+        return dtPrazoFinal;
+    }
+
+    public void setDtPrazoFinal(Date dtPrazoFinal) {
+        this.dtPrazoFinal = dtPrazoFinal;
     }
 
 }

@@ -10,92 +10,94 @@
             <ui:define name="conteudo"> 
                 <h:form id="formConsulta" prependId="false">
                     <div class="ui-fluid">
-                        <p:panelGrid columns="2" 
-                                     id="panelPesq" 
-                                     layout="grid" 
-                                     columnClasses="ui-grid-col-1, ui-grid-col-11">
+                        <p:panel id="panelPub" header="Consultar Livros/Exemplares">
+                            <p:panelGrid columns="2" 
+                                         id="panelPesq" 
+                                         layout="grid" 
+                                         columnClasses="ui-grid-col-1, ui-grid-col-11">
 
-                            <p:outputLabel value="Obra Literária: " for="obra" />
-                            <p:inputText id="obra" 
-                                         value="#{consultaControlador.titulo}" />
+                                <p:outputLabel value="Obra Literária: " for="obra" />
+                                <p:inputText id="obra" 
+                                             value="#{consultaControlador.titulo}" />
 
-                            <p:outputLabel value="Autor " for="autor" />
-                            <p:inputText id="autor" 
-                                         value="#{consultaControlador.autor}" />
+                                <p:outputLabel value="Autor " for="autor" />
+                                <p:inputText id="autor" 
+                                             value="#{consultaControlador.autor}" />
 
-                            <p:outputLabel value="Categoria: " for="categoria" />
-                            <p:inputText id="categoria" 
-                                         value="#{consultaControlador.categoria}" />
+                                <p:outputLabel value="Categoria: " for="categoria" />
+                                <p:inputText id="categoria" 
+                                             value="#{consultaControlador.categoria}" />
 
-                        </p:panelGrid>
+                            </p:panelGrid>
 
-                        <p:commandButton id="btnPesquisa"
-                                         icon="ui-icon-search" 
-                                         action="#{consultaControlador.pesquisar()}" 
-                                         update="tableLivro" 
-                                         value="Pesquisar"/>
+                            <p:commandButton id="btnPesquisa"
+                                             icon="ui-icon-search" 
+                                             action="#{consultaControlador.pesquisar()}" 
+                                             update="tableLivro" 
+                                             value="Pesquisar"/>
 
-                        <p:panel  style="margin-top: 10px" id="livro" header="Livros">
+                            <p:panel  style="margin-top: 10px" id="livro" header="Livros">
 
-                            <p:contextMenu for="tableLivro">
-                                <p:menuitem value="Visualizar" update="gridInfo" icon="ui-icon-search" oncomplete="PF('publicDialog').show()"/>
-                            </p:contextMenu>
+                                <p:contextMenu for="tableLivro">
+                                    <p:menuitem value="Visualizar" update="gridInfo" icon="ui-icon-search" oncomplete="PF('publicDialog').show()"/>
+                                </p:contextMenu>
 
-                           
-                            <p:dataTable paginator="true" 
-                                         rows="10" 
-                                         id="tableLivro" 
-                                         resizableColumns="true"
-                                         var="publicacao" 
-                                         reflow="true"
-                                         resizeMode="fit"
-                                         scrollable="true"
-                                         scrollHeight="220"
-                                         rowKey="#{publicacao.id}"
-                                         selection="#{consultaControlador.publicacaoSelecionada}"
-                                         selectionMode="single"
-                                         value="#{consultaControlador.publicacaoFiltrado}"
-                                         emptyMessage="Nenhum registro encontrado">
-                                <f:facet name="header">
-                                    Lista de Livros
-                                </f:facet>
-                                <p:column filterStyle="width: auto" filterBy="#{publicacao.tipoPublicacao.descricao}" headerText="Tipo Obra">
-                                    <h:outputText value="#{publicacao.tipoPublicacao.descricao}" />
-                                </p:column>
-                                <p:column filterStyle="width: auto" filterBy="#{publicacao.titulo}" headerText="Titulo">
-                                    <h:outputText value="#{publicacao.titulo}" />
-                                </p:column>
-                                <p:column filterStyle="width: auto" filterBy="#{publicacao.subtitulo}" headerText="Subtitulo">
-                                    <h:outputText value="#{publicacao.subtitulo}" />
-                                </p:column>
-                                <p:column filterStyle="width: auto" filterBy="#{publicacao.categoria.descricao}" headerText="Categoria">
-                                    <h:outputText value="#{publicacao.categoria.descricao}" />
-                                </p:column>
-                                <p:column filterStyle="width: auto" filterBy="#{publicacao.isbn}" headerText="ISBN">
-                                    <h:outputText value="#{publicacao.isbn}" />
-                                </p:column>
-                                <p:column  filterStyle="width: auto" filterBy="#{publicacao.anoPublicacao}" headerText="Ano Publicação">
-                                    <h:outputText value="#{publicacao.anoPublicacao}" />
-                                </p:column>
-                                <f:facet name="footer">
-                                    Total de livros: #{livroControlador.livros.size()}.
-                                </f:facet>
-                            </p:dataTable>
-                            <p:dialog closeOnEscape="true" id="dialog" header="Detalhes da Pubilicação" widgetVar="publicDialog" resizable="false">
-                                <p:outputPanel id="gridInfo">
-                                    <ui:repeat value="#{consultaControlador.publicacaoSelecionada.autorias}" var="aut">
-                                        <h:panelGrid id="gridAutores" columns="1" frame="lhs">
-                                            <h:outputText value="- Autor #{aut.tipoAutor.descricao}: #{aut.autor.sobrenome}, #{aut.autor.nome}"/>
-                                        </h:panelGrid>
-                                    </ui:repeat>
-                                    <ui:repeat value="#{consultaControlador.publicacaoSelecionada.exemplar}" var="ex">
-                                        <h:panelGrid id="gridExem" columns="2" frame="lhs">
-                                            <h:outputText value="- Nº Exemplar #{ex.numExe}, Tombo: #{ex.tombo}, Estado: #{ex.estadoExemplar.descricao}"/>  
-                                        </h:panelGrid>
-                                    </ui:repeat>
-                                </p:outputPanel>
-                            </p:dialog>
 
+                                <p:dataTable paginator="true" 
+                                             rows="10" 
+                                             id="tableLivro" 
+                                             resizableColumns="true"
+                                             var="publicacao" 
+                                             reflow="true"
+                                             resizeMode="fit"
+                                             scrollable="true"
+                                             scrollHeight="220"
+                                             rowKey="#{publicacao.id}"
+                                             selection="#{consultaControlador.publicacaoSelecionada}"
+                                             selectionMode="single"
+                                             value="#{consultaControlador.publicacaoFiltrado}"
+                                             emptyMessage="Nenhum registro encontrado">
+                                    <f:facet name="header">
+                                        Lista de Livros
+                                    </f:facet>
+                                    <p:column filterStyle="width: auto" filterBy="#{publicacao.tipoPublicacao.descricao}" headerText="Tipo Obra">
+                                        <h:outputText value="#{publicacao.tipoPublicacao.descricao}" />
+                                    </p:column>
+                                    <p:column filterStyle="width: auto" filterBy="#{publicacao.titulo}" headerText="Titulo">
+                                        <h:outputText value="#{publicacao.titulo}" />
+                                    </p:column>
+                                    <p:column filterStyle="width: auto" filterBy="#{publicacao.subtitulo}" headerText="Subtitulo">
+                                        <h:outputText value="#{publicacao.subtitulo}" />
+                                    </p:column>
+                                    <p:column filterStyle="width: auto" filterBy="#{publicacao.categoria.descricao}" headerText="Categoria">
+                                        <h:outputText value="#{publicacao.categoria.descricao}" />
+                                    </p:column>
+                                    <p:column filterStyle="width: auto" filterBy="#{publicacao.isbn}" headerText="ISBN">
+                                        <h:outputText value="#{publicacao.isbn}" />
+                                    </p:column>
+                                    <p:column  filterStyle="width: auto" filterBy="#{publicacao.anoPublicacao}" headerText="Ano Publicação">
+                                        <h:outputText value="#{publicacao.anoPublicacao}" />
+                                    </p:column>
+                                    <f:facet name="footer">
+                                        Total de livros: #{livroControlador.livros.size()}.
+                                    </f:facet>
+                                </p:dataTable>
+                                <p:dialog closeOnEscape="true" id="dialog" header="Detalhes da Pubilicação" widgetVar="publicDialog" resizable="false">
+                                    <p:outputPanel id="gridInfo">
+                                        <ui:repeat value="#{consultaControlador.publicacaoSelecionada.autorias}" var="aut">
+                                            <h:panelGrid id="gridAutores" columns="1" frame="lhs">
+                                                <h:outputText value="- Autor #{aut.tipoAutor.descricao}: #{aut.autor.sobrenome}, #{aut.autor.nome}"/>
+                                            </h:panelGrid>
+                                        </ui:repeat>
+                                        <ui:repeat value="#{consultaControlador.publicacaoSelecionada.exemplar}" var="ex">
+                                            <h:panelGrid id="gridExem" columns="2" frame="lhs">
+                                                <h:outputText value="- Nº Exemplar #{ex.numExe}, Tombo: #{ex.tombo}, Estado: #{ex.estadoExemplar.descricao}"/>  
+                                            </h:panelGrid>
+                                        </ui:repeat>
+                                    </p:outputPanel>
+                                </p:dialog>
+
+                            </p:panel>
                         </p:panel>
                     </div>
                 </h:form>

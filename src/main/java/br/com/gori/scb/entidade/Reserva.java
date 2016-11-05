@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
@@ -24,6 +26,9 @@ import javax.persistence.Temporal;
  */
 @Entity
 @SequenceGenerator(name = "RESERVA_SEQUENCE", sequenceName = "RESERVA_SEQUENCE", allocationSize = 1, initialValue = 0)
+@NamedQueries({
+    @NamedQuery(name = "Reserva.findByPessoa", query = "select r from Reserva r, Pessoa p where r.pessoa = p.id and p.nome = :nome")
+})
 public class Reserva implements Serializable {
 
     private static final long serialVersionUID = 1L;

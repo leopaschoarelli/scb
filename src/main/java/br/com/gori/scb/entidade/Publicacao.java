@@ -79,7 +79,7 @@ public class Publicacao implements Serializable {
         this.autorias = new ArrayList<Autoria>();
     }
 
-    public Publicacao(String titulo, String subtitulo, Integer anoPublicacao, Cidade cidade, String cutter, String cdd, String edicao, TipoPublicacao tipoPublicacao, Editora editora, Categoria categoria, String isbn, List<Exemplar> exemplar, FiltroConsulta filtroConsulta) {
+    public Publicacao(String titulo, String subtitulo, Integer anoPublicacao, Cidade cidade, String cutter, String cdd, String edicao, TipoPublicacao tipoPublicacao, Editora editora, Categoria categoria, String isbn, List<Exemplar> exemplar) {
         this.id = HibernateNextId.newInstance("PUBLICACAO_SEQUENCE").getValue().longValue();
         this.titulo = titulo;
         this.subtitulo = subtitulo;
@@ -93,7 +93,6 @@ public class Publicacao implements Serializable {
         this.categoria = categoria;
         this.isbn = isbn;
         this.exemplar = exemplar;
-        this.filtroConsulta = filtroConsulta;
     }
 
     public Long getId() {

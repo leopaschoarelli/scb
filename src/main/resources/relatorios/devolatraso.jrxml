@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="devolatraso" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ae51ed8-b90a-42d9-b372-b4b1fd996e04">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="devolatraso" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ae51ed8-b90a-42d9-b372-b4b1fd996e04">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="78"/>
 	<property name="ireport.y" value="0"/>
 	<property name="ireport.callouts" value="##Wed Nov 02 00:09:30 BRST 2016"/>
 	<style name="Heading 3" fontSize="14" isBold="true"/>
@@ -10,8 +10,10 @@
 	</parameter>
 	<parameter name="IMAGEM" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select e.tombo,f.titulo,c.nome,b.prazo,(current_date - b.prazo) as dias
+		<![CDATA[select e.tombo,f.titulo,c.nome,a.criacao as empre,b.prazo,(current_date - b.prazo) as dias,(d.descricao || ' - ' || d.serie || ' - ' || g.descricao) as turma
                  from emprestimo a, itememprestimo b, exemplar e, publicacao f, pessoa c
+                 left join turma d on c.turma_id = d.id
+                 left join turno g on d.turno_id = g.id
                  where b.emprestimo_id = a.id
                  and b.devolucao is null
                  and b.exemplar_id = e.id
@@ -24,8 +26,10 @@
 	<field name="nome" class="java.lang.String"/>
 	<field name="tombo" class="java.lang.String"/>
 	<field name="titulo" class="java.lang.String"/>
-	<field name="prazo" class="java.lang.String"/>
+	<field name="prazo" class="java.util.Date"/>
 	<field name="dias" class="java.lang.String"/>
+	<field name="turma" class="java.lang.String"/>
+	<field name="empre" class="java.util.Date"/>
 	<group name="Group1"/>
 	<group name="Group2"/>
 	<group name="Group3"/>
@@ -36,7 +40,7 @@
 	<title>
 		<band height="71" splitType="Stretch">
 			<image>
-				<reportElement x="220" y="9" width="131" height="62" uuid="15ac9bc9-b7ee-40ee-9cc1-1c9a20b66641"/>
+				<reportElement x="351" y="9" width="131" height="62" uuid="15ac9bc9-b7ee-40ee-9cc1-1c9a20b66641"/>
 				<imageExpression><![CDATA[$P{IMAGEM} + "gori.jpg"]]></imageExpression>
 			</image>
 		</band>
@@ -45,82 +49,123 @@
 		<band/>
 	</pageHeader>
 	<columnHeader>
-		<band height="52">
+		<band height="58">
 			<staticText>
-				<reportElement x="0" y="0" width="555" height="19" forecolor="#666666" uuid="bd695c48-071b-488c-9668-0df1ae487271"/>
+				<reportElement x="0" y="0" width="802" height="21" forecolor="#666666" uuid="bd695c48-071b-488c-9668-0df1ae487271"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lista de Devoluções Atrasadas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="231" y="32" width="193" height="20" uuid="bdfc5f10-ff25-49e6-bc96-7d947652dbb1"/>
+				<reportElement x="251" y="36" width="220" height="20" uuid="bdfc5f10-ff25-49e6-bc96-7d947652dbb1"/>
 				<text><![CDATA[Nome da Pessoa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="32" width="71" height="20" uuid="3c406d0c-59a4-482c-8af2-0ac27e34e444"/>
+				<reportElement x="0" y="36" width="71" height="20" uuid="3c406d0c-59a4-482c-8af2-0ac27e34e444"/>
 				<text><![CDATA[Tombo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="71" y="32" width="160" height="20" uuid="28261b4f-a04b-4cd8-a220-f2b24dd5a1ad"/>
+				<reportElement x="71" y="36" width="180" height="20" uuid="28261b4f-a04b-4cd8-a220-f2b24dd5a1ad"/>
 				<text><![CDATA[Título Livro]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="495" y="32" width="60" height="20" uuid="75d8b27b-d7d1-4154-a903-c2748d26ffb5"/>
+				<reportElement x="742" y="36" width="60" height="20" uuid="75d8b27b-d7d1-4154-a903-c2748d26ffb5"/>
 				<text><![CDATA[Dias Atraso]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="424" y="32" width="71" height="20" uuid="5310e83e-1d0c-4630-923c-35307e14ac41"/>
-				<text><![CDATA[Dt. Prevista]]></text>
+				<reportElement x="660" y="36" width="82" height="20" uuid="5310e83e-1d0c-4630-923c-35307e14ac41"/>
+				<text><![CDATA[Dt. Prevista Dev.]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="471" y="35" width="111" height="20" uuid="27a876ea-b655-4a0a-af28-55c6a1f2be75"/>
+				<text><![CDATA[Turma]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="582" y="36" width="78" height="20" uuid="185cdf64-f889-4306-ba78-ad13e9406a8e"/>
+				<text><![CDATA[Dt. Empréstimo]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-48" y="55" width="883" height="1" uuid="9c2d5996-4a66-4782-8ca3-9f5b9690b88d"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20">
+		<band height="23">
 			<textField>
-				<reportElement x="231" y="0" width="193" height="20" uuid="f4cf0d15-1114-410c-8757-849361491684"/>
+				<reportElement x="251" y="0" width="220" height="20" uuid="f4cf0d15-1114-410c-8757-849361491684"/>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="71" height="20" uuid="6ce8a4be-cb73-416b-97a8-6d12faa0cbbf"/>
+				<reportElement x="0" y="0" width="72" height="20" uuid="6ce8a4be-cb73-416b-97a8-6d12faa0cbbf"/>
 				<textFieldExpression><![CDATA[$F{tombo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="71" y="0" width="160" height="20" uuid="4038ce49-ec66-4f64-a34e-5dca27bd46d6"/>
-				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="495" y="0" width="60" height="20" uuid="81a38023-1c59-4887-b7f4-edd9a5852a42"/>
+				<reportElement x="742" y="0" width="60" height="20" uuid="81a38023-1c59-4887-b7f4-edd9a5852a42"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{dias}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="424" y="0" width="71" height="20" uuid="ed241fb4-b9b8-4b0a-b71f-2aff1e6d9047"/>
+				<reportElement x="660" y="0" width="82" height="20" uuid="ed241fb4-b9b8-4b0a-b71f-2aff1e6d9047"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{prazo}]]></textFieldExpression>
 			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="471" y="0" width="111" height="20" uuid="595f1938-631b-4d6e-8e93-ca0fb4ede1b8"/>
+				<textFieldExpression><![CDATA[$F{turma}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="582" y="0" width="78" height="20" uuid="62cf1170-8d0f-42bb-9bc5-af52ce40689e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{empre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="72" y="0" width="179" height="20" uuid="4038ce49-ec66-4f64-a34e-5dca27bd46d6"/>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="-19" y="20" width="881" height="1" uuid="9233b626-49f0-4cdb-b4da-4cb8b4fe8ab9"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band height="17">
-			<textField>
-				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="29c30a14-3f96-47cf-bb9e-b3da180c5a81"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="ebd92578-24d5-4b67-9308-3e40a179c0e4"/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
+		<band height="22">
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="0" y="4" width="100" height="13" uuid="9e5cff2a-8b1a-4a87-a81f-785d0796897a"/>
+				<reportElement x="0" y="2" width="275" height="20" uuid="f656e231-d239-4980-93ec-b0f8f81876bd"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="702" y="0" width="100" height="22" uuid="34256813-0280-4643-a506-a4f5d999e606"/>
+				<textFieldExpression><![CDATA["Paginá " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
 	<summary>
 		<band/>
 	</summary>
+	<noData>
+		<band height="116" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="86" width="802" height="30" uuid="4243ddc7-3e3a-4d29-a5cf-094f3425fce7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nenhum Registro Encontrado!]]></text>
+			</staticText>
+			<image>
+				<reportElement x="351" y="5" width="131" height="62" uuid="163f8e74-82fc-45d3-ac7a-d93ca0b89b09"/>
+				<imageExpression><![CDATA[$P{IMAGEM} + "gori.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="67" width="802" height="19" forecolor="#666666" uuid="a59f5aa6-6b3e-4d70-9bb7-505277b80830"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lista de Devoluções Atrasadas]]></text>
+			</staticText>
+		</band>
+	</noData>
 </jasperReport>

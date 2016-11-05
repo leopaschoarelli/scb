@@ -74,11 +74,29 @@ public class PessoaDAOImpl extends AbstractDAO<Pessoa> implements PessoaDAO {
         }
     }
 
+    public List<Pessoa> getAlunos(String nome) {
+        String sql;
+        Boolean caracter;
+        if (nome == null || " ".equals(nome)) {
+            sql = "select p.* from pessoa p where p.turma_id is not null";
+            caracter = false;
+        } else {
+            sql = "select p.* from pessoa p where lower(p.nome) like :parte "
+                    + "and p.turma_id is not null";
+            caracter = true;
+        }
+        Query q = getEntityManager().createNativeQuery(sql, Pessoa.class);
+        if (caracter) {
+            q.setParameter("parte", "%" + nome + "%");
+        }
+        q.setMaxResults(MAX_RESULTS_QUERY);
+        return q.getResultList();
+    }
+
     public Pessoa recuperaReservasEEmprestimos(Pessoa p) {
         p.getReservasAbertas().addAll(reservaDao.recuperaReservasAbertas(p));
         p.getEmprestimosAbertos().addAll(emprestimoDao.recuperaEmprestimosAbertos(p));
         return p;
     }
-
 
 }

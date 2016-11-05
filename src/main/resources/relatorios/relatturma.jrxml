@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatturma" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39914efa-ee9c-4f09-9c67-90d1348a3d40">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="68"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DESCRICAO" class="java.lang.String"/>
+	<parameter name="IMAGEM" class="java.lang.String"/>
+	<parameter name="SQL" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select e.tombo,f.titulo,c.nome,a.criacao as empre,b.prazo,b.devolucao,(d.descricao || ' - ' || d.serie || ' - ' || g.descricao) as turma
+                 from emprestimo a, itememprestimo b, exemplar e, publicacao f, pessoa c
+                 inner join turma d on c.turma_id = d.id
+                 inner join turno g on d.turno_id = g.id
+                 where b.emprestimo_id = a.id
+                 and b.exemplar_id = e.id
+                 and e.publicacao_id = f.id
+                 and a.pessoa_id = c.id
+                 $P!{SQL}]]>
+	</queryString>
+	<field name="tombo" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="empre" class="java.util.Date"/>
+	<field name="prazo" class="java.util.Date"/>
+	<field name="devolucao" class="java.util.Date"/>
+	<field name="turma" class="java.lang.String"/>
+	<variable name="turma_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{turma}]]></variableExpression>
+	</variable>
+	<variable name="turma_2" class="java.lang.Integer" resetType="Group" resetGroup="Group1" calculation="Count">
+		<variableExpression><![CDATA[$F{turma}]]></variableExpression>
+	</variable>
+	<variable name="turma_3" class="java.lang.Integer" resetType="Group" resetGroup="Group1" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{turma}]]></variableExpression>
+	</variable>
+	<group name="Group1"/>
+	<group name="Group3" keepTogether="true"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="64">
+			<image>
+				<reportElement x="357" y="2" width="131" height="62" uuid="730bf6ea-c7b3-40d6-932d-9adc0cec2109"/>
+				<imageExpression><![CDATA[$P{IMAGEM} + "gori.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="54">
+			<textField>
+				<reportElement x="0" y="0" width="802" height="21" forecolor="#666666" uuid="f63612fc-be5d-4fd9-a3c5-280cb4bdf257"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Lista de " + $P{DESCRICAO} + " Por Turma"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="259" y="30" width="185" height="20" uuid="29eda8d7-3ccc-4271-87d8-aba70ef22497"/>
+				<text><![CDATA[Nome da Pessoa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="444" y="30" width="118" height="20" uuid="2c0560cc-a48d-4f0c-8a24-cea5a13c61ca"/>
+				<text><![CDATA[Turma ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="75" height="20" uuid="b3440836-59b7-44c1-bf0a-9c4fd7f1f429"/>
+				<text><![CDATA[Tombo	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="30" width="184" height="20" uuid="755d3943-1520-4602-a2f0-bc2e26e1a808"/>
+				<text><![CDATA[Título]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="562" y="30" width="88" height="20" uuid="a84f4b2d-47e4-409c-9ec2-c68d37b51b8f"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Dt. Emp.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="650" y="30" width="77" height="20" uuid="cc87c197-9a6a-446b-9053-44dad45aeae7"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Dt. Prazo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="727" y="30" width="74" height="20" uuid="2a2a2671-1949-495d-9f61-804c6a5462d1"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Dt. Devolução]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-169" y="50" width="1022" height="1" uuid="864c1683-6b10-48f1-aee5-f3c254a228ac"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22">
+			<textField>
+				<reportElement x="259" y="0" width="185" height="20" uuid="f12ee794-f2be-45d5-ba44-7a66f9ab3a71"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="444" y="0" width="118" height="20" uuid="ca3102c8-3fd1-49c5-a79a-8f420273f951"/>
+				<textFieldExpression><![CDATA[$F{turma}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="75" height="20" uuid="cc446ca3-5971-446b-9bee-c48954868045"/>
+				<textFieldExpression><![CDATA[$F{tombo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="0" width="184" height="20" uuid="fd3ae272-5003-413c-bd29-c99222b902a3"/>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement x="562" y="0" width="88" height="20" uuid="8faf46d3-e76f-44de-b257-dfc51ccad5d4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{empre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="650" y="0" width="77" height="20" uuid="e10f0554-e965-4669-9c41-d7de28b4c685"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{prazo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="727" y="0" width="74" height="20" uuid="17f4e232-ec8c-4966-9647-42744438547d"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{devolucao}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="-25" y="20" width="878" height="1" uuid="b115a2a4-cc26-4808-8a11-3f413f912b45"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="-25" y="4" width="786" height="13" backcolor="#E6E6E6" uuid="a4b0d764-4cf6-4046-9adb-9d3ed864f6b6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="761" y="4" width="68" height="13" backcolor="#E6E6E6" uuid="2c4e1450-65a0-4042-ac52-68a7702d85ba"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="289" height="13" uuid="b159ef38-bcd8-4e90-9083-f21a1f3c989a"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+	<noData>
+		<band height="113">
+			<image>
+				<reportElement x="357" y="0" width="131" height="62" uuid="b43dcf3e-4ea1-456c-8b30-35d62db02367"/>
+				<imageExpression><![CDATA[$P{IMAGEM} + "gori.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="-1" y="62" width="802" height="21" forecolor="#666666" uuid="defc885c-f700-4cd6-ab48-db31361a99f8"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Lista de " + $P{DESCRICAO} + " Por Turma"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-1" y="83" width="802" height="30" uuid="e0b81789-7ae6-435d-bdad-5be45062d592"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nenhum Registro Encontrado!]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

@@ -865,7 +865,6 @@ public class EmprestimoControlador implements Serializable {
             it.getExemplar().setEstadoExemplar(EstadoExemplar.DISPONIVEL);
             it.setDevolucao(new Date());
             itensDevolFiltro.remove(it);
-            itensDevolucao.remove(it);
         }
         try {
             emprestimoDAO.update(emprestimo);

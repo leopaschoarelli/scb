@@ -10,23 +10,32 @@
             <ui:define name="conteudo">
                 <h:form>
                     <f:metadata>
-                        <f:viewAction action="#{emprestimoAtrasoControlador.newInstances()}" />
+                        <f:viewAction action="#{relatorioTurma.newInstances()}" />
                     </f:metadata>
                     <div class="ui-fluid">
-                        <p:panel id="panelRelat" header="Relatório Devoluções em Atraso">
+                        <p:panel id="panelRelat" header="Relatório Empréstimos/Devoluções Por Turma">
                             <p:panelGrid id="gridRelat" columns="4"
                                          layout="grid" 
                                          columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-0, ui-grid-col-4"
                                          styleClass="panelgrid-noborder">
+                                <p:outputLabel for="console" value="Filtrar: " />
+                                <p:selectOneMenu id="console" value="#{relatorioTurma.console}">
+                                    <f:selectItem itemLabel="Todos" itemValue="" />
+                                    <f:selectItem itemLabel="Empréstimos Não Devolvidos" itemValue="is null" />
+                                    <f:selectItem itemLabel="Devoluções" itemValue="is not null" />
+                                </p:selectOneMenu>
+                                <p:outputLabel  />
+                                <p:outputLabel  />
+
                                 <p:outputLabel value="Pessoa: " for="pessoa" />
                                 <p:autoComplete 
                                     id="pessoa"
                                     var="pessoa" 
                                     forceSelection="true"
-                                    completeMethod="#{emprestimoAtrasoControlador.completaPessoa}" 
-                                    converter="#{emprestimoAtrasoControlador.converterPessoa}"
+                                    completeMethod="#{relatorioTurma.completaPessoa}" 
+                                    converter="#{relatorioTurma.converterPessoa}"
                                     emptyMessage="Nenhum resultado encontrado"
-                                    value="#{emprestimoAtrasoControlador.pessoa}"
+                                    value="#{relatorioTurma.pessoa}"
                                     itemValue="#{pessoa.id}" itemLabel="#{pessoa.toString()}">
                                 </p:autoComplete>
                                 <p:outputLabel  />
@@ -37,10 +46,10 @@
                                     id="obra"
                                     var="obra" 
                                     forceSelection="true"
-                                    completeMethod="#{emprestimoAtrasoControlador.completaObra}" 
-                                    converter="#{emprestimoAtrasoControlador.converterObra}"
+                                    completeMethod="#{relatorioTurma.completaObra}" 
+                                    converter="#{relatorioTurma.converterObra}"
                                     emptyMessage="Nenhum resultado encontrado"
-                                    value="#{emprestimoAtrasoControlador.publicacao}"
+                                    value="#{relatorioTurma.publicacao}"
                                     itemValue="#{obra.id}" itemLabel="#{obra.toString()}">
                                 </p:autoComplete>
                                 <p:outputLabel  />
@@ -51,10 +60,10 @@
                                     id="exemplar"
                                     var="exemplar" 
                                     forceSelection="true"
-                                    completeMethod="#{emprestimoAtrasoControlador.completaExem}" 
-                                    converter="#{emprestimoAtrasoControlador.converterPublicacao}"
+                                    completeMethod="#{relatorioTurma.completaExem}" 
+                                    converter="#{relatorioTurma.converterPublicacao}"
                                     emptyMessage="Nenhum resultado encontrado"
-                                    value="#{emprestimoAtrasoControlador.exemplar}"
+                                    value="#{relatorioTurma.exemplar}"
                                     itemValue="#{exemplar.id}" itemLabel="#{exemplar.toString()}">
                                 </p:autoComplete>
                                 <p:outputLabel  />
@@ -64,10 +73,10 @@
                                 <p:autoComplete 
                                     id="turno"
                                     var="turno" 
-                                    completeMethod="#{emprestimoAtrasoControlador.completaTurno}" 
-                                    converter="#{emprestimoAtrasoControlador.converterTurno}"
+                                    completeMethod="#{relatorioTurma.completaTurno}" 
+                                    converter="#{relatorioTurma.converterTurno}"
                                     emptyMessage="Nenhum resultado encontrado"
-                                    value="#{emprestimoAtrasoControlador.turno}"
+                                    value="#{relatorioTurma.turno}"
                                     itemValue="#{turno.id}" itemLabel="#{turno.toString()}"/>
                                 <p:outputLabel  />
                                 <p:outputLabel  />
@@ -77,33 +86,44 @@
                                 <p:autoComplete 
                                     id="turmas"
                                     var="turmas"
-                                    completeMethod="#{emprestimoAtrasoControlador.completaTurma}" 
-                                    converter="#{emprestimoAtrasoControlador.converterTurma}"
+                                    completeMethod="#{relatorioTurma.completaTurma}" 
+                                    converter="#{relatorioTurma.converterTurma}"
                                     emptyMessage="Nenhum resultado encontrado"
-                                    value="#{emprestimoAtrasoControlador.pessoaTurma.turma}"
+                                    value="#{relatorioTurma.pessoaTurma.turma}"
                                     itemValue="#{turmas.id}" itemLabel="#{turmas.toString()}"/>
                                 <p:outputLabel  />
                                 <p:outputLabel  />
 
                                 <p:outputLabel value="Data Emprestimo: " />
                                 <p:calendar id="dtInicial"
-                                            value="#{emprestimoAtrasoControlador.dataInicial}" 
+                                            value="#{relatorioTurma.dataInicial}" 
                                             mask="true" 
                                             pattern="dd/MM/yyyy" />
                                 <p:outputLabel value="até"/>
                                 <p:calendar id="dtFinal"
-                                            value="#{emprestimoAtrasoControlador.dataFinal}" 
+                                            value="#{relatorioTurma.dataFinal}" 
                                             mask="true" 
                                             pattern="dd/MM/yyyy" />
 
                                 <p:outputLabel value="Data Prazo Devolução: " />
+                                <p:calendar id="dtPrazoInicial"
+                                            value="#{relatorioTurma.dtPrazoIni}" 
+                                            mask="true" 
+                                            pattern="dd/MM/yyyy" />
+                                <p:outputLabel value="até"/>
+                                <p:calendar id="dtPrazoFinal"
+                                            value="#{relatorioTurma.dtPrazoFinal}" 
+                                            mask="true" 
+                                            pattern="dd/MM/yyyy" />
+                                
+                                <p:outputLabel value="Data Devolução: " />
                                 <p:calendar id="dtDevolInicial"
-                                            value="#{emprestimoAtrasoControlador.dtDevolIni}" 
+                                            value="#{relatorioTurma.dtDevolIni}" 
                                             mask="true" 
                                             pattern="dd/MM/yyyy" />
                                 <p:outputLabel value="até"/>
                                 <p:calendar id="dtDevolFinal"
-                                            value="#{emprestimoAtrasoControlador.dtDevolFinal}" 
+                                            value="#{relatorioTurma.dtDevolFinal}" 
                                             mask="true" 
                                             pattern="dd/MM/yyyy" />
                             </p:panelGrid>
@@ -114,13 +134,13 @@
                                          styleClass="panelgrid-noborder">
                                 <p:commandButton value="Imprimir Relatório" 
                                                  icon="fa fa-print"
-                                                 action="#{emprestimoAtrasoControlador.emitir}" 
+                                                 action="#{relatorioTurma.emitir}" 
                                                  onclick="this.form.target = '_blank'"
                                                  ajax="false" />
                                 <p:commandButton value="Limpar filtros" 
                                                  icon="fa fa-print"
                                                  update="@form"
-                                                 action="#{emprestimoAtrasoControlador.newInstances()}" 
+                                                 action="#{relatorioTurma.newInstances()}" 
                                                  ajax="true" />
                             </p:panelGrid>
                         </p:panel>

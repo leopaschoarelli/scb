@@ -48,4 +48,13 @@ public class TurmaDAOImpl extends AbstractDAO<Turma> implements TurmaDAO {
             throw new NonUniqueResultException();
         }
     }
+
+    public List<Turma> getTurmas(String descricao) {
+        String sql = "select t.* from turma t where lower(t.descricao) like :parte";
+        Query q = getEntityManager().createNativeQuery(sql, Turma.class);
+        q.setParameter("parte", "%" + descricao + "%");
+        q.setMaxResults(MAX_RESULTS_QUERY);
+        return q.getResultList();
+    }
+
 }
