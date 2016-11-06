@@ -74,7 +74,6 @@
                                             <li><p:link outcome="/pages/private/admin/pessoa/lista.xhtml"><i class="fa fa-file"></i>Pessoas</p:link></li>
                                             <li><p:link outcome="/pages/private/admin/instituicao/lista.xhtml"><i class="fa fa-file"></i>Instituição</p:link></li>
                                             <li><p:link outcome="/pages/private/admin/role/lista.xhtml"><i class="fa fa-file"></i>Permissões de Login</p:link></li>
-                                            <li><p:link outcome="/pages/private/admin/usuario/lista.xhtml"><i class="fa fa-file"></i>Usuário</p:link></li>
                                             <li>
                                                 <a href="#"><i class="fa fa-folder-open"></i>Endereços
                                                     <span class="pull-right-container">
@@ -142,6 +141,26 @@
                                         </ul>
                                     </li>
                                 </sec:authorize>
+                                <li><a onclick="PF('spt').show();"><i class="fa fa-question"></i> <span>Sobre</span></a></li>
+                                <p:dialog id="spt" 
+                                          closeOnEscape="true" 
+                                          responsive="true" 
+                                          resizable="false" 
+                                          header="Suporte" 
+                                          widgetVar="spt">
+                                    <center>
+                                        <h:graphicImage id="logotipo" library="images" name="logoLeo2.png" height="200" width="200"/>
+                                    </center>
+                                    <p:panel>
+                                        <h:panelGrid id="panelInfo" columns="1" >
+                                            <h:outputText id="nome" value="Nome.....: Leonardo Henrique Paschoarelli Ribeiro" />
+                                            <h:outputText id="telefone" value="Telefone.: (044)9883-0385" />
+                                            <h:outputText id="email" value="E-mail...: leonardo.lhpr@gmail.com" />
+                                            <p:separator/>
+                                            <h:outputText value="Tema fornecido por Almsaeed Studio - AdminLTE"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:dialog>
                                 <sec:authorize access="isAuthenticated()" >
                                     <li><h:outputLink value="${request.contextPath}/applogout"><i class="fa fa-power-off"></i> <span>Logout</span></h:outputLink></li>
                                 </sec:authorize>

@@ -3,61 +3,69 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form id="form-user" prependId="false">
-                    <div class="ui-fluid">
-                        <p:panel id="panelInstituicao" header="#{instituicaoControlador.header}">
-                            <p:messages id="messagesInstituicao" autoUpdate="true" closable="true" />
-                            <p:focus context="panelInstituicao"/>
-                            <p:panelGrid id="gridInst" 
-                                         columns="2"
-                                         layout="grid" 
-                                         style="margin-top: 20px; margin-bottom: 40px"
-                                         columnClasses="ui-grid-col-2, ui-grid-col-10">
-                                <p:outputLabel value="Nome Fantasia: " for="nomeFanta" />
-                                <p:inputText id="nomeFanta" 
-                                             required="true"
-                                             placeholder="Nome Fantasia"
-                                             readonly="#{instituicaoControlador.visualizar}" 
-                                             value="#{instituicaoControlador.instituicao.nomeFantasia}" />
-                                <p:outputLabel value="Razão Social: " for="razao" />
-                                <p:inputText id="razao" 
-                                             required="true"
-                                             placeholder="Razão Social"
-                                             readonly="#{instituicaoControlador.visualizar}" 
-                                             value="#{instituicaoControlador.instituicao.razaoSocial}" />
-                                <p:outputLabel value="CNPJ: " for="cnpj" />
-                                <p:inputText id="cnpj"
-                                             required="true"
-                                             placeholder="CNPJ"
-                                             readonly="#{instituicaoControlador.visualizar}" 
-                                             value="#{instituicaoControlador.instituicao.cnpj}" />
-                                <p:outputLabel value="Data de Fundação: " for="fundacao"/>
-                                <p:calendar id="fundacao" 
-                                            required="true"
-                                            placeholder="Data de Fundação"
-                                            showOn="#{!instituicaoControlador.visualizar}"
-                                            readonly="#{instituicaoControlador.visualizar}" 
-                                            value="#{instituicaoControlador.instituicao.fundacao}" 
-                                            pattern="dd/MM/yyyy" mask="true" />
-                            </p:panelGrid>
-                            <p:separator/>
-                            <p:panelGrid id="gridBotoes" columns="2"
-                                         layout="grid"
-                                         style="margin-top: 20px; margin-bottom: 40px"
-                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
-                                         styleClass="panelgrid-noborder">
-                                <p:commandButton process="@this" ajax="false" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{instituicaoControlador.salvar()}" 
-                                                 update="@form" disabled="#{instituicaoControlador.visualizar}"/>
-                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/instituicao/lista.xhtml" />
-                            </p:panelGrid>
-                        </p:panel>
-                        <p:defaultCommand target="nomeFanta" />
-                    </div>
-                </h:form>
+                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                    <h:form id="form-user" prependId="false">
+                        <div class="ui-fluid">
+                            <p:panel id="panelInstituicao" header="#{instituicaoControlador.header}">
+                                <p:messages id="messagesInstituicao" autoUpdate="true" closable="true" />
+                                <p:focus context="panelInstituicao"/>
+                                <p:panelGrid id="gridInst" 
+                                             columns="2"
+                                             layout="grid" 
+                                             style="margin-top: 20px; margin-bottom: 40px"
+                                             columnClasses="ui-grid-col-2, ui-grid-col-10">
+                                    <p:outputLabel value="Nome Fantasia: " for="nomeFanta" />
+                                    <p:inputText id="nomeFanta" 
+                                                 required="true"
+                                                 placeholder="Nome Fantasia"
+                                                 readonly="#{instituicaoControlador.visualizar}" 
+                                                 value="#{instituicaoControlador.instituicao.nomeFantasia}" />
+                                    <p:outputLabel value="Razão Social: " for="razao" />
+                                    <p:inputText id="razao" 
+                                                 required="true"
+                                                 placeholder="Razão Social"
+                                                 readonly="#{instituicaoControlador.visualizar}" 
+                                                 value="#{instituicaoControlador.instituicao.razaoSocial}" />
+                                    <p:outputLabel value="CNPJ: " for="cnpj" />
+                                    <p:inputText id="cnpj"
+                                                 required="true"
+                                                 placeholder="CNPJ"
+                                                 readonly="#{instituicaoControlador.visualizar}" 
+                                                 value="#{instituicaoControlador.instituicao.cnpj}" />
+                                    <p:outputLabel value="Data de Fundação: " for="fundacao"/>
+                                    <p:calendar id="fundacao" 
+                                                required="true"
+                                                placeholder="Data de Fundação"
+                                                showOn="#{!instituicaoControlador.visualizar}"
+                                                readonly="#{instituicaoControlador.visualizar}" 
+                                                value="#{instituicaoControlador.instituicao.fundacao}" 
+                                                pattern="dd/MM/yyyy" mask="true" />
+                                </p:panelGrid>
+                                <p:separator/>
+                                <p:panelGrid id="gridBotoes" columns="2"
+                                             layout="grid"
+                                             style="margin-top: 20px; margin-bottom: 40px"
+                                             columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                             styleClass="panelgrid-noborder">
+                                    <p:commandButton process="@this" ajax="false" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{instituicaoControlador.salvar()}" 
+                                                     update="@form" disabled="#{instituicaoControlador.visualizar}"/>
+                                    <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/instituicao/lista.xhtml" />
+                                </p:panelGrid>
+                            </p:panel>
+                            <p:defaultCommand target="nomeFanta" />
+                        </div>
+                    </h:form>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                    <ui:insert name="restrito">
+                        <ui:include src="/WEB-INF/template/acessonegado.xhtml" />
+                    </ui:insert>
+                </sec:authorize>
             </ui:define>
         </ui:composition>
     </h:body>

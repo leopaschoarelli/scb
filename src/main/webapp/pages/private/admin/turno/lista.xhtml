@@ -3,88 +3,96 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form id="formLista" prependId="false">
-                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/turno/lista.xhtml/" />
-                    <p:panel  id="turno" header="Turnos">
-                        <p:toolbar id="toolbarTurno">
-                            <f:facet name="left">
-                                <p:commandButton id="botaoNovo" 
-                                                 value="Novo"
-                                                 icon="ui-icon-plus"
-                                                 ajax="false"
-                                                 title="Adicionar novo Turno"
-                                                 action="#{turnoControlador.prepararNovo()}" />
-                                <span class="ui-separator">
-                                    <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                                </span>
-                                <p:commandButton id="btnEditar" 
-                                                 icon="ui-icon-pencil" 
-                                                 process="@this"
-                                                 disabled="#{turnoControlador.turnoSelecionado == null}"
-                                                 title="Editar #{turnoControlador.turnoSelecionado.descricao}" 
-                                                 action="#{turnoControlador.prepararEdicao()}" 
-                                                 ajax="false"/>
-                                <p:commandButton id="btnVisualizar" 
-                                                 icon="ui-icon-search" 
-                                                 process="@this"
-                                                 disabled="#{turnoControlador.turnoSelecionado == null}"
-                                                 title="Visualizar as informações de: #{turnoControlador.turnoSelecionado.descricao}" 
-                                                 action="#{turnoControlador.prepararVer()}" 
-                                                 ajax="false"/>
-                                <p:commandButton id="btnExcluir" 
-                                                 icon="ui-icon-trash" 
-                                                 process="@this"
-                                                 disabled="#{turnoControlador.turnoSelecionado == null}"
-                                                 update="tableTurno toolbarTurno"
-                                                 action="#{turnoControlador.excluir()}" 
-                                                 title="Excluir o turno: #{turnoControlador.turnoSelecionado.descricao} ?" 
-                                                 ajax="true">
-                                    <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
-                                               message="Tem certeza que deseja excluir #{turnoControlador.turnoSelecionado.descricao}" />
-                                </p:commandButton>
-                            </f:facet>
-                        </p:toolbar>
-                        <br/>
-                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
-                        <p:dataTable paginator="true" 
-                                     reflow="true"
-                                     rows="10" 
-                                     resizeMode="fit"
-                                     scrollable="true"
-                                     scrollHeight="255"
-                                     id="tableTurno" 
-                                     value="#{turnoControlador.turnos}" 
-                                     resizableColumns="true"
-                                     selection="#{turnoControlador.turnoSelecionado}"
-                                     selectionMode="single"
-                                     rowKey="#{turno.id}"
-                                     var="turno" 
-                                     emptyMessage="Nenhum registro encontrado">
-                            <p:ajax event="rowSelect" update=":formLista:toolbarTurno"/>
-                            <p:ajax event="rowUnselect" update=":formLista:toolbarTurno" />
-                            <f:facet name="header">
-                                Lista de Turnos
-                            </f:facet>
-                            <p:column filterStyle="width: auto" filterBy="#{turno.descricao}" headerText="Nome">
-                                <h:outputText value="#{turno.descricao}" />
-                            </p:column>
-                            <p:column filterStyle="width: auto" filterBy="#{turno.inicio}" headerText="Hora de Inicio">
-                                <h:outputText value="#{turno.inicio}" />
-                            </p:column>
-                            <p:column filterStyle="width: auto" filterBy="#{turno.termino}" headerText="Hora de Término">
-                                <h:outputText value="#{turno.termino}" />
-                            </p:column>
-                            <f:facet name="footer">
-                                Total de turnos: #{turnoControlador.turnos.size()}.
-                            </f:facet>
-                        </p:dataTable>
-                    </p:panel>
-                </h:form>
+                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                    <h:form id="formLista" prependId="false">
+                        <p:hotkey bind="F5" update="@form" action="/pages/private/admin/turno/lista.xhtml/" />
+                        <p:panel  id="turno" header="Turnos">
+                            <p:toolbar id="toolbarTurno">
+                                <f:facet name="left">
+                                    <p:commandButton id="botaoNovo" 
+                                                     value="Novo"
+                                                     icon="ui-icon-plus"
+                                                     ajax="false"
+                                                     title="Adicionar novo Turno"
+                                                     action="#{turnoControlador.prepararNovo()}" />
+                                    <span class="ui-separator">
+                                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                    </span>
+                                    <p:commandButton id="btnEditar" 
+                                                     icon="ui-icon-pencil" 
+                                                     process="@this"
+                                                     disabled="#{turnoControlador.turnoSelecionado == null}"
+                                                     title="Editar #{turnoControlador.turnoSelecionado.descricao}" 
+                                                     action="#{turnoControlador.prepararEdicao()}" 
+                                                     ajax="false"/>
+                                    <p:commandButton id="btnVisualizar" 
+                                                     icon="ui-icon-search" 
+                                                     process="@this"
+                                                     disabled="#{turnoControlador.turnoSelecionado == null}"
+                                                     title="Visualizar as informações de: #{turnoControlador.turnoSelecionado.descricao}" 
+                                                     action="#{turnoControlador.prepararVer()}" 
+                                                     ajax="false"/>
+                                    <p:commandButton id="btnExcluir" 
+                                                     icon="ui-icon-trash" 
+                                                     process="@this"
+                                                     disabled="#{turnoControlador.turnoSelecionado == null}"
+                                                     update="tableTurno toolbarTurno"
+                                                     action="#{turnoControlador.excluir()}" 
+                                                     title="Excluir o turno: #{turnoControlador.turnoSelecionado.descricao} ?" 
+                                                     ajax="true">
+                                        <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+                                                   message="Tem certeza que deseja excluir #{turnoControlador.turnoSelecionado.descricao}" />
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:toolbar>
+                            <br/>
+                            <p:messages autoUpdate="true" closable="true" showDetail="false"  />
+                            <p:dataTable paginator="true" 
+                                         reflow="true"
+                                         rows="10" 
+                                         resizeMode="fit"
+                                         scrollable="true"
+                                         scrollHeight="255"
+                                         id="tableTurno" 
+                                         value="#{turnoControlador.turnos}" 
+                                         resizableColumns="true"
+                                         selection="#{turnoControlador.turnoSelecionado}"
+                                         selectionMode="single"
+                                         rowKey="#{turno.id}"
+                                         var="turno" 
+                                         emptyMessage="Nenhum registro encontrado">
+                                <p:ajax event="rowSelect" update=":formLista:toolbarTurno"/>
+                                <p:ajax event="rowUnselect" update=":formLista:toolbarTurno" />
+                                <f:facet name="header">
+                                    Lista de Turnos
+                                </f:facet>
+                                <p:column filterStyle="width: auto" filterBy="#{turno.descricao}" headerText="Nome">
+                                    <h:outputText value="#{turno.descricao}" />
+                                </p:column>
+                                <p:column filterStyle="width: auto" filterBy="#{turno.inicio}" headerText="Hora de Inicio">
+                                    <h:outputText value="#{turno.inicio}" />
+                                </p:column>
+                                <p:column filterStyle="width: auto" filterBy="#{turno.termino}" headerText="Hora de Término">
+                                    <h:outputText value="#{turno.termino}" />
+                                </p:column>
+                                <f:facet name="footer">
+                                    Total de turnos: #{turnoControlador.turnos.size()}.
+                                </f:facet>
+                            </p:dataTable>
+                        </p:panel>
+                    </h:form>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                    <ui:insert name="restrito">
+                        <ui:include src="/WEB-INF/template/acessonegado.xhtml" />
+                    </ui:insert>
+                </sec:authorize>
             </ui:define>
         </ui:composition>
     </h:body>

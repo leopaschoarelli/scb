@@ -4,81 +4,89 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sec="http://www.springframework.org/security/tags"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form id="formLista" prependId="false">
-                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/editora/lista.xhtml/" />
-                    <p:panel  id="editora" header="Editoras">
-                        <p:toolbar id="toolbarEditora">
-                            <f:facet name="left">
-                                <p:commandButton id="botaoNovo" 
-                                                 value="Novo"
-                                                 ajax="false"
-                                                 icon="ui-icon-plus"
-                                                 title="Adicionar nova Editora"
-                                                 action="#{editoraControlador.prepararNovo()}" />
-                                <span class="ui-separator">
-                                    <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                                </span>
-                                <p:commandButton id="btnEditar" 
-                                                 icon="ui-icon-pencil"
-                                                 disabled="#{editoraControlador.editoraSelecionada == null}"
-                                                 title="Editar editora" 
-                                                 process="@this"
-                                                 action="#{editoraControlador.prepararEdicao()}" 
-                                                 ajax="false"/>
-                                <p:commandButton id="btnVisualizar" 
-                                                 icon="ui-icon-search" 
-                                                 process="@this"
-                                                 disabled="#{editoraControlador.editoraSelecionada == null}"
-                                                 title="Visualizar as informações de: #{editora.nome}" 
-                                                 action="#{editoraControlador.prepararVer()}"
-                                                 ajax="false"/>
-                                <p:commandButton id="btnExcluir" 
-                                                 icon="ui-icon-trash" 
-                                                 process="@this"
-                                                 disabled="#{editoraControlador.editoraSelecionada == null}"
-                                                 update="tableEditora"
-                                                 action="#{editoraControlador.excluir()}" 
-                                                 title="Excluir a editora?" 
-                                                 ajax="true">
-                                    <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
-                                               message="Tem certeza que deseja excluir #{editoraControlador.editoraSelecionada.nome}" />
-                                </p:commandButton>
-                            </f:facet>
-                        </p:toolbar>
-                        <br/>
-                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
-                        <p:dataTable paginator="true" 
-                                     reflow="true"
-                                     rows="10" 
-                                     resizeMode="fit"
-                                     scrollable="true"
-                                     scrollHeight="255"
-                                     id="tableEditora" 
-                                     value="#{editoraControlador.editoras}" 
-                                     resizableColumns="true"
-                                     selection="#{editoraControlador.editoraSelecionada}"
-                                     selectionMode="single"
-                                     rowKey="#{editora.id}"
-                                     var="editora" 
-                                     emptyMessage="Nenhum registro encontrado">
-                            <p:ajax event="rowSelect" update=":formLista:toolbarEditora"/>
-                            <p:ajax event="rowUnselect" update=":formLista:toolbarEditora" />
-                            <f:facet name="header">
-                                Lista de Editoras
-                            </f:facet>
-                            <p:column filterStyle="width: auto" filterBy="#{editora.nome}" headerText="Nome">
-                                <h:outputText value="#{editora.nome}" />
-                            </p:column>
-                            <f:facet name="footer">
-                                Total de editoras: #{editoraControlador.editoras.size()}.
-                            </f:facet>
-                        </p:dataTable>
-                    </p:panel>
-                </h:form>
+                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                    <h:form id="formLista" prependId="false">
+                        <p:hotkey bind="F5" update="@form" action="/pages/private/admin/editora/lista.xhtml" />
+                        <p:panel  id="editora" header="Editoras">
+                            <p:toolbar id="toolbarEditora">
+                                <f:facet name="left">
+                                    <p:commandButton id="botaoNovo" 
+                                                     value="Novo"
+                                                     ajax="false"
+                                                     icon="ui-icon-plus"
+                                                     title="Adicionar nova Editora"
+                                                     action="#{editoraControlador.prepararNovo()}" />
+                                    <span class="ui-separator">
+                                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                    </span>
+                                    <p:commandButton id="btnEditar" 
+                                                     icon="ui-icon-pencil"
+                                                     disabled="#{editoraControlador.editoraSelecionada == null}"
+                                                     title="Editar editora" 
+                                                     process="@this"
+                                                     action="#{editoraControlador.prepararEdicao()}" 
+                                                     ajax="false"/>
+                                    <p:commandButton id="btnVisualizar" 
+                                                     icon="ui-icon-search" 
+                                                     process="@this"
+                                                     disabled="#{editoraControlador.editoraSelecionada == null}"
+                                                     title="Visualizar as informações de: #{editora.nome}" 
+                                                     action="#{editoraControlador.prepararVer()}"
+                                                     ajax="false"/>
+                                    <p:commandButton id="btnExcluir" 
+                                                     icon="ui-icon-trash" 
+                                                     process="@this"
+                                                     disabled="#{editoraControlador.editoraSelecionada == null}"
+                                                     update="tableEditora"
+                                                     action="#{editoraControlador.excluir()}" 
+                                                     title="Excluir a editora?" 
+                                                     ajax="true">
+                                        <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+                                                   message="Tem certeza que deseja excluir #{editoraControlador.editoraSelecionada.nome}" />
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:toolbar>
+                            <br/>
+                            <p:messages autoUpdate="true" closable="true" showDetail="false"  />
+                            <p:dataTable paginator="true" 
+                                         reflow="true"
+                                         rows="10" 
+                                         resizeMode="fit"
+                                         scrollable="true"
+                                         scrollHeight="255"
+                                         id="tableEditora" 
+                                         value="#{editoraControlador.editoras}" 
+                                         resizableColumns="true"
+                                         selection="#{editoraControlador.editoraSelecionada}"
+                                         selectionMode="single"
+                                         rowKey="#{editora.id}"
+                                         var="editora" 
+                                         emptyMessage="Nenhum registro encontrado">
+                                <p:ajax event="rowSelect" update=":formLista:toolbarEditora"/>
+                                <p:ajax event="rowUnselect" update=":formLista:toolbarEditora" />
+                                <f:facet name="header">
+                                    Lista de Editoras
+                                </f:facet>
+                                <p:column filterStyle="width: auto" filterBy="#{editora.nome}" headerText="Nome">
+                                    <h:outputText value="#{editora.nome}" />
+                                </p:column>
+                                <f:facet name="footer">
+                                    Total de editoras: #{editoraControlador.editoras.size()}.
+                                </f:facet>
+                            </p:dataTable>
+                        </p:panel>
+                    </h:form>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                    <ui:insert name="restrito">
+                        <ui:include src="/WEB-INF/template/acessonegado.xhtml" />
+                    </ui:insert>
+                </sec:authorize>
             </ui:define>
         </ui:composition>
     </h:body>

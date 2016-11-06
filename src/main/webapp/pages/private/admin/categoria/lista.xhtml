@@ -4,77 +4,85 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:sec="http://www.springframework.org/security/tags"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form id="formLista" prependId="false">
-                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/categoria/lista.xhtml/" />
-                    <p:panel  id="cat" header="Categorias">
-                        <p:toolbar id="toolbarCategoria">
-                            <f:facet name="left">
-                                <p:commandButton id="botaoNovo" 
-                                                 value="Novo"
-                                                 icon="ui-icon-plus"
-                                                 ajax="false"
-                                                 title="Adicionar nova Categoria"
-                                                 action="#{categoriaControlador.prepararNovo}"/>
-                                <span class="ui-separator">
-                                    <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                                </span>
-                                <p:commandButton id="btnEditar" 
-                                                 icon="ui-icon-pencil" 
-                                                 process="@this"
-                                                 disabled="#{categoriaControlador.categoriaSelecionada == null}"
-                                                 title="Editar #{categoriaControlador.categoriaSelecionada}" 
-                                                 action="#{categoriaControlador.prepararEdicao()}" 
-                                                 ajax="false" />
-                                <p:commandButton id="btnVisualizar" 
-                                                 icon="ui-icon-search" 
-                                                 process="@this"
-                                                 disabled="#{categoriaControlador.categoriaSelecionada == null}"
-                                                 title="Visualizar as informações de: #{categoriaControlador.categoriaSelecionada}" 
-                                                 action="#{categoriaControlador.prepararVer()}" 
-                                                 ajax="false" />
-                                <p:commandButton id="btnExcluir" 
-                                                 icon="ui-icon-trash" 
-                                                 process="@this"
-                                                 disabled="#{categoriaControlador.categoriaSelecionada == null}"
-                                                 update="tableCategoria toolbarCategoria"
-                                                 action="#{categoriaControlador.excluir()}" 
-                                                 title="Excluir a categoria: #{categoriaControlador.categoriaSelecionada} ?" 
-                                                 ajax="true">
-                                    <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
-                                               message="Tem certeza que deseja excluir #{categoriaControlador.categoriaSelecionada}" />
-                                </p:commandButton>
-                            </f:facet>
-                        </p:toolbar>
-                        <br/>
-                        <p:treeTable id="tableCategoria"  
-                                     resizableColumns="true"
-                                     liveResize="true"
-                                     scrollable="true"
-                                     scrollHeight="350"
-                                     selection="#{categoriaControlador.categoriaSelecionada}"
-                                     selectionMode="single"
-                                     emptyMessage="Nenhum registro encontrado"
-                                     value="#{categoriaControlador.raiz}" 
-                                     var="categoria">
+                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                    <h:form id="formLista" prependId="false">
+                        <p:hotkey bind="F5" update="@form" action="/pages/private/admin/categoria/lista.xhtml/" />
+                        <p:panel  id="cat" header="Categorias">
+                            <p:toolbar id="toolbarCategoria">
+                                <f:facet name="left">
+                                    <p:commandButton id="botaoNovo" 
+                                                     value="Novo"
+                                                     icon="ui-icon-plus"
+                                                     ajax="false"
+                                                     title="Adicionar nova Categoria"
+                                                     action="#{categoriaControlador.prepararNovo}"/>
+                                    <span class="ui-separator">
+                                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                    </span>
+                                    <p:commandButton id="btnEditar" 
+                                                     icon="ui-icon-pencil" 
+                                                     process="@this"
+                                                     disabled="#{categoriaControlador.categoriaSelecionada == null}"
+                                                     title="Editar #{categoriaControlador.categoriaSelecionada}" 
+                                                     action="#{categoriaControlador.prepararEdicao()}" 
+                                                     ajax="false" />
+                                    <p:commandButton id="btnVisualizar" 
+                                                     icon="ui-icon-search" 
+                                                     process="@this"
+                                                     disabled="#{categoriaControlador.categoriaSelecionada == null}"
+                                                     title="Visualizar as informações de: #{categoriaControlador.categoriaSelecionada}" 
+                                                     action="#{categoriaControlador.prepararVer()}" 
+                                                     ajax="false" />
+                                    <p:commandButton id="btnExcluir" 
+                                                     icon="ui-icon-trash" 
+                                                     process="@this"
+                                                     disabled="#{categoriaControlador.categoriaSelecionada == null}"
+                                                     update="tableCategoria toolbarCategoria"
+                                                     action="#{categoriaControlador.excluir()}" 
+                                                     title="Excluir a categoria: #{categoriaControlador.categoriaSelecionada} ?" 
+                                                     ajax="true">
+                                        <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+                                                   message="Tem certeza que deseja excluir #{categoriaControlador.categoriaSelecionada}" />
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:toolbar>
+                            <br/>
+                            <p:treeTable id="tableCategoria"  
+                                         resizableColumns="true"
+                                         liveResize="true"
+                                         scrollable="true"
+                                         scrollHeight="350"
+                                         selection="#{categoriaControlador.categoriaSelecionada}"
+                                         selectionMode="single"
+                                         emptyMessage="Nenhum registro encontrado"
+                                         value="#{categoriaControlador.raiz}" 
+                                         var="categoria">
 
-                            <p:ajax event="select" update=":formLista:toolbarCategoria"/>
-                            <p:ajax event="unselect" update=":formLista:toolbarCategoria"/>
-                            <f:facet name="header">
-                                Categorias
-                            </f:facet>
-                            <p:column priority="1" filterBy="#{categoria.descricao}" headerText="Categorias e Subcategorias">
-                                <h:outputText value="#{categoria.descricao}" />
-                            </p:column>
-                            <f:facet name="footer">
-                                Total de categorias: #{categoriaControlador.raiz.childCount}.
-                            </f:facet>
-                        </p:treeTable>
-                    </p:panel>
-                </h:form>
+                                <p:ajax event="select" update=":formLista:toolbarCategoria"/>
+                                <p:ajax event="unselect" update=":formLista:toolbarCategoria"/>
+                                <f:facet name="header">
+                                    Categorias
+                                </f:facet>
+                                <p:column priority="1" filterBy="#{categoria.descricao}" headerText="Categorias e Subcategorias">
+                                    <h:outputText value="#{categoria.descricao}" />
+                                </p:column>
+                                <f:facet name="footer">
+                                    Total de categorias: #{categoriaControlador.raiz.childCount}.
+                                </f:facet>
+                            </p:treeTable>
+                        </p:panel>
+                    </h:form>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                    <ui:insert name="restrito">
+                        <ui:include src="/WEB-INF/template/acessonegado.xhtml" />
+                    </ui:insert>
+                </sec:authorize>
             </ui:define>
         </ui:composition>
     </h:body>

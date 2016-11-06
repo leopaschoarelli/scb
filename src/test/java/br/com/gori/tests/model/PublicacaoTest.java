@@ -76,7 +76,7 @@ public class PublicacaoTest {
     }
 
     @Test
-    public void countPublicacaos() {
+    public void countPublicacoes() {
         Assert.assertNotEquals(0, publicacaoDAO.count());
     }
 
@@ -96,7 +96,7 @@ public class PublicacaoTest {
         Assert.assertEquals(p, finded);
     }
 
-    @Test
+    @Test 
     public void testBuscarPublicacaoPorTitulo() {
         Assert.assertNotNull(publicacaoDAO.buscarPublicacaoPorTitulo(publicacao.getTitulo()));
     }

@@ -3,106 +3,114 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form id="formLista" prependId="false">
-                    <p:hotkey bind="F5" update="@form" action="/pages/private/admin/pessoa/lista.xhtml/" />
-                    <p:panel id="Pessoas" header="Pessoas">
-                        <p:toolbar id="toolbarPessoa">
-                            <f:facet name="left">
-                                <p:splitButton icon="ui-icon-plus" title="Adicionar Pessoas"  value="Novo">
-                                    <p:menuitem title="Adicionar novo Aluno" 
-                                                id="novoAluno" value="Aluno" 
-                                                ajax="false"
-                                                action="#{pessoaControlador.prepararNovoAluno}" />
-                                    <p:menuitem title="Adicionar novas Pessoas" 
-                                                id="novaPessoa" value="Outros"
-                                                ajax="false"
-                                                action="#{pessoaControlador.prepararNovaPessoa}" />
-                                </p:splitButton>
-                                <span class="ui-separator">
-                                    <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                                </span>
-                                <p:commandButton id="btnEditar" 
-                                                 icon="ui-icon-pencil" 
-                                                 process="@this"
-                                                 disabled="#{pessoaControlador.pessoaSelecionada == null}"
-                                                 title="Editar Pessoa" 
-                                                 action="#{pessoaControlador.prepararEdicao()}" 
-                                                 ajax="false" />
-                                <p:commandButton id="btnVisualizar" 
-                                                 icon="ui-icon-search" 
-                                                 process="@this"
-                                                 disabled="#{pessoaControlador.pessoaSelecionada == null}"
-                                                 title="Visualizar as informações" 
-                                                 action="#{pessoaControlador.prepararVer()}" 
-                                                 ajax="false" />
-                                <p:commandButton id="btnExcluir" 
-                                                 icon="ui-icon-trash" 
-                                                 process="@this"
-                                                 disabled="#{pessoaControlador.pessoaSelecionada == null}"
-                                                 update="tableAluno"
-                                                 action="#{pessoaControlador.excluir()}" 
-                                                 title="Excluir a pessoa?" 
-                                                 ajax="true">
-                                    <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
-                                               message="Tem certeza que deseja excluir #{pessoaControlador.pessoaSelecionada.nome}" />
-                                </p:commandButton>
-                            </f:facet>
-                        </p:toolbar>
-                        <br/>
-                        <p:messages autoUpdate="true" closable="true" showDetail="false"  />
-                        <p:dataTable paginator="true" 
-                                     rows="10" 
-                                     resizeMode="fit"
-                                     scrollable="true"
-                                     scrollHeight="255"
-                                     id="tableAluno" 
-                                     reflow="true"
-                                     value="#{pessoaControlador.pessoas}" 
-                                     resizableColumns="true"
-                                     selection="#{pessoaControlador.pessoaSelecionada}"
-                                     selectionMode="single"
-                                     rowKey="#{pessoa.id}"
-                                     var="pessoa" 
-                                     emptyMessage="Nenhum registro encontrado">
-                            <p:ajax event="rowSelect" update=":formLista:toolbarPessoa"/>
-                            <p:ajax event="rowUnselect" update=":formLista:toolbarPessoa" />
-                            <f:facet name="header">
-                                Lista de Pessoas
-                            </f:facet>
+                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                    <h:form id="formLista" prependId="false">
+                        <p:hotkey bind="F5" update="@form" action="/pages/private/admin/pessoa/lista.xhtml/" />
+                        <p:panel id="Pessoas" header="Pessoas">
+                            <p:toolbar id="toolbarPessoa">
+                                <f:facet name="left">
+                                    <p:splitButton icon="ui-icon-plus" title="Adicionar Pessoas"  value="Novo">
+                                        <p:menuitem title="Adicionar novo Aluno" 
+                                                    id="novoAluno" value="Aluno" 
+                                                    ajax="false"
+                                                    action="#{pessoaControlador.prepararNovoAluno}" />
+                                        <p:menuitem title="Adicionar novas Pessoas" 
+                                                    id="novaPessoa" value="Outros"
+                                                    ajax="false"
+                                                    action="#{pessoaControlador.prepararNovaPessoa}" />
+                                    </p:splitButton>
+                                    <span class="ui-separator">
+                                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                    </span>
+                                    <p:commandButton id="btnEditar" 
+                                                     icon="ui-icon-pencil" 
+                                                     process="@this"
+                                                     disabled="#{pessoaControlador.pessoaSelecionada == null}"
+                                                     title="Editar Pessoa" 
+                                                     action="#{pessoaControlador.prepararEdicao()}" 
+                                                     ajax="false" />
+                                    <p:commandButton id="btnVisualizar" 
+                                                     icon="ui-icon-search" 
+                                                     process="@this"
+                                                     disabled="#{pessoaControlador.pessoaSelecionada == null}"
+                                                     title="Visualizar as informações" 
+                                                     action="#{pessoaControlador.prepararVer()}" 
+                                                     ajax="false" />
+                                    <p:commandButton id="btnExcluir" 
+                                                     icon="ui-icon-trash" 
+                                                     process="@this"
+                                                     disabled="#{pessoaControlador.pessoaSelecionada == null}"
+                                                     update="tableAluno"
+                                                     action="#{pessoaControlador.excluir()}" 
+                                                     title="Excluir a pessoa?" 
+                                                     ajax="true">
+                                        <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+                                                   message="Tem certeza que deseja excluir #{pessoaControlador.pessoaSelecionada.nome}" />
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:toolbar>
+                            <br/>
+                            <p:messages autoUpdate="true" closable="true" showDetail="false"  />
+                            <p:dataTable paginator="true" 
+                                         rows="10" 
+                                         resizeMode="fit"
+                                         scrollable="true"
+                                         scrollHeight="255"
+                                         id="tableAluno" 
+                                         reflow="true"
+                                         value="#{pessoaControlador.pessoas}" 
+                                         resizableColumns="true"
+                                         selection="#{pessoaControlador.pessoaSelecionada}"
+                                         selectionMode="single"
+                                         rowKey="#{pessoa.id}"
+                                         var="pessoa" 
+                                         emptyMessage="Nenhum registro encontrado">
+                                <p:ajax event="rowSelect" update=":formLista:toolbarPessoa"/>
+                                <p:ajax event="rowUnselect" update=":formLista:toolbarPessoa" />
+                                <f:facet name="header">
+                                    Lista de Pessoas
+                                </f:facet>
 
-                            <p:column filterStyle="width: auto" filterBy="#{pessoa.tipoPessoa.descricao}" headerText="Tipo Pessoa">
-                                <h:outputText value="#{pessoa.tipoPessoa.descricao}" />
-                            </p:column>
+                                <p:column filterStyle="width: auto" filterBy="#{pessoa.tipoPessoa.descricao}" headerText="Tipo Pessoa">
+                                    <h:outputText value="#{pessoa.tipoPessoa.descricao}" />
+                                </p:column>
 
-                            <p:column filterStyle="width: auto" filterBy="#{pessoa.nome}" headerText="Nome">
-                                <h:outputText value="#{pessoa.nome}" />
-                            </p:column>
+                                <p:column filterStyle="width: auto" filterBy="#{pessoa.nome}" headerText="Nome">
+                                    <h:outputText value="#{pessoa.nome}" />
+                                </p:column>
 
-                            <p:column filterStyle="width: auto" filterBy="#{pessoa.nascimento}" headerText="Data de Nascimento">
-                                <h:outputText value="#{pessoa.nascimento}">
-                                    <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
-                                </h:outputText>
-                            </p:column>
+                                <p:column filterStyle="width: auto" filterBy="#{pessoa.nascimento}" headerText="Data de Nascimento">
+                                    <h:outputText value="#{pessoa.nascimento}">
+                                        <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
 
-                            <p:column filterStyle="width: auto" filterBy="#{pessoa.rg}" headerText="RG">
-                                <h:outputText value="#{pessoa.rg}" />
-                            </p:column>
+                                <p:column filterStyle="width: auto" filterBy="#{pessoa.rg}" headerText="RG">
+                                    <h:outputText value="#{pessoa.rg}" />
+                                </p:column>
 
-                            <p:column filterStyle="width: auto" filterBy="#{pessoa.sexo.descricao}" headerText="Sexo">
-                                <h:outputText value="#{pessoa.sexo.descricao}" />
-                            </p:column>
+                                <p:column filterStyle="width: auto" filterBy="#{pessoa.sexo.descricao}" headerText="Sexo">
+                                    <h:outputText value="#{pessoa.sexo.descricao}" />
+                                </p:column>
 
-                            <f:facet name="footer">
-                                Total de pessoas #{pessoaControlador.pessoas.size()}.
-                            </f:facet>
-                        </p:dataTable>
-                    </p:panel>
-                </h:form>
+                                <f:facet name="footer">
+                                    Total de pessoas #{pessoaControlador.pessoas.size()}.
+                                </f:facet>
+                            </p:dataTable>
+                        </p:panel>
+                    </h:form>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                    <ui:insert name="restrito">
+                        <ui:include src="/WEB-INF/template/acessonegado.xhtml" />
+                    </ui:insert>
+                </sec:authorize>
             </ui:define>
         </ui:composition>
     </h:body>

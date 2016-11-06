@@ -3,10 +3,13 @@ package br.com.gori.scb.controle;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.dao.impl.RoleDAOImpl;
 import br.com.gori.scb.entidade.Role;
+import br.com.gori.scb.entidade.util.RoleUser;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -101,6 +104,14 @@ public class RoleControlador implements Serializable {
         return role;
     }
 
+    public List<SelectItem> getListaTypeRole() {
+        List<SelectItem> toReturn = new ArrayList<SelectItem>();
+        for (RoleUser tp : RoleUser.values()) {
+            toReturn.add(new SelectItem(tp, tp.getDescricao()));
+        }
+        return toReturn;
+    }
+
     public void setRole(Role role) {
         this.role = role;
     }
@@ -145,5 +156,4 @@ public class RoleControlador implements Serializable {
         this.visualiza = visualiza;
     }
 
-    
 }

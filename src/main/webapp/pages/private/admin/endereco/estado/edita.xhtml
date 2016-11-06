@@ -3,59 +3,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form id="form-user" prependId="false">
-                    <div class="ui-fluid">
-                        <p:panel id="panelEstado" header="#{estadoControlador.header}">
-                            <p:messages id="messagesEstado" autoUpdate="true" closable="true" />
-                            <p:focus context="panelEstado"/>
-                            <p:panelGrid id="gridEstado" columns="2"
-                                         layout="grid" 
-                                         style="margin-top: 20px; margin-bottom: 40px"
-                                         columnClasses="ui-grid-col-1, ui-grid-col-11"
-                                         styleClass="panelgrid-noborder">
-                                <p:outputLabel value="Nome:" for="nomee" />
-                                <p:inputText required="true" 
-                                             id="nomee" 
-                                             placeholder="Nome do Estado"
-                                             readonly="#{estadoControlador.visualiza}" 
-                                             value="#{estadoControlador.estado.nome}"/>
-                                <p:outputLabel value="UF:" for="uf"/>
-                                <p:inputText required="true" 
-                                             id="uf" 
-                                             placeholder="UF do Estado"
-                                             readonly="#{estadoControlador.visualiza}" 
-                                             value="#{estadoControlador.estado.uf}" />
-                                <p:outputLabel value="País:" for="pais" />
-                                <p:autoComplete 
-                                    readonly="#{estadoControlador.visualiza}"
-                                    id="pais"
-                                    required="true"
-                                    var="pais" 
-                                    placeholder="Digite o nome do País"
-                                    completeMethod="#{estadoControlador.completaPais}" 
-                                    converter="#{estadoControlador.convertPais}"
-                                    emptyMessage="Nenhum resultado encontrado"
-                                    value="#{estadoControlador.estado.pais}"
-                                    itemValue="#{pais.id}" itemLabel="#{pais.toString()}"/>
-                            </p:panelGrid>
-                            <p:separator/>
-                            <p:panelGrid id="gridBotoes" columns="2"
-                                         layout="grid"
-                                         style="margin-top: 20px; margin-bottom: 40px"
-                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
-                                         styleClass="panelgrid-noborder">
-                                <p:commandButton id="botaoSalvar" process="@this" ajax="false" icon="ui-icon-check" value="Salvar" action="#{estadoControlador.salvar}" 
-                                                 update="@form" disabled="#{estadoControlador.visualiza}"/>
-                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/endereco/estado/lista.xhtml" />
-                            </p:panelGrid>
-                        </p:panel>
-                        <p:defaultCommand target="nomee" />
-                    </div>
-                </h:form>
+                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                    <h:form id="form-user" prependId="false">
+                        <div class="ui-fluid">
+                            <p:panel id="panelEstado" header="#{estadoControlador.header}">
+                                <p:messages id="messagesEstado" autoUpdate="true" closable="true" />
+                                <p:focus context="panelEstado"/>
+                                <p:panelGrid id="gridEstado" columns="2"
+                                             layout="grid" 
+                                             style="margin-top: 20px; margin-bottom: 40px"
+                                             columnClasses="ui-grid-col-1, ui-grid-col-11"
+                                             styleClass="panelgrid-noborder">
+                                    <p:outputLabel value="Nome:" for="nomee" />
+                                    <p:inputText required="true" 
+                                                 id="nomee" 
+                                                 placeholder="Nome do Estado"
+                                                 readonly="#{estadoControlador.visualiza}" 
+                                                 value="#{estadoControlador.estado.nome}"/>
+                                    <p:outputLabel value="UF:" for="uf"/>
+                                    <p:inputText required="true" 
+                                                 id="uf" 
+                                                 placeholder="UF do Estado"
+                                                 readonly="#{estadoControlador.visualiza}" 
+                                                 value="#{estadoControlador.estado.uf}" />
+                                    <p:outputLabel value="País:" for="pais" />
+                                    <p:autoComplete 
+                                        readonly="#{estadoControlador.visualiza}"
+                                        id="pais"
+                                        required="true"
+                                        var="pais" 
+                                        placeholder="Digite o nome do País"
+                                        completeMethod="#{estadoControlador.completaPais}" 
+                                        converter="#{estadoControlador.convertPais}"
+                                        emptyMessage="Nenhum resultado encontrado"
+                                        value="#{estadoControlador.estado.pais}"
+                                        itemValue="#{pais.id}" itemLabel="#{pais.toString()}"/>
+                                </p:panelGrid>
+                                <p:separator/>
+                                <p:panelGrid id="gridBotoes" columns="2"
+                                             layout="grid"
+                                             style="margin-top: 20px; margin-bottom: 40px"
+                                             columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                             styleClass="panelgrid-noborder">
+                                    <p:commandButton id="botaoSalvar" process="@this" ajax="false" icon="ui-icon-check" value="Salvar" action="#{estadoControlador.salvar}" 
+                                                     update="@form" disabled="#{estadoControlador.visualiza}"/>
+                                    <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/endereco/estado/lista.xhtml" />
+                                </p:panelGrid>
+                            </p:panel>
+                            <p:defaultCommand target="nomee" />
+                        </div>
+                    </h:form>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                    <ui:insert name="restrito">
+                        <ui:include src="/WEB-INF/template/acessonegado.xhtml" />
+                    </ui:insert>
+                </sec:authorize>
             </ui:define>
         </ui:composition>
     </h:body>

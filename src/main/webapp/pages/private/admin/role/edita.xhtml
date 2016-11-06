@@ -3,41 +3,55 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form id="form-user" prependId="false">
-                    <div class="ui-fluid">
-                        <p:panel id="panelRole" header="#{roleControlador.header}">
-                            <p:messages id="messagesRole" showDetail="true" closable="true" autoUpdate="true" />
-                            <p:focus context="panelRole"/>
-                            <p:panelGrid id="gridRole" 
-                                         columns="2"
-                                         layout="grid" 
-                                         style="margin-top: 20px; margin-bottom: 40px"
-                                         columnClasses="ui-grid-col-2, ui-grid-col-10">
-                                <p:outputLabel value="Nome: " for="nomer" />
-                                <p:inputText id="nomer" 
-                                             required="true"
-                                             placeholder="Digite o Nome"
-                                             readonly="#{roleControlador.visualiza}" 
-                                             value="#{roleControlador.role.name}" />
-                            </p:panelGrid>
-                            <p:separator/>
-                            <p:panelGrid id="gridBotoes" columns="2"
-                                         layout="grid"
-                                         style="margin-top: 20px; margin-bottom: 40px"
-                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
-                                         styleClass="panelgrid-noborder">
-                                <p:commandButton process="@this" ajax="false" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{roleControlador.salvar()}" 
-                                                 update="@form" disabled="#{roleControlador.visualiza}"/>
-                                <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/role/lista.xhtml" />
-                            </p:panelGrid>
-                        </p:panel>
-                        <p:defaultCommand target="nomer" />
-                    </div>
-                </h:form>
+                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                    <h:form id="form-user" prependId="false">
+                        <div class="ui-fluid">
+                            <p:panel id="panelRole" header="#{roleControlador.header}">
+                                <p:messages id="messagesRole" showDetail="true" closable="true" autoUpdate="true" />
+                                <p:focus context="panelRole"/>
+                                <p:panelGrid id="gridRole" 
+                                             columns="2"
+                                             layout="grid" 
+                                             style="margin-top: 20px; margin-bottom: 40px"
+                                             columnClasses="ui-grid-col-2, ui-grid-col-10">
+                                    <p:outputLabel value="Tipo de Permissão: " for="tprole" />
+                                    <p:selectOneMenu id="tprole" rendered="true" disabled="#{roleControlador.visualiza}"  style="width: 130px" value="#{roleControlador.role.typeRole}" >
+                                        <f:selectItems var="tipo" itemLabel="#{tipo}" itemValue="#{tipo}"
+                                                       value="#{roleControlador.listaTypeRole}"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="Descrição: " for="nomer" />
+                                    <p:inputText id="nomer" 
+                                                 required="true"
+                                                 placeholder="Digite o Nome"
+                                                 readonly="#{roleControlador.visualiza}" 
+                                                 value="#{roleControlador.role.name}" />
+                                </p:panelGrid>
+                                <p:separator/>
+                                <p:panelGrid id="gridBotoes" columns="2"
+                                             layout="grid"
+                                             style="margin-top: 20px; margin-bottom: 40px"
+                                             columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                             styleClass="panelgrid-noborder">
+                                    <p:commandButton process="@this" ajax="false" id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{roleControlador.salvar()}" 
+                                                     update="@form" disabled="#{roleControlador.visualiza}"/>
+                                    <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/role/lista.xhtml" />
+                                </p:panelGrid>
+                            </p:panel>
+                            <p:defaultCommand target="nomer" />
+                        </div>
+                    </h:form>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                    <ui:insert name="restrito">
+                        <ui:include src="/WEB-INF/template/acessonegado.xhtml" />
+                    </ui:insert>
+                </sec:authorize>
             </ui:define>
         </ui:composition>
     </h:body>

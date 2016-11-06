@@ -3,233 +3,241 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body class="skin-blue sidebar-mini">
         <ui:composition template="/WEB-INF/template/template.xhtml">
             <ui:define name="conteudo">
-                <h:form  id="form-user" prependId="false" >
-                    <f:metadata>
-                        <f:viewAction action="#{emprestimoControlador.inicializar}" />
-                    </f:metadata>
-                    <div class="ui-fluid">
-                        <p:panel id="panelEmprestimo" header="Realizar Empréstimo">
-                            <p:messages id="messagesEmprestimo" showDetail="false" closable="true" autoUpdate="true" />
-                            <p:focus context="panelEmprestimo"/>
-                            <p:panelGrid id="gridEmprestimo" 
-                                         columns="2"
-                                         layout="grid"
-                                         styleClass="panelgrid-noborder"
-                                         style="margin-top: 5px; margin-bottom: 1px"
-                                         columnClasses="ui-grid-col-6, ui-grid-col-6">
-                                <p:panelGrid columns="3" id="camposEmp"
-                                             styleClass="panelgrid-noborder"
+                <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
+                    <h:form  id="form-user" prependId="false" >
+                        <f:metadata>
+                            <f:viewAction action="#{emprestimoControlador.inicializar}" />
+                        </f:metadata>
+                        <div class="ui-fluid">
+                            <p:panel id="panelEmprestimo" header="Realizar Empréstimo">
+                                <p:messages id="messagesEmprestimo" showDetail="false" closable="true" autoUpdate="true" />
+                                <p:focus context="panelEmprestimo"/>
+                                <p:panelGrid id="gridEmprestimo" 
+                                             columns="2"
                                              layout="grid"
-                                             style="margin-top: 5px; margin-bottom: 10px"
-                                             columnClasses="ui-grid-col-3, ui-grid-col-8, ui-grid-col-1">
+                                             styleClass="panelgrid-noborder"
+                                             style="margin-top: 5px; margin-bottom: 1px"
+                                             columnClasses="ui-grid-col-6, ui-grid-col-6">
+                                    <p:panelGrid columns="3" id="camposEmp"
+                                                 styleClass="panelgrid-noborder"
+                                                 layout="grid"
+                                                 style="margin-top: 5px; margin-bottom: 10px"
+                                                 columnClasses="ui-grid-col-3, ui-grid-col-8, ui-grid-col-1">
 
-                                    <p:outputLabel value="Pessoa: " for="pessoa" />
-                                    <p:autoComplete 
-                                        readonly="#{emprestimoControlador.visualizar}"
-                                        id="pessoa"
-                                        var="pessoa" 
-                                        forceSelection="true"
-                                        completeMethod="#{emprestimoControlador.completaPessoa}" 
-                                        converter="#{emprestimoControlador.converterPessoa}"
-                                        emptyMessage="Nenhum resultado encontrado"
-                                        value="#{emprestimoControlador.emprestimo.pessoa}"
-                                        itemValue="#{pessoa.id}" itemLabel="#{pessoa.toString()}">
-                                        <p:ajax event="keyup"
-                                                update="addExem dtDevolucao tableRes gridEmp"
-                                                listener="#{emprestimoControlador.validaDiasDevolucao('Sim')}"/>
-                                    </p:autoComplete>
-                                    <p:outputLabel value="" />
+                                        <p:outputLabel value="Pessoa: " for="pessoa" />
+                                        <p:autoComplete 
+                                            readonly="#{emprestimoControlador.visualizar}"
+                                            id="pessoa"
+                                            var="pessoa" 
+                                            forceSelection="true"
+                                            completeMethod="#{emprestimoControlador.completaPessoa}" 
+                                            converter="#{emprestimoControlador.converterPessoa}"
+                                            emptyMessage="Nenhum resultado encontrado"
+                                            value="#{emprestimoControlador.emprestimo.pessoa}"
+                                            itemValue="#{pessoa.id}" itemLabel="#{pessoa.toString()}">
+                                            <p:ajax event="keyup"
+                                                    update="addExem dtDevolucao tableRes gridEmp"
+                                                    listener="#{emprestimoControlador.validaDiasDevolucao('Sim')}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel value="" />
 
-                                    <p:outputLabel value="Obra: " for="obra" />
-                                    <p:autoComplete 
-                                        id="obra"
-                                        var="obra" 
-                                        forceSelection="true"
-                                        completeMethod="#{emprestimoControlador.completaObra}" 
-                                        converter="#{emprestimoControlador.converterObra}"
-                                        emptyMessage="Nenhum resultado encontrado"
-                                        value="#{emprestimoControlador.publicacaoFiltro}"
-                                        itemValue="#{obra.id}" itemLabel="#{obra.toString()}">
-                                        <p:ajax event="itemSelect" listener="#{emprestimoControlador.validaQtdEmprestimo()}" />
-                                        <p:ajax event="itemUnselect" />
-                                        <p:ajax event="keyup" />
-                                    </p:autoComplete>
-                                    <p:outputLabel value="" />
+                                        <p:outputLabel value="Obra: " for="obra" />
+                                        <p:autoComplete 
+                                            id="obra"
+                                            var="obra" 
+                                            forceSelection="true"
+                                            completeMethod="#{emprestimoControlador.completaObra}" 
+                                            converter="#{emprestimoControlador.converterObra}"
+                                            emptyMessage="Nenhum resultado encontrado"
+                                            value="#{emprestimoControlador.publicacaoFiltro}"
+                                            itemValue="#{obra.id}" itemLabel="#{obra.toString()}">
+                                            <p:ajax event="itemSelect" listener="#{emprestimoControlador.validaQtdEmprestimo()}" />
+                                            <p:ajax event="itemUnselect" />
+                                            <p:ajax event="keyup" />
+                                        </p:autoComplete>
+                                        <p:outputLabel value="" />
 
-                                    <p:outputLabel value="Exemplar: " for="exemplar" />
-                                    <p:inputText id="exemplar" valueChangeListener="#{emprestimoControlador.btnSubmit}"
-                                                 value="#{emprestimoControlador.tomboEmprestimo}" />
-                                    <p:commandButton icon="ui-icon-check" update="nomeExem" id="complet" actionListener="#{emprestimoControlador.btnSubmit}" />
+                                        <p:outputLabel value="Exemplar: " for="exemplar" />
+                                        <p:inputText id="exemplar" valueChangeListener="#{emprestimoControlador.btnSubmit}"
+                                                     value="#{emprestimoControlador.tomboEmprestimo}" />
+                                        <p:commandButton icon="ui-icon-check" update="nomeExem" id="complet" actionListener="#{emprestimoControlador.btnSubmit}" />
 
-                                    <p:outputLabel/>
-                                    <p:inputText readonly="true" value="#{emprestimoControlador.nomeExemplar}" id="nomeExem" />
-                                    <p:outputLabel/>
+                                        <p:outputLabel/>
+                                        <p:inputText readonly="true" value="#{emprestimoControlador.nomeExemplar}" id="nomeExem" />
+                                        <p:outputLabel/>
 
-                                    <p:outputLabel value="Data Devolução: " for="dtDevolucao" />
-                                    <p:calendar id="dtDevolucao"
-                                                readonly="true" 
-                                                showOn="false"
-                                                value="#{emprestimoControlador.itemEmprestimo.prazo}" 
-                                                pattern="dd/MM/yyyy" 
-                                                mask="true" >
-                                    </p:calendar>
-                                    <p:outputLabel/>
-                                </p:panelGrid>
-                                <p:dataTable id="tableRes"
-                                             var="itemreserva" 
-                                             paginator="true"
-                                             rows="5"
-                                             reflow="true"
-                                             resizableColumns="true"
-                                             resizeMode="fit"
-                                             scrollable="true"
-                                             scrollHeight="60"
-                                             value="#{emprestimoControlador.reservasAbertas}"
-                                             emptyMessage="Nenhum registro encontrado">
-                                    <f:facet name="header">
-                                        Reservas Abertas
-                                    </f:facet>
-                                    <p:column filterStyle="width: auto" headerText="Publicação">
-                                        <h:outputText value="#{itemreserva.publicacao.titulo}" />
-                                    </p:column>
-                                    <p:column filterStyle="width: auto" headerText="Data Prevista">
-                                        <h:outputText value="#{itemreserva.previsao}">
-                                            <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
-                                        </h:outputText>
-                                    </p:column>
-                                    <p:column style="width: auto" headerText="Gerencial">
-                                        <p:commandButton id="btnEfetiva" icon="ui-icon-check" update="tableRes gridEmp" action="#{emprestimoControlador.onEfetivaReserva(itemreserva)}"/>
-                                    </p:column>
-                                </p:dataTable>
-                            </p:panelGrid>
-                            <p:commandButton  
-                                actionListener="#{emprestimoControlador.pesquisaEmprestimo}" 
-                                id="addExem" 
-                                icon="ui-icon-search" 
-                                value="Pesquisar" 
-                                disabled="#{emprestimoControlador.emprestar == false}" 
-                                update="messagesEmprestimo gridEmp addExem"
-                                process="@this"
-                                title="Realizar Pesquisa"/>
-
-                            <p:panelGrid id="gridEmp" 
-                                         columns="2"
-                                         layout="grid"
-                                         styleClass="panelgrid-noborder"
-                                         style="margin-top: 5px; margin-bottom: 10px"
-                                         columnClasses="ui-grid-col-6, ui-grid-col-6">
-                                <p:panel id="exemplares" header="Exemplares Disponiveis">
-                                    <p:dataTable id="tableExemDisp" 
-                                                 var="exemplares" 
-                                                 paginator="true" 
+                                        <p:outputLabel value="Data Devolução: " for="dtDevolucao" />
+                                        <p:calendar id="dtDevolucao"
+                                                    readonly="true" 
+                                                    showOn="false"
+                                                    value="#{emprestimoControlador.itemEmprestimo.prazo}" 
+                                                    pattern="dd/MM/yyyy" 
+                                                    mask="true" >
+                                        </p:calendar>
+                                        <p:outputLabel/>
+                                    </p:panelGrid>
+                                    <p:dataTable id="tableRes"
+                                                 var="itemreserva" 
+                                                 paginator="true"
+                                                 rows="5"
                                                  reflow="true"
-                                                 rows="5" 
                                                  resizableColumns="true"
-                                                 value="#{emprestimoControlador.exemplaresFiltrados}" 
+                                                 resizeMode="fit"
+                                                 scrollable="true"
+                                                 scrollHeight="60"
+                                                 value="#{emprestimoControlador.reservasAbertas}"
                                                  emptyMessage="Nenhum registro encontrado">
-                                        <p:column width="25">
-                                            <h:outputText id="dragIcon" style="text-align: left" styleClass="ui-icon ui-icon-arrow-4" />
-                                            <p:draggable for="dragIcon" revert="true" helper="clone"/>
+                                        <f:facet name="header">
+                                            Reservas Abertas
+                                        </f:facet>
+                                        <p:column filterStyle="width: auto" headerText="Publicação">
+                                            <h:outputText value="#{itemreserva.publicacao.titulo}" />
                                         </p:column>
-                                        <p:column headerText="Tombo">
-                                            <h:outputText value="#{exemplares.tombo}" />
+                                        <p:column filterStyle="width: auto" headerText="Data Prevista">
+                                            <h:outputText value="#{itemreserva.previsao}">
+                                                <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                            </h:outputText>
                                         </p:column>
-                                        <p:column headerText="Número Exemplar">
-                                            <h:outputText value="#{exemplares.numExe}" />
-                                        </p:column>
-                                        <p:column headerText="Estado Exemplar">
-                                            <h:outputText value="#{exemplares.estadoExemplar.descricao}" />
+                                        <p:column style="width: auto" headerText="Gerencial">
+                                            <p:commandButton id="btnEfetiva" icon="ui-icon-check" update="tableRes gridEmp" action="#{emprestimoControlador.onEfetivaReserva(itemreserva)}"/>
                                         </p:column>
                                     </p:dataTable>
-                                </p:panel>
-                                <p:panel id="exemplaresSelecionados" header="Exemplares para Emprestimo">
-                                    <p:outputPanel id="dropArea">
-                                        <h:outputText value="Coloque aqui os exemplares a serem emprestados" rendered="#{empty emprestimoControlador.emprestimo.itemEmprestimo}" style="font-size:16px;" />
-                                        <p:dataTable id="tableEmp" 
-                                                     var="itememp" 
+                                </p:panelGrid>
+                                <p:commandButton  
+                                    actionListener="#{emprestimoControlador.pesquisaEmprestimo}" 
+                                    id="addExem" 
+                                    icon="ui-icon-search" 
+                                    value="Pesquisar" 
+                                    disabled="#{emprestimoControlador.emprestar == false}" 
+                                    update="messagesEmprestimo gridEmp addExem"
+                                    process="@this"
+                                    title="Realizar Pesquisa"/>
+
+                                <p:panelGrid id="gridEmp" 
+                                             columns="2"
+                                             layout="grid"
+                                             styleClass="panelgrid-noborder"
+                                             style="margin-top: 5px; margin-bottom: 10px"
+                                             columnClasses="ui-grid-col-6, ui-grid-col-6">
+                                    <p:panel id="exemplares" header="Exemplares Disponiveis">
+                                        <p:dataTable id="tableExemDisp" 
+                                                     var="exemplares" 
                                                      paginator="true" 
                                                      reflow="true"
                                                      rows="5" 
-                                                     rendered="#{not empty emprestimoControlador.exemplarDrop}"
                                                      resizableColumns="true"
-                                                     value="#{emprestimoControlador.exemplarDrop}" 
+                                                     value="#{emprestimoControlador.exemplaresFiltrados}" 
                                                      emptyMessage="Nenhum registro encontrado">
-
-                                            <p:column headerText="Exemplar">
-                                                <h:outputText value="#{itememp.publicacao.titulo}" />
+                                            <p:column width="25">
+                                                <h:outputText id="dragIcon" style="text-align: left" styleClass="ui-icon ui-icon-arrow-4" />
+                                                <p:draggable for="dragIcon" revert="true" helper="clone"/>
                                             </p:column>
-
-                                            <p:column headerText="Data Emprestimo">
-                                                <h:outputText value="#{emprestimoControlador.emprestimo.criacao}">
-                                                    <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
-                                                </h:outputText>
+                                            <p:column headerText="Tombo">
+                                                <h:outputText value="#{exemplares.tombo}" />
                                             </p:column>
-                                            <p:column headerText="Data Prazo de Devolução">
-                                                <h:outputText value="#{emprestimoControlador.itemEmprestimo.prazo}">
-                                                    <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
-                                                </h:outputText>
+                                            <p:column headerText="Número Exemplar">
+                                                <h:outputText value="#{exemplares.numExe}" />
+                                            </p:column>
+                                            <p:column headerText="Estado Exemplar">
+                                                <h:outputText value="#{exemplares.estadoExemplar.descricao}" />
                                             </p:column>
                                         </p:dataTable>
-                                    </p:outputPanel>
-                                </p:panel>
-                                <p:droppable  for="exemplaresSelecionados" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="tableExemDisp" onDrop="handleDrop">
-                                    <p:ajax listener="#{emprestimoControlador.onExemplarDrop}" update="dropArea tableExemDisp addExem" />
-                                </p:droppable>
+                                    </p:panel>
+                                    <p:panel id="exemplaresSelecionados" header="Exemplares para Emprestimo">
+                                        <p:outputPanel id="dropArea">
+                                            <h:outputText value="Coloque aqui os exemplares a serem emprestados" rendered="#{empty emprestimoControlador.emprestimo.itemEmprestimo}" style="font-size:16px;" />
+                                            <p:dataTable id="tableEmp" 
+                                                         var="itememp" 
+                                                         paginator="true" 
+                                                         reflow="true"
+                                                         rows="5" 
+                                                         rendered="#{not empty emprestimoControlador.exemplarDrop}"
+                                                         resizableColumns="true"
+                                                         value="#{emprestimoControlador.exemplarDrop}" 
+                                                         emptyMessage="Nenhum registro encontrado">
+
+                                                <p:column headerText="Exemplar">
+                                                    <h:outputText value="#{itememp.publicacao.titulo}" />
+                                                </p:column>
+
+                                                <p:column headerText="Data Emprestimo">
+                                                    <h:outputText value="#{emprestimoControlador.emprestimo.criacao}">
+                                                        <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                                    </h:outputText>
+                                                </p:column>
+                                                <p:column headerText="Data Prazo de Devolução">
+                                                    <h:outputText value="#{emprestimoControlador.itemEmprestimo.prazo}">
+                                                        <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                                                    </h:outputText>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:outputPanel>
+                                    </p:panel>
+                                    <p:droppable  for="exemplaresSelecionados" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="tableExemDisp" onDrop="handleDrop">
+                                        <p:ajax listener="#{emprestimoControlador.onExemplarDrop}" update="dropArea tableExemDisp addExem" />
+                                    </p:droppable>
+                                </p:panelGrid>
+                            </p:panel>
+                            <p:separator/>
+                            <p:panelGrid id="gridBotoes" columns="1"
+                                         layout="grid"
+                                         columnClasses="ui-grid-col-12"
+                                         styleClass="panelgrid-noborder">
+                                <p:commandButton id="botaoSalvar1" 
+                                                 ajax="true" 
+                                                 icon="ui-icon-check" 
+                                                 value="Salvar" 
+                                                 onclick="PF('salvarEmp').show();"/>
                             </p:panelGrid>
-                        </p:panel>
-                        <p:separator/>
-                        <p:panelGrid id="gridBotoes" columns="1"
-                                     layout="grid"
-                                     columnClasses="ui-grid-col-12"
-                                     styleClass="panelgrid-noborder">
-                            <p:commandButton id="botaoSalvar1" 
-                                             ajax="true" 
-                                             icon="ui-icon-check" 
-                                             value="Salvar" 
-                                             onclick="PF('salvarEmp').show();"/>
-                        </p:panelGrid>
-                    </div>
-                    <p:dialog responsive="true"
-                              header="Imprimir Comprovante?" 
-                              widgetVar="salvarEmp" 
-                              visible="false"
-                              width="350"
-                              resizable="false"
-                              height="100">
-                        <p:ajax event="close" update="messagesEmprestimo" listener="#{emprestimoControlador.fecharConfirmacao}" />
-                        <p:outputLabel value="Deseja realizar a impressão do comprovante de empréstimo?" />
+                        </div>
+                        <p:dialog responsive="true"
+                                  header="Imprimir Comprovante?" 
+                                  widgetVar="salvarEmp" 
+                                  visible="false"
+                                  width="350"
+                                  resizable="false"
+                                  height="100">
+                            <p:ajax event="close" update="messagesEmprestimo" listener="#{emprestimoControlador.fecharConfirmacao}" />
+                            <p:outputLabel value="Deseja realizar a impressão do comprovante de empréstimo?" />
 
-                        <p:panelGrid id="gridBotoes2" columns="2"
-                                     layout="grid"
-                                     style="margin-top: 20px"
-                                     columnClasses="ui-grid-col-6, ui-grid-col-6"
-                                     styleClass="panelgrid-noborder">
+                            <p:panelGrid id="gridBotoes2" columns="2"
+                                         layout="grid"
+                                         style="margin-top: 20px"
+                                         columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                         styleClass="panelgrid-noborder">
 
-                            <p:commandButton id="botaoSim" 
-                                             ajax="false" 
-                                             actionListener="#{emprestimoControlador.salvar('Sim')}" 
-                                             action="#{comprovanteControlador.emitir()}"
-                                             onclick="PF('salvarEmp').hide(); this.form.target = '_blank'"
-                                             process="@this"
-                                             icon="ui-icon-check" 
-                                             update="@form"
-                                             value="Sim" 
-                                             />
+                                <p:commandButton id="botaoSim" 
+                                                 ajax="false" 
+                                                 actionListener="#{emprestimoControlador.salvar('Sim')}" 
+                                                 action="#{comprovanteControlador.emitir()}"
+                                                 onclick="PF('salvarEmp').hide(); this.form.target = '_blank'"
+                                                 process="@this"
+                                                 icon="ui-icon-check" 
+                                                 update="@form"
+                                                 value="Sim" 
+                                                 />
 
-                            <p:commandButton id="botaoNao" process="@this" 
-                                             icon="ui-icon-close" 
-                                             value="Não" 
-                                             ajax="false"
-                                             update="panelEmprestimo"
-                                             action="#{emprestimoControlador.salvar('Nao')}" />
-                        </p:panelGrid>
-                    </p:dialog>
-                </h:form>
+                                <p:commandButton id="botaoNao" process="@this" 
+                                                 icon="ui-icon-close" 
+                                                 value="Não" 
+                                                 ajax="false"
+                                                 update="panelEmprestimo"
+                                                 action="#{emprestimoControlador.salvar('Nao')}" />
+                            </p:panelGrid>
+                        </p:dialog>
+                    </h:form>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
+                    <ui:insert name="restrito">
+                        <ui:include src="/WEB-INF/template/acessonegado.xhtml" />
+                    </ui:insert>
+                </sec:authorize>
             </ui:define>
         </ui:composition>
     </h:body>

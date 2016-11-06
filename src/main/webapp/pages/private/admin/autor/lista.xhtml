@@ -11,7 +11,7 @@
             <ui:define name="conteudo">
                 <sec:authorize access="hasAnyRole('ROLE_ADMIN')" >
                     <h:form id="formLista" prependId="false">
-                        <p:hotkey bind="F5" update="@form" action="/pages/private/admin/autor/lista.xhtml/" />
+                        <p:hotkey bind="F5" update="@form" action="/pages/private/admin/autor/lista.xhtml" />
                         <p:panel  id="turno" header="Autores">
                             <p:toolbar id="toolbarAutor">
                                 <f:facet name="left">
@@ -84,9 +84,8 @@
                             </p:dataTable>
                         </p:panel>
                     </h:form>
-
                 </sec:authorize>
-                <sec:authorize access="hasAnyRole('ROLE_USER')" >
+                <sec:authorize access="hasAnyRole('ROLE_ROOT','ROLE_MOD','ROLE_USER')" >
                     <ui:insert name="restrito">
                         <ui:include src="/WEB-INF/template/acessonegado.xhtml" />
                     </ui:insert>
