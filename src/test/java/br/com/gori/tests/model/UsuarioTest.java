@@ -26,7 +26,7 @@ public class UsuarioTest {
     @BeforeClass
     public static void setUpClass() {
         usuarioDAO = new UserDAOImpl();
-        usuario = new User("leo95h", "admin", true);
+        usuario = usuarioDAO.findByUsername("admin");
     }
 
     @AfterClass
@@ -42,9 +42,10 @@ public class UsuarioTest {
     }
 
     @Test
-    public void persistIfNotExists() {;
+    public void persistIfNotExists() {
         User u = usuarioDAO.findByUsername(usuario.getUsername());
         if (u == null) {
+            usuario = new User("admin", "admin", true);
             u = usuarioDAO.merge(usuario);
         }
         Assert.assertNotNull(u);
@@ -52,15 +53,12 @@ public class UsuarioTest {
 
     @Test
     public void findAllUsers() {
-        List<User> usuarios = new ArrayList<User>();
-        usuarios = usuarioDAO.listAll();
-        Assert.assertFalse(usuarios.isEmpty());
+        Assert.assertFalse(usuarioDAO.listAll().isEmpty());
     }
 
     @Test
     public void countUsers() {
-        int value = usuarioDAO.count();
-        Assert.assertFalse(value == 0);
+        Assert.assertNotEquals(0, usuarioDAO.count());
     }
 
     @Test

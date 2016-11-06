@@ -1,19 +1,11 @@
 //package br.com.gori.tests.model;
 //
-//import br.com.gori.scb.dao.impl.EmprestimoDAOImpl;
+//import br.com.gori.scb.dao.impl.EmpDAOImpl;
 //import br.com.gori.scb.dao.impl.PessoaDAOImpl;
-//import br.com.gori.scb.dao.impl.TipoPessoaDAOImpl;
 //import br.com.gori.scb.entidade.Emprestimo;
 //import br.com.gori.scb.entidade.Pessoa;
-//import br.com.gori.scb.entidade.TipoPessoa;
-//import br.com.gori.scb.entidade.util.Sexo;
-//import java.util.ArrayList;
 //import java.util.Date;
-//import java.util.List;
-//import org.junit.After;
-//import org.junit.AfterClass;
 //import org.junit.Assert;
-//import org.junit.Before;
 //import org.junit.BeforeClass;
 //import org.junit.Test;
 //
@@ -23,13 +15,13 @@
 // */
 //public class EmprestimoTest {
 //
-//    private final EmprestimoDAOImpl emprestimoDAO;
+//    private final EmpDAOImpl emprestimoDAO;
 //    private static PessoaDAOImpl pessoaDAO;
 //    private static Date criacao;
 //    private static Pessoa teste;
 //
 //    public EmprestimoTest() {
-//        emprestimoDAO = new EmprestimoDAOImpl();
+//        emprestimoDAO = new EmpDAOImpl();
 //        pessoaDAO = new PessoaDAOImpl();
 //    }
 //
@@ -37,11 +29,11 @@
 //    public static void setUpClass() {
 //        criacao = new Date();
 //        pessoaDAO = new PessoaDAOImpl();
-//        teste = pessoaDAO.buscarPessoaPorNome("Leonardo Henrique Paschoarelli Ribeiro"); 
+//        teste = pessoaDAO.buscarPessoaPorNome("Leonardo Henrique Paschoarelli Ribeiro");
 //    }
 //
 //    @Test
-//    public void persistIfNotExists() {        
+//    public void persistIfNotExists() {
 //        Emprestimo e = emprestimoDAO.buscarEmprestimoPorPessoa(teste.getNome());
 //        if (e == null) {
 //            Emprestimo emp = new Emprestimo(teste, criacao);

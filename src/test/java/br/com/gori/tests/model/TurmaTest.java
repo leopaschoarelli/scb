@@ -33,11 +33,7 @@ public class TurmaTest {
         turmaDAO = new TurmaDAOImpl();
         turnoDAO = new TurnoDAOImpl();
         turno = turnoDAO.buscarTurnoPorDescricao("Matutino");
-        if (turno == null) {
-            turno = new Turno("Matutino", null, null);
-            turno = turnoDAO.merge(turno);
-        }
-        turma = new Turma("3º Ano", Modalidade.ENS_MED, "A", turno);
+        turma = turmaDAO.buscarTurmaPorDescricao("6º Ano");
     }
 
     @AfterClass
@@ -56,22 +52,20 @@ public class TurmaTest {
     public void persistIfNotExists() {
         Turma t = turmaDAO.buscarTurmaPorDescricao(turma.getDescricao());
         if (t == null) {
-            t = turmaDAO.merge(turma);
+            Turma turm = new Turma("6º Ano", Modalidade.ENS_FUN, "A", turno);
+            t = turmaDAO.merge(turm);
         }
         Assert.assertNotNull(t);
     }
 
     @Test
     public void findAllTurmas() {
-        List<Turma> turmas = new ArrayList<Turma>();
-        turmas = turmaDAO.listAll();
-        Assert.assertFalse(turmas.isEmpty());
+        Assert.assertFalse(turmaDAO.listAll().isEmpty());
     }
 
     @Test
     public void countTurmas() {
-        int value = turmaDAO.count();
-        Assert.assertFalse(value == 0);
+        Assert.assertNotEquals(0, turmaDAO.count());
     }
 
     @Test

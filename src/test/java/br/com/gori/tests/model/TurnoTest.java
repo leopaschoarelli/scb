@@ -27,7 +27,7 @@ public class TurnoTest {
     @BeforeClass
     public static void setUpClass() {
         turnoDAO = new TurnoDAOImpl();
-        turno = new Turno("Matutino", null, null);
+        turno = turnoDAO.buscarTurnoPorDescricao("Matutino");
     }
 
     @AfterClass
@@ -46,22 +46,20 @@ public class TurnoTest {
     public void persistIfNotExists() {
         Turno t = turnoDAO.buscarTurnoPorDescricao(turno.getDescricao());
         if (t == null) {
-            t = turnoDAO.merge(turno);
+            Turno turn = new Turno("Matutino", null, null);
+            t = turnoDAO.merge(turn);
         }
         Assert.assertNotNull(t);
     }
 
     @Test
     public void findAllTurnos() {
-        List<Turno> turnos = new ArrayList<Turno>();
-        turnos = turnoDAO.listAll();
-        Assert.assertFalse(turnos.isEmpty());
+        Assert.assertFalse(turnoDAO.listAll().isEmpty());
     }
 
     @Test
     public void countTurnos() {
-        int value = turnoDAO.count();
-        Assert.assertFalse(value == 0);
+        Assert.assertNotEquals(0, turnoDAO.count());
     }
 
     @Test
