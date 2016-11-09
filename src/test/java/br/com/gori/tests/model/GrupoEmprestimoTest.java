@@ -2,8 +2,6 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.GrupoEmprestimoDAOImpl;
 import br.com.gori.scb.entidade.GrupoEmprestimo;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,13 +19,12 @@ public class GrupoEmprestimoTest {
     private static GrupoEmprestimo grupo;
 
     public GrupoEmprestimoTest() {
-
+        grupoEmprestimoDAO = new GrupoEmprestimoDAOImpl();
+        grupo = grupoEmprestimoDAO.buscarGrupoPorNome("Professores");
     }
 
     @BeforeClass
     public static void setUpClass() {
-        grupoEmprestimoDAO = new GrupoEmprestimoDAOImpl();
-        grupo = grupoEmprestimoDAO.buscarGrupoPorNome("Professores");
     }
 
     @AfterClass

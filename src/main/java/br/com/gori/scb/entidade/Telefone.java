@@ -1,8 +1,6 @@
 package br.com.gori.scb.entidade;
 
 import br.com.gori.scb.entidade.util.TipoTelefone;
-import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,7 +21,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "Telefone.findByNumero", query = "select t from Telefone t where t.numero = :numero")
 })
-public class Telefone implements Serializable {
+public class Telefone extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

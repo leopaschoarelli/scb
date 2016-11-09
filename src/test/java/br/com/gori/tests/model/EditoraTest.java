@@ -2,8 +2,6 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.EditoraDAOImpl;
 import br.com.gori.scb.entidade.Editora;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,13 +19,13 @@ public class EditoraTest {
     private static Editora editora;
 
     public EditoraTest() {
+        editoraDAO = new EditoraDAOImpl();
+        editora = editoraDAO.buscarEditoraPorNome("Editora Globo");
 
     }
 
     @BeforeClass
     public static void setUpClass() {
-        editoraDAO = new EditoraDAOImpl();
-        editora = editoraDAO.buscarEditoraPorNome("Editora Globo");
     }
 
     @AfterClass

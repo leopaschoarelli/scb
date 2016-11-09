@@ -1,8 +1,6 @@
 package br.com.gori.scb.entidade;
 
 import br.com.gori.scb.entidade.util.TipoEndereco;
-import br.com.gori.scb.entidade.util.TipoLogradouro;
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,7 +23,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "Endereco.findByLogradouro", query = "select e from Endereco e where e.logradouro = :logradouro")
 })
-public class Endereco implements Serializable {
+public class Endereco extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

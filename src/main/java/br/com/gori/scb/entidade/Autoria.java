@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +19,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "Autoria.findByNome", query = "select a from Autoria a, Autor b where a.autor = b.id and b.nome = :nome")
 })
-public class Autoria implements Serializable {
+public class Autoria extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -73,7 +72,6 @@ public class Autoria implements Serializable {
 //    public void setPublicacoes(List<Publicacao> publicacoes) {
 //        this.publicacoes = publicacoes;
 //    }
-
     @Override
     public int hashCode() {
         int hash = 7;
@@ -102,8 +100,6 @@ public class Autoria implements Serializable {
         }
         return true;
     }
-
-    
 
     @Override
     public String toString() {

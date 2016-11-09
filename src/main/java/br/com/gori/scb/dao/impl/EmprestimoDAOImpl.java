@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.EmprestimoDAO;
 import br.com.gori.scb.entidade.ConfiguracaoEmprestimo;
@@ -29,7 +30,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
 
     @Override
     public List<Emprestimo> listarEmprestimoPorPessoa(String nome) {
-        Query q = getEntityManager().createNamedQuery("Emprestimo.findByPessoa", Emprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Emprestimo.findByPessoa", Emprestimo.class);
         q.setParameter("nome", nome);
         return q.getResultList();
     }
@@ -42,7 +43,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
                 + "and b.exemplar_id = d.id "
                 + "and b.devolucao is null "
                 + "and lower(c.nome) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, ItemEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, ItemEmprestimo.class);
         q.setParameter("parte", "%" + nome.toLowerCase() + "%");
         return q.getResultList();
     }
@@ -54,7 +55,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
                 + "and d.id = c.tipopessoa_id "
                 + "and lower(b.nome) like :parte";
         System.out.println(sql);
-        Query q = getEntityManager().createNativeQuery(sql, ConfiguracaoEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, ConfiguracaoEmprestimo.class);
         q.setParameter("parte", "%" + nome.toLowerCase() + "%");
         ConfiguracaoEmprestimo ce = (ConfiguracaoEmprestimo) q.getSingleResult();
         return ce;
@@ -68,7 +69,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
                 + "and b.devolucao is null "
                 + "and b.estadoemprestimo = 'EMPRESTADO' "
                 + "and lower(c.nome) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, ItemEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, ItemEmprestimo.class);
         q.setParameter("parte", "%" + nome.toLowerCase() + "%");
         Integer qtdEmprestada = q.getResultList().size();
         System.out.println(qtdEmprestada);
@@ -77,7 +78,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
 
     @Override
     public Emprestimo buscarEmprestimoPorPessoa(String nome) {
-        Query q = getEntityManager().createNamedQuery("Emprestimo.findByPessoa", Emprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Emprestimo.findByPessoa", Emprestimo.class);
         q.setParameter("nome", nome);
         List<Emprestimo> emprestimos = q.getResultList();
         if (emprestimos.isEmpty()) {
@@ -101,7 +102,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
             sql = "select p.* from pessoa p where lower(p.nome) like :parte";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Pessoa.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Pessoa.class);
         if (caracter) {
             q.setParameter("parte", "%" + nome + "%");
         }
@@ -123,7 +124,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
                     + "and e.tombo like :parte";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Exemplar.class);
         if (caracter) {
             q.setParameter("parte", "%" + tombo + "%");
         }
@@ -143,7 +144,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
                     + "and e.tombo like :parte";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Exemplar.class);
         if (caracter) {
             q.setParameter("parte", "%" + tombo + "%");
         }
@@ -180,7 +181,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
         if (idPessoa != null) {
             sql = sql + "and c.id = :idPessoa ";
         }
-        Query q = getEntityManager().createNativeQuery(sql, ItemEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, ItemEmprestimo.class);
         if (!"".equals(nomel)) {
             q.setParameter("nomel", "%" + nomel.toLowerCase() + "%");
         }
@@ -215,7 +216,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
             sql = "select p.* from publicacao p where lower(p.titulo) like :parte";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Publicacao.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Publicacao.class);
         if (caracter) {
             q.setParameter("parte", "%" + titulo + "%");
         }
@@ -230,7 +231,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
                 + "where e.publicacao_id = p.id "
                 + "and e.estadoexemplar = 'DISPONIVEL'"
                 + "and e.publicacao_id = :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Exemplar.class);
         q.setParameter("parte", id);
         return q.getResultList();
     }
@@ -240,7 +241,7 @@ public class EmprestimoDAOImpl extends AbstractDAO<Emprestimo> implements Empres
                 + "where a.id = b.emprestimo_id "
                 + "and b.devolucao is null "
                 + "and a.pessoa_id = :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Emprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Emprestimo.class);
         q.setParameter("parte", pessoa.getId());
         List<Emprestimo> emprestimos = q.getResultList();
         for (Emprestimo emp : emprestimos) {

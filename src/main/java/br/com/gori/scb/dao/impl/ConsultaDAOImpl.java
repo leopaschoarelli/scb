@@ -1,10 +1,8 @@
 package br.com.gori.scb.dao.impl;
 
 import br.com.gori.scb.dao.AbstractDAO;
-import br.com.gori.scb.entidade.ItemEmprestimo;
 import br.com.gori.scb.entidade.Publicacao;
 import java.util.List;
-import javax.persistence.Query;
 
 /**
  *

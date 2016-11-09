@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.ItemReservaDAO;
 import br.com.gori.scb.entidade.ItemReserva;
@@ -22,14 +23,14 @@ public class ItemReservaDAOImpl extends AbstractDAO<ItemReserva> implements Item
 
     @Override
     public List<ItemReserva> listarItemReservaPorTitulo(String titulo) {
-        Query q = getEntityManager().createNamedQuery("ItemReserva.findByTitulo", ItemReserva.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("ItemReserva.findByTitulo", ItemReserva.class);
         q.setParameter("titulo", titulo);
         return q.getResultList();
     }
 
     @Override
     public ItemReserva buscarItemReservaPorTitulo(String titulo) {
-        Query q = getEntityManager().createNamedQuery("ItemReserva.findByTitulo", ItemReserva.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("ItemReserva.findByTitulo", ItemReserva.class);
         q.setParameter("titulo", titulo);
         List<ItemReserva> itens = q.getResultList();
         if (itens.isEmpty()) {
@@ -47,7 +48,7 @@ public class ItemReservaDAOImpl extends AbstractDAO<ItemReserva> implements Item
                 + "where a.id = b.reserva_id "
                 + "and (b.efetivado is null or b.efetivado = 'false') "
                 + "and a.id = :parte";
-        Query q = getEntityManager().createNativeQuery(sql, ItemReserva.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, ItemReserva.class);
         q.setParameter("parte", reserva.getId());
         return q.getResultList();
     }
@@ -58,7 +59,7 @@ public class ItemReservaDAOImpl extends AbstractDAO<ItemReserva> implements Item
                 + "and (b.efetivado = 'false' or b.efetivado is null) "
                 + "and b.previsao = current_date "
                 + "and a.pessoa_id = :parte ";
-        Query q = getEntityManager().createNativeQuery(sql, ItemReserva.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, ItemReserva.class);
         q.setParameter("parte", pessoa.getId());
         return q.getResultList();
     }
@@ -83,7 +84,7 @@ public class ItemReservaDAOImpl extends AbstractDAO<ItemReserva> implements Item
         if (idPessoa != null) {
             sql = sql + "and d.id = :idPessoa ";
         }
-        Query q = getEntityManager().createNativeQuery(sql, ItemReserva.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, ItemReserva.class);
         if (!"".equals(publicacao)) {
             q.setParameter("publicacao", "%" + publicacao.toLowerCase() + "%");
         }
@@ -108,7 +109,7 @@ public class ItemReservaDAOImpl extends AbstractDAO<ItemReserva> implements Item
                 + "where a.id = b.reserva_id "
                 + "and (b.efetivado is null or b.efetivado = 'false') "
                 + "and a.pessoa_id = :parte";
-        Query q = getEntityManager().createNativeQuery(sql, ItemReserva.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, ItemReserva.class);
         q.setParameter("parte", pessoa.getId());
         return q.getResultList();
     }

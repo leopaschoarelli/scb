@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.TurmaDAO;
 import br.com.gori.scb.entidade.Turma;
@@ -21,7 +22,7 @@ public class TurmaDAOImpl extends AbstractDAO<Turma> implements TurmaDAO {
     @Override
     public List<Turno> getTurnos(String descricao) {
         String sql = "select t.* from turno t where lower(t.descricao) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Turno.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Turno.class);
         q.setParameter("parte", "%" + descricao + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -29,14 +30,14 @@ public class TurmaDAOImpl extends AbstractDAO<Turma> implements TurmaDAO {
 
     @Override
     public List<Turma> listarTurmaPorDescricao(String descricao) {
-        Query q = getEntityManager().createNamedQuery("Turma.findByDescricao", Turma.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Turma.findByDescricao", Turma.class);
         q.setParameter("descricao", descricao);
         return q.getResultList();
     }
 
     @Override
     public Turma buscarTurmaPorDescricao(String descricao) {
-        Query q = getEntityManager().createNamedQuery("Turma.findByDescricao", Turma.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Turma.findByDescricao", Turma.class);
         q.setParameter("descricao", descricao);
         List<Turma> turnos = q.getResultList();
         if (turnos.isEmpty()) {
@@ -51,7 +52,7 @@ public class TurmaDAOImpl extends AbstractDAO<Turma> implements TurmaDAO {
 
     public List<Turma> getTurmas(String descricao) {
         String sql = "select t.* from turma t where lower(t.descricao) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Turma.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Turma.class);
         q.setParameter("parte", "%" + descricao + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();

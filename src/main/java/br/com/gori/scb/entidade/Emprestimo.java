@@ -1,11 +1,8 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +26,7 @@ import javax.persistence.Temporal;
 @NamedQueries({
     @NamedQuery(name = "Emprestimo.findByPessoa", query = "select e from Emprestimo e, Pessoa p where e.pessoa = p.id and p.nome = :nome")
 })
-public class Emprestimo implements Serializable {
+public class Emprestimo extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -85,9 +82,6 @@ public class Emprestimo implements Serializable {
         this.itemEmprestimo = itemEmprestimo;
     }
 
-
-    
-    
     @Override
     public int hashCode() {
         int hash = 0;

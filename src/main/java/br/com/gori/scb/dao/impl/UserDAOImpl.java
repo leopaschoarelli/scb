@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.UserDAO;
 import br.com.gori.scb.entidade.User;
@@ -22,7 +23,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
     @SuppressWarnings("unchecked")
     @Override
     public User findByUsername(String username) {
-        Query q = getEntityManager().createNamedQuery("User.findByUsername", User.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("User.findByUsername", User.class);
         q.setParameter("username", username);
         List<User> users = q.getResultList();
         if (users.isEmpty()) {
@@ -37,7 +38,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
     @SuppressWarnings("unchecked")
     @Override
     public User findByCredentials(String username, String password) {
-        Query q = getEntityManager().createNamedQuery("User.findByCredentials", User.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("User.findByCredentials", User.class);
         q.setParameter("username", username);
         q.setParameter("password", password);
         List<User> users = q.getResultList();
@@ -53,7 +54,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
     public User getLogin(String nome) {
         String sql;
         sql = "select u.* from users u where lower(u.username) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, User.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, User.class);
         q.setParameter("parte", "%" + nome + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return (User) q.getSingleResult();

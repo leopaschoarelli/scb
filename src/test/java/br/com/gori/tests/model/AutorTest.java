@@ -2,13 +2,12 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.AutorDAOImpl;
 import br.com.gori.scb.entidade.Autor;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -21,13 +20,13 @@ public class AutorTest {
     private static Autor autor;
 
     public AutorTest() {
+        autorDAO = new AutorDAOImpl();
+        autor = new Autor();
+        autor = autorDAO.buscarAutorPorNome("Lima");
     }
 
     @BeforeClass
     public static void setUpClass() {
-        autorDAO = new AutorDAOImpl();
-        autor = new Autor();
-        autor = autorDAO.buscarAutorPorNome("Lima");
     }
 
     @AfterClass

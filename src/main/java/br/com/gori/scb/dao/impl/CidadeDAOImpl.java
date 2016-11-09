@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.CidadeDAO;
 import br.com.gori.scb.entidade.Cidade;
@@ -29,22 +30,24 @@ public class CidadeDAOImpl extends AbstractDAO<Cidade> implements CidadeDAO {
             sql = "select e.* from estado e where lower(e.nome) like :parte";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Estado.class);
-        if (caracter) q.setParameter("parte", "%" + nome + "%");
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Estado.class);
+        if (caracter) {
+            q.setParameter("parte", "%" + nome + "%");
+        }
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
     }
 
     @Override
     public List<Cidade> listarCidadePorNome(String nome) {
-        Query q = getEntityManager().createNamedQuery("Cidade.findByNome", Cidade.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Cidade.findByNome", Cidade.class);
         q.setParameter("nome", nome);
         return q.getResultList();
     }
 
     @Override
     public Cidade buscarCidadePorNome(String nome) {
-        Query q = getEntityManager().createNamedQuery("Cidade.findByNome", Cidade.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Cidade.findByNome", Cidade.class);
         q.setParameter("nome", nome);
         List<Cidade> autores = q.getResultList();
         if (autores.isEmpty()) {

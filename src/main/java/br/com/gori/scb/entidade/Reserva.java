@@ -1,11 +1,8 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +26,7 @@ import javax.persistence.Temporal;
 @NamedQueries({
     @NamedQuery(name = "Reserva.findByPessoa", query = "select r from Reserva r, Pessoa p where r.pessoa = p.id and p.nome = :nome")
 })
-public class Reserva implements Serializable {
+public class Reserva extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -84,8 +81,6 @@ public class Reserva implements Serializable {
     public void setItemReserva(List<ItemReserva> itemReserva) {
         this.itemReserva = itemReserva;
     }
-
-
 
     @Override
     public int hashCode() {

@@ -1,7 +1,6 @@
 package br.com.gori.scb.entidade;
 
 import br.com.gori.scb.entidade.util.TipoPenalidade;
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +23,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "Penalidade.findByDescricao", query = "select p from Penalidade p where p.descricao = :descricao")
 })
-public class Penalidade implements Serializable {
+public class Penalidade extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

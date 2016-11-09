@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.gori.scb.connection;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Disposes;
-import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,39 +8,57 @@ import javax.persistence.Persistence;
  *
  * @author Leonardo
  */
-@ApplicationScoped
 public class EntityManagerProducer {
 
-    private static EntityManagerProducer instance;
-    private EntityManagerFactory factory;
-    private EntityManager entityManager;
+    private static final EntityManagerFactory FACTORY;
+    private static final ThreadLocal<EntityManager> THREADS;
 
-    public EntityManagerProducer() {
-        factory = Persistence.createEntityManagerFactory("scbPU");
+    static {
+        FACTORY = Persistence.createEntityManagerFactory("scbPU");
+        THREADS = new ThreadLocal<>();
     }
 
-    @Produces
-    @RequestScoped
-    public EntityManager createEntityManager() {
-        return factory.createEntityManager();
-    }
-
-    public static EntityManagerProducer newInstance() {
-        if (instance == null) {
-            instance = new EntityManagerProducer();
-        }
-        return instance;
-    }
-
-    public EntityManager getEntityManager() {
+    public static EntityManager getEntityManager() {
+        EntityManager entityManager = THREADS.get();
         if (entityManager == null || !entityManager.isOpen()) {
-            entityManager = factory.createEntityManager();
+            entityManager = FACTORY.createEntityManager();
+            THREADS.set(entityManager);
         }
         return entityManager;
     }
 
-    public void closeEntityManager(@Disposes EntityManager manager) {
-        manager.close();
+    public static void beginTransaction() {
+        getEntityManager().getTransaction().begin();
     }
+
+    public static void commitTransaction() {
+        getEntityManager().getTransaction().commit();
+    }
+
+    public static void rollbackTransaction() {
+        getEntityManager().getTransaction().rollback();
+    }
+
+    public static void rollbackAndCloseTransaction() {
+        rollbackTransaction();
+        closeTransaction();
+    }
+
+    public static void commitAndCloseTransaction() {
+        commitTransaction();
+        closeTransaction();
+    }
+
+    public static void closeTransaction() {
+        getEntityManager().close();
+    }
+
+    public static void closeFactory() {
+        FACTORY.close();
+    }
+//
+//    public void closeEntityManager(@Disposes EntityManager manager) {
+//        manager.close();
+//    }
 
 }

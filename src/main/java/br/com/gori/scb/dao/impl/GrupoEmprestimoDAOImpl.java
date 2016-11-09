@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.GrupoEmprestimoDAO;
 import br.com.gori.scb.entidade.GrupoEmprestimo;
@@ -22,7 +23,7 @@ public class GrupoEmprestimoDAOImpl extends AbstractDAO<GrupoEmprestimo> impleme
     @Override
     public List<TipoPessoa> getTipoPessoas(String descricao) {
         String sql = "select t.* from tipopessoa t where lower(t.descricao) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, TipoPessoa.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, TipoPessoa.class);
         q.setParameter("parte", "%" + descricao + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -31,7 +32,7 @@ public class GrupoEmprestimoDAOImpl extends AbstractDAO<GrupoEmprestimo> impleme
     @Override
     public List<Publicacao> getPublicacoes(String titulo) {
         String sql = "select p.* from publicacao p where lower(p.titulo) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Publicacao.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Publicacao.class);
         q.setParameter("parte", "%" + titulo + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -39,14 +40,14 @@ public class GrupoEmprestimoDAOImpl extends AbstractDAO<GrupoEmprestimo> impleme
 
     @Override
     public List<GrupoEmprestimo> listarGrupoPorNome(String nome) {
-        Query q = getEntityManager().createNamedQuery("GrupoEmprestimo.findByNome", GrupoEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("GrupoEmprestimo.findByNome", GrupoEmprestimo.class);
         q.setParameter("nome", nome);
         return q.getResultList();
     }
 
     @Override
     public GrupoEmprestimo buscarGrupoPorNome(String nome) {
-        Query q = getEntityManager().createNamedQuery("GrupoEmprestimo.findByNome", GrupoEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("GrupoEmprestimo.findByNome", GrupoEmprestimo.class);
         q.setParameter("nome", nome);
         List<GrupoEmprestimo> grupos = q.getResultList();
         if (grupos.isEmpty()) {

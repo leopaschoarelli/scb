@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -31,7 +30,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "User.findByCredentials", query = "select u from User u where u.username = :username and u.password = :password")
 })
 @SequenceGenerator(name = "USER_SEQUENCE", sequenceName = "USER_SEQUENCE", allocationSize = 1, initialValue = 0)
-public class User implements Serializable {
+public class User extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

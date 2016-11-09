@@ -26,7 +26,7 @@ public final class HibernateNextId implements Serializable {
     private HibernateNextId(String sequenceName) {
         this.ids = new ArrayList<>();
         this.sequenceName = sequenceName;
-        this.entityManager = EntityManagerProducer.newInstance().getEntityManager();
+        this.entityManager = EntityManagerProducer.getEntityManager();
     }
 
     public static HibernateNextId newInstance(String sequenceName) {

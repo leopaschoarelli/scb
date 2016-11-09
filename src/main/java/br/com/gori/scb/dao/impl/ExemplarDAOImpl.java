@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.ExemplarDAO;
 import br.com.gori.scb.entidade.Exemplar;
@@ -23,14 +24,14 @@ public class ExemplarDAOImpl extends AbstractDAO<Exemplar> implements ExemplarDA
 
     @Override
     public List<Exemplar> listarExemplarPorTitulo(String titulo) {
-        Query q = getEntityManager().createNamedQuery("Exemplar.findByTitulo", Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Exemplar.findByTitulo", Exemplar.class);
         q.setParameter("titulo", titulo);
         return q.getResultList();
     }
 
     @Override
     public Exemplar buscarExemplarPorTitulo(String titulo) {
-        Query q = getEntityManager().createNamedQuery("Exemplar.findByTitulo", Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Exemplar.findByTitulo", Exemplar.class);
         q.setParameter("titulo", titulo);
         List<Exemplar> exemplares = q.getResultList();
         if (exemplares.isEmpty()) {
@@ -50,7 +51,7 @@ public class ExemplarDAOImpl extends AbstractDAO<Exemplar> implements ExemplarDA
                 + "and b.estadoexemplar = 'EMPRESTADO' "
                 + "and b.tombo like :parte "
                 + "limit 1 ";
-        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Exemplar.class);
         q.setParameter("parte", "%" + tombo + "%");
         if (q.getResultList().isEmpty()) {
             return null;
@@ -65,7 +66,7 @@ public class ExemplarDAOImpl extends AbstractDAO<Exemplar> implements ExemplarDA
                 + "and b.estadoexemplar = 'DISPONIVEL' "
                 + "and b.tombo like :parte "
                 + "limit 1 ";
-        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Exemplar.class);
         q.setParameter("parte", "%" + tombo + "%");
         if (q.getResultList().isEmpty()) {
             return null;
@@ -87,7 +88,7 @@ public class ExemplarDAOImpl extends AbstractDAO<Exemplar> implements ExemplarDA
             System.out.println("Inicio: " + itemReserva.getPrevisao() + " - Fim: " + itemReserva.getDevolucao());
         }
         System.out.println("SQL: " + sql);
-        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Exemplar.class);
         q.setParameter("public", publicacao.getId());
         if (itemReserva != null) {
             q.setParameter("inicio", itemReserva.getPrevisao());
@@ -111,7 +112,7 @@ public class ExemplarDAOImpl extends AbstractDAO<Exemplar> implements ExemplarDA
                 + "where ex.estadoexemplar = 'EMPRESTADO' "
                 + "and pub.id = :public "
                 + "and it.prazo <= :previsao ";
-        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Exemplar.class);
         q.setParameter("public", publicacao.getId());
         if (itemReserva != null) {
             q.setParameter("previsao", itemReserva.getPrevisao());

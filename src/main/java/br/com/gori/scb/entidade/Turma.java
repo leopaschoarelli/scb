@@ -1,7 +1,6 @@
 package br.com.gori.scb.entidade;
 
 import br.com.gori.scb.entidade.util.Modalidade;
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -24,7 +23,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "Turma.findByDescricao", query = "select t from Turma t where t.descricao = :descricao")
 })
-public class Turma implements Serializable {
+public class Turma extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

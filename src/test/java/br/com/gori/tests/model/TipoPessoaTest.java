@@ -2,8 +2,6 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.TipoPessoaDAOImpl;
 import br.com.gori.scb.entidade.TipoPessoa;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,13 +19,12 @@ public class TipoPessoaTest {
     private static TipoPessoa tipoPessoa;
 
     public TipoPessoaTest() {
-
+        tipoPessoaDAO = new TipoPessoaDAOImpl();
+        tipoPessoa = tipoPessoaDAO.buscarTipoPessoaPorDescricao("Comunidade");
     }
 
     @BeforeClass
     public static void setUpClass() {
-        tipoPessoaDAO = new TipoPessoaDAOImpl();
-        tipoPessoa = tipoPessoaDAO.buscarTipoPessoaPorDescricao("Comunidade");
     }
 
     @AfterClass

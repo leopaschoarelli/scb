@@ -3,7 +3,6 @@ package br.com.gori.scb.entidade;
 import br.com.gori.scb.controle.util.HibernateNextId;
 import br.com.gori.scb.entidade.util.FiltroConsulta;
 import br.com.gori.scb.entidade.util.TipoPublicacao;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -31,7 +30,7 @@ import javax.persistence.Transient;
 @NamedQueries({
     @NamedQuery(name = "Publicacao.findByTitulo", query = "select p from Publicacao p where p.titulo = :titulo")
 })
-public class Publicacao implements Serializable {
+public class Publicacao extends AbstractEntity {
 
 //    private static final long serialVersionUID = 1L;
     @Id
@@ -223,7 +222,6 @@ public class Publicacao implements Serializable {
         this.filtroConsulta = filtroConsulta;
     }
 
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -243,9 +241,9 @@ public class Publicacao implements Serializable {
         }
         return true;
     }
-    
-    public String pesquisa(){
-        return titulo+" "+subtitulo+" - "+edicao+" - "+categoria.getDescricao()+" - "+isbn;
+
+    public String pesquisa() {
+        return titulo + " " + subtitulo + " - " + edicao + " - " + categoria.getDescricao() + " - " + isbn;
     }
 
     @Override

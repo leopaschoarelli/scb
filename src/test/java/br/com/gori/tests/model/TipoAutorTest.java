@@ -2,8 +2,6 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.TipoAutorDAOImpl;
 import br.com.gori.scb.entidade.TipoAutor;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,13 +19,12 @@ public class TipoAutorTest {
     private static TipoAutor tipoAutor;
 
     public TipoAutorTest() {
-
+        tipoAutorDAO = new TipoAutorDAOImpl();
+        tipoAutor = tipoAutorDAO.buscarTipoAutorPorDescricao("Primário");
     }
 
     @BeforeClass
     public static void setUpClass() {
-        tipoAutorDAO = new TipoAutorDAOImpl();
-        tipoAutor = tipoAutorDAO.buscarTipoAutorPorDescricao("Primário");
     }
 
     @AfterClass

@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.RoleDAO;
 import br.com.gori.scb.entidade.Role;
@@ -21,7 +22,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
     @Override
     public Role findRoleByName(String name) {
-        Query q = getEntityManager().createNamedQuery("Role.findRoleByType", Role.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Role.findRoleByType", Role.class);
         q.setParameter("type", name);
         List<Role> roles = q.getResultList();
         if (roles.isEmpty()) {
@@ -44,7 +45,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
             sql = "select r.* from roles r where lower(r.name) like :parte";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Role.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Role.class);
         if (caracter) {
             q.setParameter("parte", "%" + nome + "%");
         }
@@ -58,7 +59,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
                 + "and c.id = b.user_id "
                 + "and c.id = :parte "
                 + "limit 1 ";
-        Query q = getEntityManager().createNativeQuery(sql, Role.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Role.class);
         q.setParameter("parte", user.getId());
         Role role = (Role) q.getSingleResult();
         return role;
@@ -66,7 +67,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
     public Role buscarRolePorTipo(RoleUser tipo) {
         String sql = "select r.* from roles r where upper(r.typerole) like :parte limit 1";
-        Query q = getEntityManager().createNativeQuery(sql, Role.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Role.class);
         q.setParameter("parte", "%" + tipo + "%");
         Role role = (Role) q.getSingleResult();
         return role;

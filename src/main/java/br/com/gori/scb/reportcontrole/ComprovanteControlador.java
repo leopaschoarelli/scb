@@ -1,5 +1,6 @@
 package br.com.gori.scb.reportcontrole;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.dao.impl.EmprestimoDAOImpl;
 import java.io.Serializable;
@@ -12,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
-import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -48,7 +48,7 @@ public class ComprovanteControlador implements Serializable {
         ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/report2.jasper",
                 this.response, parametros, "Comprovante.pdf");
 
-        Session session = emprestimoDAO.getEntityManager().unwrap(Session.class);
+        Session session = EntityManagerProducer.getEntityManager().unwrap(Session.class);
         session.doWork(executor);
 
         if (executor.isRelatorioGerado()) {

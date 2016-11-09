@@ -1,18 +1,18 @@
 package br.com.gori.scb.dao;
 
 import br.com.gori.scb.connection.EntityManagerProducer;
+import br.com.gori.scb.entidade.AbstractEntity;
+import br.com.gori.scb.util.SCBException;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
-
+import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author Leonardo
  * @param <T>
  */
-public abstract class AbstractDAO<T> implements Serializable {
+public abstract class AbstractDAO<T extends AbstractEntity> implements Serializable {
 
     public static final int MAX_RESULTS_QUERY = 10;
     private final Class clazz;
@@ -22,90 +22,113 @@ public abstract class AbstractDAO<T> implements Serializable {
     }
 
     public void save(T entity) {
-        beginTransaction();
-        getEntityManager().persist(entity);
-        commitAndCloseTransaction();
-//        commit();
-    }
-    
-    public void rollback(){
-        closeTransaction();
-    }
-    
-    public void saveSemCommit(T entity) {
-        beginTransaction();
-        getEntityManager().flush();
-        closeTransaction();
+        try {
+            EntityManagerProducer.beginTransaction();
+            EntityManagerProducer.getEntityManager().persist(entity);
+            EntityManagerProducer.commitAndCloseTransaction();
+        } catch (Exception ex) {
+            EntityManagerProducer.rollbackAndCloseTransaction();
+            String message = "Error to save " + clazz.getSimpleName() + ":" + ex.getMessage();
+            throw new SCBException(message, ex);
+        }
     }
 
     public void update(T entity) {
-        beginTransaction();
-        getEntityManager().merge(entity);
-        commitAndCloseTransaction();
-//        commit();
+        try {
+            EntityManagerProducer.beginTransaction();
+            EntityManagerProducer.getEntityManager().merge(entity);
+            EntityManagerProducer.commitAndCloseTransaction();
+        } catch (Exception ex) {
+            EntityManagerProducer.rollbackAndCloseTransaction();
+            String message = "Error to update " + clazz.getSimpleName() + ":" + ex.getMessage();
+            throw new SCBException(message, ex);
+        }
+    }
+
+    public void saveOrUpdate(T entity) {
+        if (entity.getId() == null) {
+            save(entity);
+        } else {
+            update(entity);
+        }
     }
 
     public T merge(T entity) {
-        beginTransaction();
-        entity = getEntityManager().merge(entity);
-        commitAndCloseTransaction();
-        return entity;
+        try {
+            EntityManagerProducer.beginTransaction();
+            entity = EntityManagerProducer.getEntityManager().merge(entity);
+            EntityManagerProducer.commitAndCloseTransaction();
+            return entity;
+        } catch (Exception ex) {
+            EntityManagerProducer.rollbackAndCloseTransaction();
+            String message = "Error to merge " + clazz.getSimpleName() + ":" + ex.getMessage();
+            throw new SCBException(message, ex);
+        }
     }
 
     public void delete(T entity) {
-        beginTransaction();
-        getEntityManager().remove(getEntityManager().merge(entity));
-        commitAndCloseTransaction();
+        try {
+            EntityManagerProducer.beginTransaction();
+            EntityManagerProducer.getEntityManager().remove(EntityManagerProducer.getEntityManager().merge(entity));
+            EntityManagerProducer.commitAndCloseTransaction();
+        } catch (Exception ex) {
+            EntityManagerProducer.rollbackAndCloseTransaction();
+            String message = "Error to delete " + clazz.getSimpleName() + ":" + ex.getMessage();
+            throw new SCBException(message, ex);
+        }
+    }
+
+    public void deleteById(Long id) {
+        delete(findById(id));
+    }
+
+    public void deleteAll() {
+        try {
+            EntityManagerProducer.beginTransaction();
+            for (T entity : listAll()) {
+                EntityManagerProducer.getEntityManager().remove(entity);
+            }
+            EntityManagerProducer.commitAndCloseTransaction();
+        } catch (Exception ex) {
+            EntityManagerProducer.rollbackAndCloseTransaction();
+            String message = "Error to delete all " + clazz.getSimpleName() + ":" + ex.getMessage();
+            throw new SCBException(message, ex);
+        }
     }
 
     public T recover(Class clazz, Object id) {
-        return (T) getEntityManager().find(clazz, id);
+        return (T) EntityManagerProducer.getEntityManager().find(clazz, id);
     }
 
     public T findById(Object id) {
-        return (T) getEntityManager().find(clazz, id);
+        return (T) EntityManagerProducer.getEntityManager().find(clazz, id);
     }
 
-    @Transactional
     public Object find(Class entity, Object id) {
-        return getEntityManager().find(entity, id);
+        return EntityManagerProducer.getEntityManager().find(entity, id);
     }
 
     public List<T> listAll() {
-        String hql = "from " + clazz.getSimpleName() + " obj order by obj.id";
-        Query q = getEntityManager().createQuery(hql);
-        return q.getResultList();
+        try {
+            String hql = "from " + clazz.getSimpleName() + " obj order by obj.id";
+            System.out.println("HQL: " + hql);
+            Query q = EntityManagerProducer.getEntityManager().createQuery(hql);
+            return q.getResultList();
+        } catch (Exception ex) {
+            String message = "Error to list " + clazz.getSimpleName() + ": " + ex.getMessage();
+            throw new SCBException(message, ex);
+        }
+    }
+
+    @Transactional
+    public List<T> findAll() {
+        return EntityManagerProducer.getEntityManager().createQuery("from " + clazz.getSimpleName() + " obj order by obj.id").getResultList();
     }
 
     public int count() {
         String hql = "select count(obj.id) as amount from " + clazz.getSimpleName() + " obj";
-        Query q = getEntityManager().createQuery(hql);
+        Query q = EntityManagerProducer.getEntityManager().createQuery(hql);
         Long value = (Long) q.getSingleResult();
         return value.intValue();
-    }
-
-    protected void beginTransaction() {
-        getEntityManager().getTransaction().begin();
-    }
-
-    protected void commitAndCloseTransaction() {
-        commit();
-        closeTransaction();
-    }
-
-    private void commit() {
-        getEntityManager().getTransaction().commit();
-    }
-
-    private void closeTransaction() {
-        getEntityManager().close();
-    }
-
-    public EntityManager getEntityManager() {
-        return EntityManagerProducer.newInstance().getEntityManager();
-    }
-
-    public Class getClazz() {
-        return clazz;
     }
 }

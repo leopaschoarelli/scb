@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +21,7 @@ import javax.persistence.Temporal;
 @NamedQueries({
     @NamedQuery(name = "ItemReserva.findByTitulo", query = "select i from ItemReserva i, Publicacao p where i.publicacao = p.id and p.titulo = :titulo")
 })
-public class ItemReserva implements Serializable {
+public class ItemReserva extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

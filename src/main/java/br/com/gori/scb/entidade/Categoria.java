@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,7 +23,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "Categoria.findByDescricao", query = "select c from Categoria c where c.descricao = :descricao")
 })
-public class Categoria implements Serializable {
+public class Categoria extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

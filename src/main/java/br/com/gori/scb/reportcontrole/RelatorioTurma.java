@@ -1,5 +1,6 @@
 package br.com.gori.scb.reportcontrole;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.dao.impl.EmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.ExemplarDAOImpl;
@@ -113,7 +114,7 @@ public class RelatorioTurma implements Serializable {
         ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/relatturma.jasper",
                 this.response, parametros, "Relatório Por Turma.pdf");
 
-        Session session = emprestimoDAO.getEntityManager().unwrap(Session.class);
+        Session session = EntityManagerProducer.getEntityManager().unwrap(Session.class);
         session.doWork(executor);
 
         if (executor.isRelatorioGerado()) {

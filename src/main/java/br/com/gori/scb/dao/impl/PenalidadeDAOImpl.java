@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.PenalidadeDAO;
 import br.com.gori.scb.entidade.Penalidade;
@@ -19,14 +20,14 @@ public class PenalidadeDAOImpl extends AbstractDAO<Penalidade> implements Penali
 
     @Override
     public List<Penalidade> listarPenalidadePorDescricao(String descricao) {
-        Query q = getEntityManager().createNamedQuery("Penalidade.findByDescricao", Penalidade.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Penalidade.findByDescricao", Penalidade.class);
         q.setParameter("descricao", descricao);
         return q.getResultList();
     }
 
     @Override
     public Penalidade buscarPenalidadePorDescricao(String descricao) {
-        Query q = getEntityManager().createNamedQuery("Penalidade.findByDescricao", Penalidade.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Penalidade.findByDescricao", Penalidade.class);
         q.setParameter("descricao", descricao);
         List<Penalidade> penalidades = q.getResultList();
         if (penalidades.isEmpty()) {

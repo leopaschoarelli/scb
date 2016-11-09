@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +20,7 @@ import javax.persistence.Temporal;
 @NamedQueries({
     @NamedQuery(name = "Turno.findByDescricao", query = "select t from Turno t where t.descricao = :descricao")
 })
-public class Turno implements Serializable {
+public class Turno extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

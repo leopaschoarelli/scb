@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import static br.com.gori.scb.dao.AbstractDAO.MAX_RESULTS_QUERY;
 import br.com.gori.scb.dao.inter.ConfiguracaoEmprestimoDAO;
@@ -23,7 +24,7 @@ public class ConfiguracaoEmprestimoDAOImpl extends AbstractDAO<ConfiguracaoEmpre
     @Override
     public List<Penalidade> getPenalidades(String descricao) {
         String sql = "select p.* from penalidade p where lower(p.descricao) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Penalidade.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Penalidade.class);
         q.setParameter("parte", "%" + descricao + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -32,7 +33,7 @@ public class ConfiguracaoEmprestimoDAOImpl extends AbstractDAO<ConfiguracaoEmpre
     @Override
     public List<TipoPessoa> getTipoPessoas(String descricao) {
         String sql = "select t.* from tipopessoa t where lower(t.descricao) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, TipoPessoa.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, TipoPessoa.class);
         q.setParameter("parte", "%" + descricao + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -40,14 +41,14 @@ public class ConfiguracaoEmprestimoDAOImpl extends AbstractDAO<ConfiguracaoEmpre
 
     @Override
     public List<ConfiguracaoEmprestimo> listarConfiguracaoPorDias(Integer dias) {
-        Query q = getEntityManager().createNamedQuery("ConfiguracaoEmprestimo.findByDias", ConfiguracaoEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("ConfiguracaoEmprestimo.findByDias", ConfiguracaoEmprestimo.class);
         q.setParameter("dias", dias);
         return q.getResultList();
     }
 
     @Override
     public ConfiguracaoEmprestimo buscarConfiguracaoPorDias(Integer dias) {
-        Query q = getEntityManager().createNamedQuery("ConfiguracaoEmprestimo.findByDias", ConfiguracaoEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("ConfiguracaoEmprestimo.findByDias", ConfiguracaoEmprestimo.class);
         q.setParameter("dias", dias);
         List<ConfiguracaoEmprestimo> configuracoes = q.getResultList();
         if (configuracoes.isEmpty()) {
@@ -62,7 +63,7 @@ public class ConfiguracaoEmprestimoDAOImpl extends AbstractDAO<ConfiguracaoEmpre
 
     @Override
     public ConfiguracaoEmprestimo buscarConfiguracaoPorPessoa(String descricao) {
-        Query q = getEntityManager().createNamedQuery("ConfiguracaoEmprestimo.findByPessoa", ConfiguracaoEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("ConfiguracaoEmprestimo.findByPessoa", ConfiguracaoEmprestimo.class);
         q.setParameter("descricao", descricao);
         List<ConfiguracaoEmprestimo> configuracoes = q.getResultList();
         if (configuracoes.isEmpty()) {
@@ -81,7 +82,7 @@ public class ConfiguracaoEmprestimoDAOImpl extends AbstractDAO<ConfiguracaoEmpre
                 + "and d.id = c.tipopessoa_id "
                 + "and lower(b.nome) like :parte";
         System.out.println(sql);
-        Query q = getEntityManager().createNativeQuery(sql, ConfiguracaoEmprestimo.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, ConfiguracaoEmprestimo.class);
         q.setParameter("parte", "%" + nome.toLowerCase() + "%");
         ConfiguracaoEmprestimo ce = (ConfiguracaoEmprestimo) q.getSingleResult();
         return ce;

@@ -2,8 +2,6 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.CategoriaDAOImpl;
 import br.com.gori.scb.entidade.Categoria;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,12 +19,12 @@ public class CategoriaTest {
     private static Categoria categoria;
 
     public CategoriaTest() {
+        categoriaDAO = new CategoriaDAOImpl();
+        categoria = categoriaDAO.buscarCategoriaPorDescricao("Infantil");
     }
 
     @BeforeClass
     public static void setUpClass() {
-        categoriaDAO = new CategoriaDAOImpl();
-        categoria = categoriaDAO.buscarCategoriaPorDescricao("Infantil");
     }
 
     @AfterClass

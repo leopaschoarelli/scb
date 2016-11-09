@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.EnderecoDAO;
 import br.com.gori.scb.entidade.Endereco;
@@ -19,14 +20,14 @@ public class EnderecoDAOImpl extends AbstractDAO<Endereco> implements EnderecoDA
 
     @Override
     public List<Endereco> listarEnderecoPorLogradouro(String logradouro) {
-        Query q = getEntityManager().createNamedQuery("Endereco.findByLogradouro", Endereco.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Endereco.findByLogradouro", Endereco.class);
         q.setParameter("logradouro", logradouro);
         return q.getResultList();
     }
 
     @Override
     public Endereco buscarEnderecoPorLogradouro(String logradouro) {
-        Query q = getEntityManager().createNamedQuery("Endereco.findByLogradouro", Endereco.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Endereco.findByLogradouro", Endereco.class);
         q.setParameter("logradouro", logradouro);
         List<Endereco> logradouros = q.getResultList();
         if (logradouros.isEmpty()) {

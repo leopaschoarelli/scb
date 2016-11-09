@@ -1,7 +1,6 @@
 package br.com.gori.scb.entidade;
 
 import br.com.gori.scb.entidade.util.EstadoEmprestimo;
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -33,7 +32,7 @@ import javax.persistence.Temporal;
             + "and d.titulo like :obra \n"
             + "and c.nome like :nome")
 })
-public class ItemEmprestimo implements Serializable {
+public class ItemEmprestimo extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -111,8 +110,8 @@ public class ItemEmprestimo implements Serializable {
     public void setExemplar(Exemplar exemplar) {
         this.exemplar = exemplar;
     }
-    
-    public boolean isAtrasado(){
+
+    public boolean isAtrasado() {
         return this.prazo.after(new Date());
     }
 

@@ -1,5 +1,6 @@
 package br.com.gori.scb.reportcontrole;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.dao.impl.ExemplarDAOImpl;
 import br.com.gori.scb.entidade.Exemplar;
@@ -35,7 +36,7 @@ public class Etiqueta implements Serializable {
 
     private List<Exemplar> exemplares;
     private ExemplarDAOImpl exemplarDAO;
-    
+
     public Etiqueta() {
         this.exemplares = new ArrayList<Exemplar>();
         this.exemplarDAO = new ExemplarDAOImpl();
@@ -49,7 +50,7 @@ public class Etiqueta implements Serializable {
         ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/etiquetas.jasper",
                 this.response, parametros, "Etiqueta.pdf");
 
-        Session session = exemplarDAO.getEntityManager().unwrap(Session.class);
+        Session session = EntityManagerProducer.getEntityManager().unwrap(Session.class);
         session.doWork(executor);
 
         if (executor.isRelatorioGerado()) {

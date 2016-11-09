@@ -2,8 +2,6 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.TurnoDAOImpl;
 import br.com.gori.scb.entidade.Turno;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,13 +19,12 @@ public class TurnoTest {
     private static Turno turno;
 
     public TurnoTest() {
-
+        turnoDAO = new TurnoDAOImpl();
+        turno = turnoDAO.buscarTurnoPorDescricao("Matutino");
     }
 
     @BeforeClass
     public static void setUpClass() {
-        turnoDAO = new TurnoDAOImpl();
-        turno = turnoDAO.buscarTurnoPorDescricao("Matutino");
     }
 
     @AfterClass

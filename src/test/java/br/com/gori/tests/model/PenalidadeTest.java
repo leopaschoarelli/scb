@@ -3,8 +3,6 @@ package br.com.gori.tests.model;
 import br.com.gori.scb.dao.impl.PenalidadeDAOImpl;
 import br.com.gori.scb.entidade.Penalidade;
 import br.com.gori.scb.entidade.util.TipoPenalidade;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -22,13 +20,12 @@ public class PenalidadeTest {
     private static Penalidade penalidade;
 
     public PenalidadeTest() {
-
+        penalidadeDAO = new PenalidadeDAOImpl();
+        penalidade = penalidadeDAO.buscarPenalidadePorDescricao("Atraso Emprestimo");
     }
 
     @BeforeClass
     public static void setUpClass() {
-        penalidadeDAO = new PenalidadeDAOImpl();
-        penalidade = penalidadeDAO.buscarPenalidadePorDescricao("Atraso Emprestimo");
     }
 
     @AfterClass

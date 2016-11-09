@@ -1,7 +1,6 @@
 package br.com.gori.scb.entidade;
 
 import br.com.gori.scb.entidade.util.Sexo;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,7 +21,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
@@ -36,7 +34,7 @@ import javax.persistence.Transient;
 @NamedQueries({
     @NamedQuery(name = "Pessoa.findByNome", query = "select p from Pessoa p where p.nome = :nome")
 })
-public class Pessoa implements Serializable {
+public class Pessoa extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -68,7 +66,7 @@ public class Pessoa implements Serializable {
     private Set<Emprestimo> emprestimosAbertos;
     @Transient
     private Set<Reserva> reservasAbertas;
-    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
 

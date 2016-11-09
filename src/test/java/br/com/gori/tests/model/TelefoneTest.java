@@ -28,16 +28,16 @@ public class TelefoneTest {
     private static TipoPessoa tipoPessoa;
 
     public TelefoneTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
         telefoneDAO = new TelefoneDAOImpl();
         pessoaDAO = new PessoaDAOImpl();
         tipoPessoaDAO = new TipoPessoaDAOImpl();
         tipoPessoa = tipoPessoaDAO.buscarTipoPessoaPorDescricao("Comunidade");
         pessoa = pessoaDAO.buscarPessoaPorNome("Leonardo Henrique Paschoarelli Ribeiro");
         telefone = telefoneDAO.buscarTelefonePorNumero("(44)9883-0385");
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
     }
 
     @AfterClass

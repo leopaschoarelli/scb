@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.AutoriaDAO;
 import br.com.gori.scb.entidade.Autoria;
@@ -19,7 +20,7 @@ public class AutoriaDAOImpl extends AbstractDAO<Autoria> implements AutoriaDAO {
 
     @Override
     public Autoria buscarAutoriaPorNome(String nome) {
-        Query q = getEntityManager().createNamedQuery("Autoria.findByNome", Autoria.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Autoria.findByNome", Autoria.class);
         q.setParameter("nome", nome);
         List<Autoria> autorias = q.getResultList();
         if (autorias.isEmpty()) {

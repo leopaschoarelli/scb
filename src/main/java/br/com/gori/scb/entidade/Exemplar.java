@@ -3,14 +3,11 @@ package br.com.gori.scb.entidade;
 import br.com.gori.scb.controle.util.HibernateNextId;
 import br.com.gori.scb.entidade.util.EstadoExemplar;
 import br.com.gori.scb.entidade.util.TipoAquisicao;
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -27,7 +24,7 @@ import javax.persistence.Temporal;
 @NamedQueries({
     @NamedQuery(name = "Exemplar.findByTitulo", query = "select e from Exemplar e, Publicacao p where e.publicacao = p.id and p.titulo = :titulo")
 })
-public class Exemplar implements Serializable {
+public class Exemplar extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

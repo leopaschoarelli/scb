@@ -2,8 +2,6 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.PaisDAOImpl;
 import br.com.gori.scb.entidade.Pais;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,13 +19,12 @@ public class PaisTest {
     private static Pais pais;
 
     public PaisTest() {
-
+        paisDAO = new PaisDAOImpl();
+        pais = paisDAO.buscarPaisPorNome("Brasil");
     }
 
     @BeforeClass
     public static void setUpClass() {
-        paisDAO = new PaisDAOImpl();
-        pais = paisDAO.buscarPaisPorNome("Brasil");
     }
 
     @AfterClass

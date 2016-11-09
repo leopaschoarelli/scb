@@ -2,9 +2,7 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.InstituicaoDAOImpl;
 import br.com.gori.scb.entidade.Instituicao;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -22,12 +20,12 @@ public class InstituicaoTest {
     private static Instituicao instituicao;
 
     public InstituicaoTest() {
+        instituicaoDAO = new InstituicaoDAOImpl();
+        instituicao = instituicaoDAO.buscarInstituicaoPorNomeFantasia("Escola José Luiz Gori");
     }
 
     @BeforeClass
     public static void setUpClass() {
-        instituicaoDAO = new InstituicaoDAOImpl();
-        instituicao = instituicaoDAO.buscarInstituicaoPorNomeFantasia("Escola José Luiz Gori");
     }
 
     @AfterClass

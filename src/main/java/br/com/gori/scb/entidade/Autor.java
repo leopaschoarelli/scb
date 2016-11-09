@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +17,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "Autor.findByNome", query = "select a from Autor a where a.nome = :nome")
 })
-public class Autor implements Serializable {
+public class Autor extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -82,10 +81,10 @@ public class Autor implements Serializable {
 
     @Override
     public String toString() {
-        return sobrenome.toUpperCase()+", "+nome;
+        return sobrenome.toUpperCase() + ", " + nome;
     }
-    
-    public String consultaAutor(){
+
+    public String consultaAutor() {
         return nome;
     }
 

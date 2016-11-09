@@ -1,5 +1,6 @@
 package br.com.gori.scb.reportcontrole;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.dao.impl.EmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.ExemplarDAOImpl;
@@ -99,9 +100,9 @@ public class EmprestimoAtrasoControlador implements Serializable {
         ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/devolatraso.jasper",
                 this.response, parametros, "Emprestimo em Atraso.pdf");
 
-        Session session = emprestimoDAO.getEntityManager().unwrap(Session.class);
+        Session session = EntityManagerProducer.getEntityManager().unwrap(Session.class);
 //        try {
-            session.doWork(executor);
+        session.doWork(executor);
 //        } catch (Exception ex) {
 //            JsfUtil.addErrorMessage(ex, "Erro ao emitir relatório");
 //        }

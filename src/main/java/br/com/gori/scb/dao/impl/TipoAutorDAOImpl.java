@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.TipoAutorDAO;
 import br.com.gori.scb.entidade.TipoAutor;
@@ -19,14 +20,14 @@ public class TipoAutorDAOImpl extends AbstractDAO<TipoAutor> implements TipoAuto
 
     @Override
     public List<TipoAutor> listarTipoAutorPorDescricao(String descricao) {
-        Query q = getEntityManager().createNamedQuery("TipoAutor.findByDescricao", TipoAutor.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("TipoAutor.findByDescricao", TipoAutor.class);
         q.setParameter("descricao", descricao);
         return q.getResultList();
     }
 
     @Override
     public TipoAutor buscarTipoAutorPorDescricao(String descricao) {
-        Query q = getEntityManager().createNamedQuery("TipoAutor.findByDescricao", TipoAutor.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("TipoAutor.findByDescricao", TipoAutor.class);
         q.setParameter("descricao", descricao);
         List<TipoAutor> tipos = q.getResultList();
         if (tipos.isEmpty()) {
@@ -39,5 +40,4 @@ public class TipoAutorDAOImpl extends AbstractDAO<TipoAutor> implements TipoAuto
         }
     }
 
-    
 }

@@ -4,8 +4,6 @@ import br.com.gori.scb.dao.impl.EstadoDAOImpl;
 import br.com.gori.scb.dao.impl.PaisDAOImpl;
 import br.com.gori.scb.entidade.Estado;
 import br.com.gori.scb.entidade.Pais;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -25,15 +23,14 @@ public class EstadoTest {
     private static Pais pais;
 
     public EstadoTest() {
-
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
         estadoDAO = new EstadoDAOImpl();
         paisDAO = new PaisDAOImpl();
         pais = paisDAO.buscarPaisPorNome("Brasil");
         estado = estadoDAO.buscarEstadoPorNome("Paraná");
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
     }
 
     @AfterClass

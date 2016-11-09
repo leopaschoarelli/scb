@@ -1,5 +1,6 @@
 package br.com.gori.scb.reportcontrole;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.dao.impl.EmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.ExemplarDAOImpl;
@@ -8,8 +9,6 @@ import br.com.gori.scb.dao.impl.PublicacaoDAOImpl;
 import br.com.gori.scb.entidade.Exemplar;
 import br.com.gori.scb.entidade.Pessoa;
 import br.com.gori.scb.entidade.Publicacao;
-import br.com.gori.scb.entidade.Turma;
-import br.com.gori.scb.entidade.Turno;
 import br.com.gori.scb.util.ConverterAutoComplete;
 import java.io.Serializable;
 import java.util.Date;
@@ -98,7 +97,7 @@ public class RelatorioEmpDevControlador implements Serializable {
         ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/relatempdev.jasper",
                 this.response, parametros, "Relatório Por Turma.pdf");
 
-        Session session = emprestimoDAO.getEntityManager().unwrap(Session.class);
+        Session session = EntityManagerProducer.getEntityManager().unwrap(Session.class);
         session.doWork(executor);
 
         if (executor.isRelatorioGerado()) {

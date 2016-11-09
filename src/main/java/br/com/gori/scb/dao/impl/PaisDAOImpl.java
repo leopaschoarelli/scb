@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.PaisDAO;
 import br.com.gori.scb.entidade.Pais;
@@ -19,14 +20,14 @@ public class PaisDAOImpl extends AbstractDAO<Pais> implements PaisDAO {
 
     @Override
     public List<Pais> listarPaisPorNome(String nome) {
-        Query q = getEntityManager().createNamedQuery("Pais.findByNome", Pais.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Pais.findByNome", Pais.class);
         q.setParameter("nome", nome);
         return q.getResultList();
     }
 
     @Override
     public Pais buscarPaisPorNome(String nome) {
-        Query q = getEntityManager().createNamedQuery("Pais.findByNome", Pais.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Pais.findByNome", Pais.class);
         q.setParameter("nome", nome);
         List<Pais> paises = q.getResultList();
         if (paises.isEmpty()) {

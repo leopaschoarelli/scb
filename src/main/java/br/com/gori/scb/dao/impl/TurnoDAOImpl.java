@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.TurnoDAO;
 import br.com.gori.scb.entidade.Turno;
@@ -19,14 +20,14 @@ public class TurnoDAOImpl extends AbstractDAO<Turno> implements TurnoDAO {
 
     @Override
     public List<Turno> listarTurnoPorDescricao(String descricao) {
-        Query q = getEntityManager().createNamedQuery("Turno.findByDescricao", Turno.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Turno.findByDescricao", Turno.class);
         q.setParameter("descricao", descricao);
         return q.getResultList();
     }
 
     @Override
     public Turno buscarTurnoPorDescricao(String descricao) {
-        Query q = getEntityManager().createNamedQuery("Turno.findByDescricao", Turno.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Turno.findByDescricao", Turno.class);
         q.setParameter("descricao", descricao);
         List<Turno> turnos = q.getResultList();
         if (turnos.isEmpty()) {

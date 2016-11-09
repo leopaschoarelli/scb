@@ -5,8 +5,6 @@ import br.com.gori.scb.dao.impl.TurnoDAOImpl;
 import br.com.gori.scb.entidade.Turma;
 import br.com.gori.scb.entidade.Turno;
 import br.com.gori.scb.entidade.util.Modalidade;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -26,14 +24,14 @@ public class TurmaTest {
     private static Turno turno;
 
     public TurmaTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
         turmaDAO = new TurmaDAOImpl();
         turnoDAO = new TurnoDAOImpl();
         turno = turnoDAO.buscarTurnoPorDescricao("Matutino");
         turma = turmaDAO.buscarTurmaPorDescricao("6º Ano");
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
     }
 
     @AfterClass

@@ -9,8 +9,6 @@ import br.com.gori.scb.entidade.Cidade;
 import br.com.gori.scb.entidade.Editora;
 import br.com.gori.scb.entidade.Publicacao;
 import br.com.gori.scb.entidade.util.TipoPublicacao;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -34,10 +32,6 @@ public class PublicacaoTest {
     private static Cidade cidade;
 
     public PublicacaoTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
         publicacaoDAO = new PublicacaoDAOImpl();
         categoriaDAO = new CategoriaDAOImpl();
         editoraDAO = new EditoraDAOImpl();
@@ -46,6 +40,10 @@ public class PublicacaoTest {
         categoria = categoriaDAO.buscarCategoriaPorDescricao("Contos Brasileiros");
         cidade = cidadeDAO.buscarCidadePorNome("Belo Horizonte");
         publicacao = publicacaoDAO.buscarPublicacaoPorTitulo("Se7e");
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
     }
 
     @AfterClass
@@ -96,7 +94,7 @@ public class PublicacaoTest {
         Assert.assertEquals(p, finded);
     }
 
-    @Test 
+    @Test
     public void testBuscarPublicacaoPorTitulo() {
         Assert.assertNotNull(publicacaoDAO.buscarPublicacaoPorTitulo(publicacao.getTitulo()));
     }

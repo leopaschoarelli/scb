@@ -1,12 +1,12 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import static br.com.gori.scb.dao.AbstractDAO.MAX_RESULTS_QUERY;
 import br.com.gori.scb.dao.inter.ReservaDAO;
 import br.com.gori.scb.entidade.Pessoa;
 import br.com.gori.scb.entidade.Publicacao;
 import br.com.gori.scb.entidade.Reserva;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
@@ -26,14 +26,14 @@ public class ReservaDAOImpl extends AbstractDAO<Reserva> implements ReservaDAO {
 
     @Override
     public List<Reserva> listarReservaPorPessoa(String nome) {
-        Query q = getEntityManager().createNamedQuery("Reserva.findByPessoa", Reserva.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Reserva.findByPessoa", Reserva.class);
         q.setParameter("nome", nome);
         return q.getResultList();
     }
 
     @Override
     public Reserva buscarReservaPorPessoa(String nome) {
-        Query q = getEntityManager().createNamedQuery("Reserva.findByPessoa", Reserva.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Reserva.findByPessoa", Reserva.class);
         q.setParameter("nome", nome);
         List<Reserva> estados = q.getResultList();
         if (estados.isEmpty()) {
@@ -56,7 +56,7 @@ public class ReservaDAOImpl extends AbstractDAO<Reserva> implements ReservaDAO {
             sql = "select p.* from pessoa p where lower(p.nome) like :parte";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Pessoa.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Pessoa.class);
         if (caracter) {
             q.setParameter("parte", "%" + nome.toLowerCase() + "%");
         }
@@ -74,7 +74,7 @@ public class ReservaDAOImpl extends AbstractDAO<Reserva> implements ReservaDAO {
             sql = "select p.* from publicacao p where lower(p.titulo) like :parte";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Publicacao.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Publicacao.class);
         if (caracter) {
             q.setParameter("parte", "%" + titulo.toLowerCase() + "%");
         }
@@ -87,7 +87,7 @@ public class ReservaDAOImpl extends AbstractDAO<Reserva> implements ReservaDAO {
                 + "where a.id = b.reserva_id "
                 + "and (b.efetivado is null or b.efetivado = :efetivado) "
                 + "and a.pessoa_id = :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Reserva.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Reserva.class);
         q.setParameter("parte", pessoa.getId());
         q.setParameter("efetivado", Boolean.FALSE);
         List<Reserva> reservas = q.getResultList();

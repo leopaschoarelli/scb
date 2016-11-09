@@ -2,12 +2,8 @@ package br.com.gori.tests.model;
 
 import br.com.gori.scb.dao.impl.CidadeDAOImpl;
 import br.com.gori.scb.dao.impl.EstadoDAOImpl;
-import br.com.gori.scb.dao.impl.PaisDAOImpl;
 import br.com.gori.scb.entidade.Cidade;
 import br.com.gori.scb.entidade.Estado;
-import br.com.gori.scb.entidade.Pais;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -27,14 +23,14 @@ public class CidadeTest {
     private static Estado estado;
 
     public CidadeTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
         cidadeDAO = new CidadeDAOImpl();
         estadoDAO = new EstadoDAOImpl();
         cidade = cidadeDAO.buscarCidadePorNome("Mandaguari");
         estado = estadoDAO.buscarEstadoPorNome("Paraná");
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
     }
 
     @AfterClass

@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +29,7 @@ import javax.persistence.Temporal;
     @NamedQuery(name = "ConfiguracaoEmprestimo.findByDias", query = "select c from ConfiguracaoEmprestimo c where c.dias = :dias"),
     @NamedQuery(name = "ConfiguracaoEmprestimo.findByPessoa", query = "select c from ConfiguracaoEmprestimo c, TipoPessoa t where c.tipoPessoa = t.id and t.descricao = :descricao")
 })
-public class ConfiguracaoEmprestimo implements Serializable {
+public class ConfiguracaoEmprestimo extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

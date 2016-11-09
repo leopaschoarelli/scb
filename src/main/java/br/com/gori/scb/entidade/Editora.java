@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +18,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "Editora.findByNome", query = "select e from Editora e where e.nome = :nome")
 })
-public class Editora implements Serializable {
+public class Editora extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

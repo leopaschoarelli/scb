@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.PessoaDAO;
 import br.com.gori.scb.entidade.Cidade;
@@ -28,7 +29,7 @@ public class PessoaDAOImpl extends AbstractDAO<Pessoa> implements PessoaDAO {
     @Override
     public List<Turma> getTurmas(String descricao) {
         String sql = "select t.* from turma t where lower(t.descricao) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Turma.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Turma.class);
         q.setParameter("parte", "%" + descricao + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -37,7 +38,7 @@ public class PessoaDAOImpl extends AbstractDAO<Pessoa> implements PessoaDAO {
     @Override
     public List<TipoPessoa> getTipoPessoas(String descricao) {
         String sql = "select t.* from tipopessoa t where lower(t.descricao) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, TipoPessoa.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, TipoPessoa.class);
         q.setParameter("parte", "%" + descricao + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -46,7 +47,7 @@ public class PessoaDAOImpl extends AbstractDAO<Pessoa> implements PessoaDAO {
     @Override
     public List<Cidade> getCidades(String nome) {
         String sql = "select c.* from cidade c where lower(c.nome) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Cidade.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Cidade.class);
         q.setParameter("parte", "%" + nome + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -54,14 +55,14 @@ public class PessoaDAOImpl extends AbstractDAO<Pessoa> implements PessoaDAO {
 
     @Override
     public List<Pessoa> listarPessoaPorNome(String nome) {
-        Query q = getEntityManager().createNamedQuery("Pessoa.findByNome", Pessoa.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Pessoa.findByNome", Pessoa.class);
         q.setParameter("nome", nome);
         return q.getResultList();
     }
 
     @Override
     public Pessoa buscarPessoaPorNome(String nome) {
-        Query q = getEntityManager().createNamedQuery("Pessoa.findByNome", Pessoa.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Pessoa.findByNome", Pessoa.class);
         q.setParameter("nome", nome);
         List<Pessoa> pessoas = q.getResultList();
         if (pessoas.isEmpty()) {
@@ -85,7 +86,7 @@ public class PessoaDAOImpl extends AbstractDAO<Pessoa> implements PessoaDAO {
                     + "and p.turma_id is not null";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Pessoa.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Pessoa.class);
         if (caracter) {
             q.setParameter("parte", "%" + nome + "%");
         }

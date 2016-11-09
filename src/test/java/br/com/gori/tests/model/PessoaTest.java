@@ -5,9 +5,7 @@ import br.com.gori.scb.dao.impl.TipoPessoaDAOImpl;
 import br.com.gori.scb.entidade.Pessoa;
 import br.com.gori.scb.entidade.TipoPessoa;
 import br.com.gori.scb.entidade.util.Sexo;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -27,14 +25,14 @@ public class PessoaTest {
     private static TipoPessoa tipoPessoa;
 
     public PessoaTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
         pessoaDAO = new PessoaDAOImpl();
         tipoPessoaDAO = new TipoPessoaDAOImpl();
         tipoPessoa = tipoPessoaDAO.buscarTipoPessoaPorDescricao("Comunidade");
         pessoa = pessoaDAO.buscarPessoaPorNome("Leonardo Henrique Paschoarelli Ribeiro");
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
     }
 
     @AfterClass

@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.PublicacaoDAO;
 import br.com.gori.scb.entidade.Autor;
@@ -30,7 +31,7 @@ public class PublicacaoDAOImpl extends AbstractDAO<Publicacao> implements Public
                 + "and b.publicacao_id = :parte "
                 + "order by numexe desc "
                 + "limit 1";
-        Query q = getEntityManager().createNativeQuery(sql, Exemplar.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Exemplar.class);
         q.setParameter("parte", id);
         Exemplar exem = (Exemplar) q.getSingleResult();
         return exem;
@@ -46,7 +47,7 @@ public class PublicacaoDAOImpl extends AbstractDAO<Publicacao> implements Public
             sql = "select p.* from publicacao p where lower(p.titulo) like :parte";
             caracter = true;
         }
-        Query q = getEntityManager().createNativeQuery(sql, Publicacao.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Publicacao.class);
         if (caracter) {
             q.setParameter("parte", "%" + titulo + "%");
         }
@@ -57,7 +58,7 @@ public class PublicacaoDAOImpl extends AbstractDAO<Publicacao> implements Public
     @Override
     public List<Editora> getEditoras(String nome) {
         String sql = "select e.* from editora e where lower(e.nome) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Editora.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Editora.class);
         q.setParameter("parte", "%" + nome + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -66,7 +67,7 @@ public class PublicacaoDAOImpl extends AbstractDAO<Publicacao> implements Public
     @Override
     public List<Cidade> getCidades(String nome) {
         String sql = "select c.* from cidade c where lower(c.nome) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Cidade.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Cidade.class);
         q.setParameter("parte", "%" + nome + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -75,7 +76,7 @@ public class PublicacaoDAOImpl extends AbstractDAO<Publicacao> implements Public
     @Override
     public List<Categoria> getCategorias(String descricao) {
         String sql = "select c.* from categoria c where lower(c.descricao) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Categoria.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Categoria.class);
         q.setParameter("parte", "%" + descricao + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -84,7 +85,7 @@ public class PublicacaoDAOImpl extends AbstractDAO<Publicacao> implements Public
     @Override
     public List<Autor> getAutores(String nome) {
         String sql = "select a.* from autor a where lower(a.nome) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, Autor.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Autor.class);
         q.setParameter("parte", "%" + nome + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -93,7 +94,7 @@ public class PublicacaoDAOImpl extends AbstractDAO<Publicacao> implements Public
     @Override
     public List<TipoAutor> getTipoAutores(String descricao) {
         String sql = "select t.* from tipoautor t where lower(t.descricao) like :parte";
-        Query q = getEntityManager().createNativeQuery(sql, TipoAutor.class);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, TipoAutor.class);
         q.setParameter("parte", "%" + descricao + "%");
         q.setMaxResults(MAX_RESULTS_QUERY);
         return q.getResultList();
@@ -101,21 +102,21 @@ public class PublicacaoDAOImpl extends AbstractDAO<Publicacao> implements Public
 
     @Override
     public List<Publicacao> listarPublicacaoPorTitulo(String titulo) {
-        Query q = getEntityManager().createNamedQuery("Publicacao.findByNome", Publicacao.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Publicacao.findByNome", Publicacao.class);
         q.setParameter("titulo", titulo);
         return q.getResultList();
     }
 
     @Override
     public List<Publicacao> listarPublicacaoPorSubtitulo(String subtitulo) {
-        Query q = getEntityManager().createNamedQuery("Publicacao.findByNome", Publicacao.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Publicacao.findByNome", Publicacao.class);
         q.setParameter("subtitulo", subtitulo);
         return q.getResultList();
     }
 
     @Override
     public Publicacao buscarPublicacaoPorTitulo(String titulo) {
-        Query q = getEntityManager().createNamedQuery("Publicacao.findByTitulo", Publicacao.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Publicacao.findByTitulo", Publicacao.class);
         q.setParameter("titulo", titulo);
         List<Publicacao> publicacoes = q.getResultList();
         if (publicacoes.isEmpty()) {
@@ -144,8 +145,8 @@ public class PublicacaoDAOImpl extends AbstractDAO<Publicacao> implements Public
         if (!"".equals(descricao)) {
             sql = sql + "and lower(b.descricao) like :categ ";
         }
-        System.out.println("SQL: "+sql);
-        Query q = getEntityManager().createNativeQuery(sql, Publicacao.class);
+        System.out.println("SQL: " + sql);
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Publicacao.class);
         if (!"".equals(titulo)) {
             q.setParameter("titulo", "%" + titulo + "%");
         }

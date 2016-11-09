@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,7 @@ import javax.persistence.Temporal;
  */
 @Entity
 @SequenceGenerator(name = "COMPROVANTE_SEQUENCE", sequenceName = "COMPROVANTE_SEQUENCE", allocationSize = 1, initialValue = 0)
-public class ComprovanteEmprestimo implements Serializable {
+public class ComprovanteEmprestimo extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -27,9 +26,9 @@ public class ComprovanteEmprestimo implements Serializable {
     @JoinColumn(name = "emprestimo_id", nullable = false)
     private Emprestimo emprestimo;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date criacao;    
-    
-    public ComprovanteEmprestimo(){
+    private Date criacao;
+
+    public ComprovanteEmprestimo() {
         criacao = new Date();
     }
 
@@ -37,7 +36,7 @@ public class ComprovanteEmprestimo implements Serializable {
         this.emprestimo = emprestimo;
         this.criacao = criacao;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -84,7 +83,7 @@ public class ComprovanteEmprestimo implements Serializable {
 
     @Override
     public String toString() {
-        return ""+id;
+        return "" + id;
     }
-    
+
 }

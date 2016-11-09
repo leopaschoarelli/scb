@@ -4,9 +4,7 @@ import br.com.gori.scb.dao.impl.ConfiguracaoEmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.TipoPessoaDAOImpl;
 import br.com.gori.scb.entidade.ConfiguracaoEmprestimo;
 import br.com.gori.scb.entidade.TipoPessoa;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -27,15 +25,15 @@ public class ConfiguracaoEmprestimoTest {
     private static Date criacao;
 
     public ConfiguracaoEmprestimoTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
         configuracaoDAO = new ConfiguracaoEmprestimoDAOImpl();
         tipoPessoaDAO = new TipoPessoaDAOImpl();
         configuracao = configuracaoDAO.buscarConfiguracaoPorPessoa("Comunidade");
         tipoPessoa = tipoPessoaDAO.buscarTipoPessoaPorDescricao("Comunidade");
         criacao = new Date();
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
     }
 
     @AfterClass

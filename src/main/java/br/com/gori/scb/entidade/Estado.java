@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +20,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "Estado.findByNome", query = "select e from Estado e where e.nome = :nome")
 })
-public class Estado implements Serializable {
+public class Estado extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

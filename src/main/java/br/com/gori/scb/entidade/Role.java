@@ -1,7 +1,6 @@
 package br.com.gori.scb.entidade;
 
 import br.com.gori.scb.entidade.util.RoleUser;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -26,7 +25,7 @@ import javax.persistence.Table;
 @Table(name = "roles")
 @NamedQuery(name = "Role.findRoleByType", query = "select r from Role r where r.typeRole = :type")
 @SequenceGenerator(name = "ROLE_SEQUENCE", sequenceName = "ROLE_SEQUENCE", allocationSize = 1, initialValue = 0)
-public class Role implements Serializable {
+public class Role extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

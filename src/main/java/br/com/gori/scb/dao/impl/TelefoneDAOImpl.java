@@ -1,5 +1,6 @@
 package br.com.gori.scb.dao.impl;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.dao.AbstractDAO;
 import br.com.gori.scb.dao.inter.TelefoneDAO;
 import br.com.gori.scb.entidade.Telefone;
@@ -19,14 +20,14 @@ public class TelefoneDAOImpl extends AbstractDAO<Telefone> implements TelefoneDA
 
     @Override
     public List<Telefone> listarTelefonePorNumero(String numero) {
-        Query q = getEntityManager().createNamedQuery("Telefone.findByNumero", Telefone.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Telefone.findByNumero", Telefone.class);
         q.setParameter("numero", numero);
         return q.getResultList();
     }
 
     @Override
     public Telefone buscarTelefonePorNumero(String numero) {
-        Query q = getEntityManager().createNamedQuery("Telefone.findByNumero", Telefone.class);
+        Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Telefone.findByNumero", Telefone.class);
         q.setParameter("numero", numero);
         List<Telefone> telefones = q.getResultList();
         if (telefones.isEmpty()) {

@@ -6,8 +6,6 @@ import br.com.gori.scb.dao.impl.TipoAutorDAOImpl;
 import br.com.gori.scb.entidade.Autor;
 import br.com.gori.scb.entidade.Autoria;
 import br.com.gori.scb.entidade.TipoAutor;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -29,15 +27,15 @@ public class AutoriaTest {
     private static TipoAutor tipoAutor;
 
     public AutoriaTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
         autoriaDAO = new AutoriaDAOImpl();
         autorDAO = new AutorDAOImpl();
         tipoAutorDAO = new TipoAutorDAOImpl();
         autor = autorDAO.buscarAutorPorNome("Lima");
         tipoAutor = tipoAutorDAO.buscarTipoAutorPorDescricao("Primário");
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
     }
 
     @AfterClass

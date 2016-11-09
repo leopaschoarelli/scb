@@ -1,5 +1,6 @@
 package br.com.gori.scb.reportcontrole;
 
+import br.com.gori.scb.connection.EntityManagerProducer;
 import br.com.gori.scb.controle.util.JsfUtil;
 import br.com.gori.scb.dao.impl.EmprestimoDAOImpl;
 import java.io.Serializable;
@@ -42,7 +43,7 @@ public class RelatorioGeralControlador implements Serializable {
         ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/emprestimos.jasper",
                 this.response, parametros, "emprestimos.pdf");
 
-        Session session = emprestimoDAO.getEntityManager().unwrap(Session.class);
+        Session session = EntityManagerProducer.getEntityManager().unwrap(Session.class);
         session.doWork(executor);
 
         if (executor.isRelatorioGerado()) {
@@ -60,7 +61,5 @@ public class RelatorioGeralControlador implements Serializable {
     public void setEmprestimoDAO(EmprestimoDAOImpl emprestimoDAO) {
         this.emprestimoDAO = emprestimoDAO;
     }
-    
-    
 
 }

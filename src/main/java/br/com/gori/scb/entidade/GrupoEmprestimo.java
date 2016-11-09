@@ -1,6 +1,5 @@
 package br.com.gori.scb.entidade;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -24,7 +23,7 @@ import javax.persistence.SequenceGenerator;
 @NamedQueries({
     @NamedQuery(name = "GrupoEmprestimo.findByNome", query = "select g from GrupoEmprestimo g where g.nome = :nome")
 })
-public class GrupoEmprestimo implements Serializable {
+public class GrupoEmprestimo extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     @Id
