@@ -31,13 +31,13 @@ public class GrupoEmprestimo extends AbstractEntity {
     private Long id;
     @ManyToMany
     @JoinTable(name = "grupo_pessoa",
-            joinColumns = @JoinColumn(name = "tipopessoa_id"),
-            inverseJoinColumns = @JoinColumn(name = "grupoemprestimo_id"))
+            joinColumns = @JoinColumn(name = "grupoemprestimo_id"),
+            inverseJoinColumns = @JoinColumn(name = "tipopessoa_id"))
     private List<TipoPessoa> tipoPessoas;
     @ManyToMany
     @JoinTable(name = "grupo_publicacao",
-            joinColumns = @JoinColumn(name = "publicacao_id"),
-            inverseJoinColumns = @JoinColumn(name = "grupoemprestimo_id"))
+            joinColumns = @JoinColumn(name = "grupoemprestimo_id"),
+            inverseJoinColumns = @JoinColumn(name = "publicacao_id"))
     private List<Publicacao> grupoPublicacoes;
     @Column(nullable = false)
     private String nome;

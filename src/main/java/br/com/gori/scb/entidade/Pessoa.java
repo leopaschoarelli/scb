@@ -24,6 +24,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Fetch;
 
 /**
  *
@@ -66,8 +68,9 @@ public class Pessoa extends AbstractEntity {
     private Set<Emprestimo> emprestimosAbertos;
     @Transient
     private Set<Reserva> reservasAbertas;
-    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "user_id")
+    @Fetch(FetchMode.JOIN)
     private User user;
 
     public Pessoa() {

@@ -5,6 +5,7 @@ import br.com.gori.scb.dao.impl.ComprovanteDAOImpl;
 import br.com.gori.scb.dao.impl.ConfiguracaoEmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.EmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.ExemplarDAOImpl;
+import br.com.gori.scb.dao.impl.GrupoEmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.ItemEmprestimoDAOImpl;
 import br.com.gori.scb.dao.impl.ItemReservaDAOImpl;
 import br.com.gori.scb.dao.impl.PessoaDAOImpl;
@@ -13,10 +14,12 @@ import br.com.gori.scb.entidade.ComprovanteEmprestimo;
 import br.com.gori.scb.entidade.ConfiguracaoEmprestimo;
 import br.com.gori.scb.entidade.Emprestimo;
 import br.com.gori.scb.entidade.Exemplar;
+import br.com.gori.scb.entidade.GrupoEmprestimo;
 import br.com.gori.scb.entidade.ItemEmprestimo;
 import br.com.gori.scb.entidade.ItemReserva;
 import br.com.gori.scb.entidade.Pessoa;
 import br.com.gori.scb.entidade.Publicacao;
+import br.com.gori.scb.entidade.TipoPessoa;
 import br.com.gori.scb.entidade.util.EstadoExemplar;
 import br.com.gori.scb.util.ConverterAutoComplete;
 import java.io.Serializable;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -105,6 +109,9 @@ public class EmprestimoControlador implements Serializable {
     private String btn;
     private boolean salvo;
 
+    private GrupoEmprestimoDAOImpl grupoDAO;
+    private GrupoEmprestimo grupoEmp;
+
     public EmprestimoControlador() {
         newInstances();
     }
@@ -139,15 +146,20 @@ public class EmprestimoControlador implements Serializable {
         this.itemReservaDAO = new ItemReservaDAOImpl();
         this.itensDevolFiltro = new ArrayList<>();
         this.itensEmprestado = new ArrayList<>();
-        this.publicacaoPesquisa = "";
-        this.pessoaPesquisa = "";
+        publicacaoPesquisa = "";
+        pessoaPesquisa = "";
         dtDevolIni = null;
         dtDevolFinal = null;
         this.qtdDispReserva = 0;
         this.listaDisponibilidade = new ArrayList<>();
+        grupoDAO = new GrupoEmprestimoDAOImpl();
+        grupoEmp = new GrupoEmprestimo();
         tomboEmprestimo = "";
         btn = "complet";
         salvo = false;
+        dataInicial = null;
+        dataFinal = null;
+        tomboPesquisa = "";
     }
 
     public void inicializar() {
@@ -171,12 +183,17 @@ public class EmprestimoControlador implements Serializable {
         }
     }
 
-    public String salvar(String imprimir) {
+    public String salvar() {
         try {
+            System.out.println("Pessoa Emprestimo: " + emprestimo.getPessoa().getNome());
             if (validarCampos()) {
                 comprovante.setEmprestimo(emprestimo);
                 for (ItemEmprestimo it : emprestimo.getItemEmprestimo()) {
-                    it.getExemplar().setEstadoExemplar(EstadoExemplar.EMPRESTADO);
+                    System.out.println("Caiu aqui validação exemplar !!!");
+                    Exemplar ex = new Exemplar();
+                    ex = it.getExemplar();
+                    ex.setEstadoExemplar(EstadoExemplar.EMPRESTADO);
+                    exemplarDAO.merge(ex);
                 }
                 if (edicao) {
                     emprestimoDAO.update(emprestimo);
@@ -290,24 +307,45 @@ public class EmprestimoControlador implements Serializable {
         if (publicacaoFiltro != null && itemEmprestimo.getExemplar() != null) {
             JsfUtil.addErrorMessage("Selecione ou livro ou exemplar para pesquisa");
         } else if (qtdDisponivel > 0 && qtdDispReserva > 0) {
-            if (exemplaresFiltrados == null || exemplaresFiltrados.isEmpty()) {
-                exemplaresFiltrados = new ArrayList<Exemplar>();
-            }
-            if (publicacaoFiltro != null) {
-                exemplaresFiltrados = emprestimoDAO.getExemplares(publicacaoFiltro.getId());
-                if (exemplaresFiltrados.isEmpty()) {
-                    JsfUtil.addErrorMessage("Não foram encontrados exemplares disponiveis na data atual, verifique empréstimos/devoluções");
+            if (validarGrupos()) {
+                if (exemplaresFiltrados == null || exemplaresFiltrados.isEmpty()) {
+                    exemplaresFiltrados = new ArrayList<Exemplar>();
                 }
-            } else if (itemEmprestimo.getExemplar() != null) {
-                onExemplarAdiciona();
+                if (publicacaoFiltro != null) {
+                    exemplaresFiltrados = emprestimoDAO.getExemplares(publicacaoFiltro.getId());
+                    if (exemplaresFiltrados.isEmpty()) {
+                        JsfUtil.addErrorMessage("Não foram encontrados exemplares disponiveis na data atual, verifique empréstimos/devoluções");
+                    }
+                } else if (itemEmprestimo.getExemplar() != null) {
+                    onExemplarAdiciona();
+                } else {
+                    JsfUtil.addErrorMessage("Informe algum argumento de pesquisa para os livros");
+                }
             } else {
-                JsfUtil.addErrorMessage("Informe algum argumento de pesquisa para os livros");
+                JsfUtil.addErrorMessage("Verifique se este grupo de livros pertence ao grupo de tipo pessoa: " + emprestimo.getPessoa().getTipoPessoa().getDescricao());
             }
         } else {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             String data = format.format(new Date());
             String data2 = format.format(itemEmprestimo.getPrazo());
             JsfUtil.addErrorMessage("Esta publicação não tem disponilidade de emprestimo para data: " + data + " e prazo devolução: " + data2 + ". Verifique Emprestimos/Reservas");
+        }
+    }
+
+    private boolean validarGrupos() {
+        boolean pessoaGrupo;
+        pessoaGrupo = false;
+        grupoEmp = grupoDAO.getPublicacaoTpPessoa(publicacaoFiltro, itemEmprestimo.getExemplar());
+        if (grupoEmp != null) {
+            for (TipoPessoa tp : grupoEmp.getTipoPessoas()) {
+                if (Objects.equals(tp.getId(), emprestimo.getPessoa().getTipoPessoa().getId())) {
+                    System.out.println("Encontrou grupo!");
+                    pessoaGrupo = true;
+                }
+            }
+            return pessoaGrupo;
+        } else {
+            return true;
         }
     }
 
@@ -435,6 +473,7 @@ public class EmprestimoControlador implements Serializable {
                 validaQtdEmprestimo();
                 dataDevol = new Date();
                 dataDevol = addDays(dataDevol, dias);
+                emprestimo.setPessoa(pessoa);
             }
         }
         itemEmprestimo.setPrazo(dataDevol);
@@ -840,6 +879,12 @@ public class EmprestimoControlador implements Serializable {
                 dataInicial = null;
                 dataFinal = null;
             }
+            System.out.println("Publicação: " + publicacaoPesquisa);
+            System.out.println("Pessoa: " + pessoaPesquisa);
+            System.out.println("Data Inicial: " + dataInicial);
+            System.out.println("Data Final: " + dataFinal);
+            System.out.println("Tombo 1: " + tomboPesquisa);
+            System.out.println("Tombo 2: " + tomboEmprestimo);
             itensDevolFiltro = itemEmprestimoDAO.filtrarDevolPendente(publicacaoPesquisa, pessoaPesquisa, tomboPesquisa, dataInicial, dataFinal);
             if (itensDevolFiltro.isEmpty()) {
                 JsfUtil.addSuccessMessage("Não foram encontradas devoluções pendentes com os parâmetros informados!");
@@ -862,16 +907,27 @@ public class EmprestimoControlador implements Serializable {
             return null;
         }
         for (ItemEmprestimo it : itensDevolucao) {
-            it.getExemplar().setEstadoExemplar(EstadoExemplar.DISPONIVEL);
+            System.out.println("Item : " + it.getExemplar().getId());
+            Exemplar ex = it.getExemplar();
+            ex.setEstadoExemplar(EstadoExemplar.DISPONIVEL);
             it.setDevolucao(new Date());
+            exemplarDAO.update(ex);
+//            emprestimo = emprestimoDAO.getEmprestimo(it.getEmprestimo().getId());
+//            try {
+//                emprestimoDAO.update(emprestimo);
+//                itemEmprestimoDAO.update(it);
+//            } catch (Exception e) {
+//                JsfUtil.addErrorMessage(e, "Erro ao salvar devolução");
+//            }
+            itemEmprestimoDAO.update(it);
             itensDevolFiltro.remove(it);
         }
-        try {
-            emprestimoDAO.update(emprestimo);
-            JsfUtil.addSuccessMessage("Devolução realizada com sucesso!");
-        } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, "Erro ao salvar devolução");
-        }
+//        try {
+//            emprestimoDAO.update(emprestimo);
+//        } catch (Exception e) {
+//            JsfUtil.addErrorMessage(e, "Erro ao salvar devolução");
+//        }
+        JsfUtil.addSuccessMessage("Devolução realizada com sucesso!");
         return null;
     }
 
@@ -1056,6 +1112,22 @@ public class EmprestimoControlador implements Serializable {
 
     public void setSalvo(boolean salvo) {
         this.salvo = salvo;
+    }
+
+    public GrupoEmprestimoDAOImpl getGrupoDAO() {
+        return grupoDAO;
+    }
+
+    public void setGrupoDAO(GrupoEmprestimoDAOImpl grupoDAO) {
+        this.grupoDAO = grupoDAO;
+    }
+
+    public GrupoEmprestimo getGrupoEmp() {
+        return grupoEmp;
+    }
+
+    public void setGrupoEmp(GrupoEmprestimo grupoEmp) {
+        this.grupoEmp = grupoEmp;
     }
 
 }

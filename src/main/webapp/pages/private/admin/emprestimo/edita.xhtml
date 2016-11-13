@@ -203,7 +203,6 @@
                                   width="350"
                                   resizable="false"
                                   height="100">
-                            <p:ajax event="close" update="messagesEmprestimo" listener="#{emprestimoControlador.fecharConfirmacao}" />
                             <p:outputLabel value="Deseja realizar a impressão do comprovante de empréstimo?" />
 
                             <p:panelGrid id="gridBotoes2" columns="2"
@@ -214,7 +213,7 @@
 
                                 <p:commandButton id="botaoSim" 
                                                  ajax="false" 
-                                                 actionListener="#{emprestimoControlador.salvar('Sim')}" 
+                                                 actionListener="#{emprestimoControlador.salvar}" 
                                                  action="#{comprovanteControlador.emitir()}"
                                                  onclick="PF('salvarEmp').hide(); this.form.target = '_blank'"
                                                  process="@this"
@@ -228,7 +227,7 @@
                                                  value="Não" 
                                                  ajax="false"
                                                  update="panelEmprestimo"
-                                                 action="#{emprestimoControlador.salvar('Nao')}" />
+                                                 action="#{emprestimoControlador.salvar}" />
                             </p:panelGrid>
                         </p:dialog>
                     </h:form>

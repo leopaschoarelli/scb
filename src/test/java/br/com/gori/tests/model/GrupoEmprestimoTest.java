@@ -20,7 +20,7 @@ public class GrupoEmprestimoTest {
 
     public GrupoEmprestimoTest() {
         grupoEmprestimoDAO = new GrupoEmprestimoDAOImpl();
-        grupo = grupoEmprestimoDAO.buscarGrupoPorNome("Professores");
+        grupo = grupoEmprestimoDAO.buscarGrupoPorNome("Alunos");
     }
 
     @BeforeClass
@@ -43,7 +43,7 @@ public class GrupoEmprestimoTest {
     public void persistIfNotExists() {
         GrupoEmprestimo g = grupoEmprestimoDAO.buscarGrupoPorNome(grupo.getNome());
         if (g == null) {
-            GrupoEmprestimo grp = new GrupoEmprestimo("Professores");
+            GrupoEmprestimo grp = new GrupoEmprestimo("Alunos");
             g = grupoEmprestimoDAO.merge(grp);
         }
         Assert.assertNotNull(g);
