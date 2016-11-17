@@ -191,7 +191,7 @@
                                                                      onclick="this.form.target = '_blank'"
                                                                      ajax="false" />
                                                 </div>
-                                                Total de exemplares: #{publicacaoControlador.exemplares.size()}.
+                                                Total de exemplares: #{publicacaoControlador.publicacao.exemplar.size()}.
                                             </f:facet>
                                         </p:dataTable>
 
@@ -230,7 +230,7 @@
                                                          process="@parent"
                                                          value="Adicionar" 
                                                          ajax="false"
-                                                         update="tableAut"/>
+                                                         update="autores"/>
                                         <br/>
                                         <br/>
                                         <p:dataTable id="tableAut" 
@@ -251,7 +251,8 @@
                                                 <h:outputText value="#{aut.tipoAutor.descricao}" />
                                             </p:column>
                                             <p:column headerText="Gerencial">
-                                                <p:commandButton style="width: 40px" disabled="#{publicacaoControlador.visualizar}" id="btnExcluir" icon="ui-icon-trash" update="tableAut" ajax="true"/>
+                                                <p:commandButton style="width: 40px" disabled="#{publicacaoControlador.visualizar}" id="btnExcluir" icon="ui-icon-trash"
+                                                                 action="#{publicacaoControlador.excluirAutoria(aut)}" update="tableAut" ajax="true"/>
                                             </p:column>
                                         </p:dataTable>
                                     </p:tab>
@@ -262,8 +263,9 @@
                                              styleClass="panelgrid-noborder">
                                     <p:commandButton id="botaoSalvar" icon="ui-icon-check" value="Salvar" action="#{publicacaoControlador.salvar}" 
                                                      process="@this,complemento:tabDados"
+                                                     ajax="false"
                                                      update="@form" disabled="#{publicacaoControlador.visualizar}"/>
-                                    <p:commandButton id="botaoCancelar" icon="ui-icon-close" value="Cancelar" action="#{publicacaoControlador.prepararLista}" update="@form" />
+                                    <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/publicacao/lista.xhtml" />
                                 </p:panelGrid>
                             </p:panel>
                             <p:defaultCommand target="complemento" />

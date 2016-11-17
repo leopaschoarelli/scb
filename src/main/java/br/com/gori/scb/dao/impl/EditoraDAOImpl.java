@@ -40,4 +40,11 @@ public class EditoraDAOImpl extends AbstractDAO<Editora> implements EditoraDAO {
         }
     }
 
+    public List<Editora> getEditoras(String nome) {
+        String sql = "select e.* from editora e where lower(e.nome) like :parte";
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Editora.class);
+        q.setParameter("parte", "%" + nome + "%");
+        q.setMaxResults(MAX_RESULTS_QUERY);
+        return q.getResultList();
+    }
 }

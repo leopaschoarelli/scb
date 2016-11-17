@@ -299,6 +299,10 @@ public class PublicacaoControlador implements Serializable {
         publicacao.getExemplar().remove(exemplar);
     }
 
+    public void excluirAutoria(Autoria autoria) {
+        publicacao.getAutorias().remove(autoria);
+    }
+
     public Publicacao getPublicacao() {
         return publicacao;
     }
@@ -472,6 +476,7 @@ public class PublicacaoControlador implements Serializable {
 
     public void adicionaAutoria() {
         publicacao.getAutorias().add(autoria);
+        autoria = new Autoria();
     }
 
     public Autoria getAutoria() {

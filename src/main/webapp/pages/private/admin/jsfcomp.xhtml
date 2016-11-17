@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <style type="text/css">
+            .order-table{
+                border-collapse:collapse;
+            }
+
+            .order-table-header{
+                text-align:center;
+                background:none repeat scroll 0 0 #E5E5E5;
+                border-bottom:1px solid #BBBBBB;
+                padding:16px;
+            }
+
+            .order-table-odd-row{
+                text-align:center;
+                background:none repeat scroll 0 0 #FFFFFFF;
+                border-top:1px solid #BBBBBB;
+            }
+
+            .order-table-even-row{
+                text-align:center;
+                background:none repeat scroll 0 0 #F9F9F9;
+                border-top:1px solid #BBBBBB;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:panelGrid columns="2">
+            <h:dataTable rows="10" border="5" 
+                         value="#{pessoaControlador.pessoas}" 
+                         frame="border" 
+                         styleClass="order-table"
+                         headerClass="order-table-header"
+                         rowClasses="order-table-odd-row,order-table-even-row"
+                         var="pessoa" >
+                <f:facet name="header">
+                    Lista de Pessoas
+                </f:facet>
+                <h:column>
+                    <f:facet name="header">Nome</f:facet>
+                        #{pessoa.nome}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Sexo</f:facet>
+                        #{pessoa.sexo.descricao}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Data de Nascimento</f:facet>
+                    <h:outputText value="#{pessoa.nascimento}">
+                        <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Turma</f:facet>
+                    #{pessoa.turma.descricao} - #{pessoa.turma.serie} - #{pessoa.turma.turno.descricao}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">CGM</f:facet>
+                        #{pessoa.cgm}
+                </h:column>
+            </h:dataTable>
+
+            <h:panelGrid columns="2">
+                <h:outputLabel for="nom" value="Nome: "/>
+                <h:inputText size="40" value="#{pessoaControlador.pessoa.nome}" />
+                <h:outputLabel for="sex" value="Sexo "/>
+                <h:selectOneRadio id="sex"  
+                                  value="#{pessoaControlador.pessoa.sexo}"   >  
+                    <f:selectItems value="#{pessoaControlador.sexo}" var="sexo" itemLabel="#{sexo}" itemValue="#{sexo}" />
+                </h:selectOneRadio>  
+                <h:outputLabel for="dt" value="Data Nascimento "/>
+                <h:inputText size="40" value="#{pessoaControlador.pessoa.nome}" />
+                <h:outputLabel for="tr" value="Turma: "/>
+                <h:inputText size="40" value="#{pessoaControlador.pessoa.nome}" />
+                <h:outputLabel for="cg" value="CGM: "/>
+                <h:inputText size="40" value="#{pessoaControlador.pessoa.cgm}" />
+                <h:outputLabel />
+                <h:outputLabel />
+                <h:outputLabel />
+                <h:outputLabel />
+                <h:commandButton value="Salvar" />
+                <h:commandButton value="Cancelar" />
+            </h:panelGrid>
+        </h:panelGrid>
+        <p:separator/>
+        <div class="ui-fluid">
+            <p:panelGrid columns="2"
+                         layout="grid" 
+                         style="margin-top: 20px; margin-bottom: 40px"
+                         columnClasses="ui-grid-col-9, ui-grid-col-3"
+                         styleClass="panelgrid-noborder">
+                <p:dataTable paginator="true" 
+                             rows="10" 
+                             resizeMode="fit"
+                             id="tableAluno" 
+                             reflow="true"
+                             value="#{pessoaControlador.pessoas}" 
+                             resizableColumns="true"
+                             var="pessoa" 
+                             emptyMessage="Nenhum registro encontrado">
+                    <f:facet name="header">
+                        Lista de Pessoas
+                    </f:facet>
+
+                    <p:column filterStyle="width: auto" filterBy="#{pessoa.nome}" headerText="Nome">
+                        <h:outputText value="#{pessoa.nome}" />
+                    </p:column>
+
+                    <p:column filterStyle="width: auto" filterBy="#{pessoa.sexo.descricao}" headerText="Sexo">
+                        <h:outputText value="#{pessoa.sexo.descricao}" />
+                    </p:column>
+
+                    <p:column filterStyle="width: auto" filterBy="#{pessoa.nascimento}" headerText="Data de Nascimento">
+                        <h:outputText value="#{pessoa.nascimento}">
+                            <f:convertDateTime locale="pt-br" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterStyle="width: auto" filterBy="#{pessoa.turma.descricao}" headerText="Turma">
+                        <h:outputText value="#{pessoa.turma.descricao} - #{pessoa.turma.serie} - #{pessoa.turma.turno.descricao}" />
+                    </p:column>
+
+                    <p:column filterStyle="width: auto" filterBy="#{pessoa.cgm}" headerText="CGM">
+                        <h:outputText value="#{pessoa.cgm}" />
+                    </p:column>
+                </p:dataTable>
+                <p:panelGrid columns="2"
+                             layout="grid" 
+                             style="margin-top: 20px; margin-bottom: 40px"
+                             columnClasses="ui-grid-col-2, ui-grid-col-11"
+                             styleClass="panelgrid-noborder">
+                    <p:outputLabel value="Nome: " />
+                    <p:inputText value="#{pessoaControlador.pessoa.nome}" />
+                    <p:outputLabel value="Nasc: " for="dtnasc" />
+                    <p:calendar id="dtnasc"
+                                readonly="#{pessoaControlador.visualiza}" 
+                                value="#{pessoaControlador.pessoa.nascimento}" 
+                                pattern="dd/MM/yyyy" 
+                                mask="true" />
+                    <p:outputLabel for="sx" value="Sexo: " />
+                    <p:selectOneRadio layout="grid" columns="2" value="#{pessoaControlador.pessoa.sexo}"  id="sx">
+                        <f:selectItems value="#{pessoaControlador.sexo}" var="sexo" itemLabel="#{sexo}" itemValue="#{sexo}" />
+                    </p:selectOneRadio>
+                    <p:outputLabel value="Turma: " for="turms" />
+                    <p:inputText id="turms" 
+                                 value="#{pessoaControlador.pessoa.turma}" />
+
+                    <p:outputLabel value="CGM: " for="cgm" />
+                    <p:inputText id="cgm" 
+                                 value="#{pessoaControlador.pessoa.cgm}" />
+
+                    <p:outputLabel/>
+                    <p:panelGrid id="gridBotoes" columns="2"
+                                 layout="grid"
+                                 columnClasses="ui-grid-col-6, ui-grid-col-6"
+                                 styleClass="panelgrid-noborder">
+                        <p:commandButton 
+                            id="botaoSalvar" 
+                            icon="ui-icon-check" 
+                            value="Salvar"
+                            action="#{pessoaControlador.salvar}"/>
+                        <p:button value="Cancelar" id="btnSair" icon="ui-icon-close" outcome="/pages/private/admin/pessoa/lista.xhtml" />
+                    </p:panelGrid>
+                </p:panelGrid>
+
+            </p:panelGrid>
+        </div>
+    </h:body>
+</html>
+

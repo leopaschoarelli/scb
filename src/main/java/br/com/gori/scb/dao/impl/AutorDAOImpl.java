@@ -24,7 +24,7 @@ public class AutorDAOImpl extends AbstractDAO<Autor> implements AutorDAO {
         q.setParameter("nome", nome);
         return q.getResultList();
     }
-    
+
     @Override
     public Autor buscarAutorPorNome(String nome) {
         Query q = EntityManagerProducer.getEntityManager().createNamedQuery("Autor.findByNome", Autor.class);
@@ -39,5 +39,12 @@ public class AutorDAOImpl extends AbstractDAO<Autor> implements AutorDAO {
             throw new NonUniqueResultException();
         }
     }
-    
+
+    public List<Autor> getAutores(String nome) {
+        String sql = "select a.* from autor a where lower(a.nome) like :parte";
+        Query q = EntityManagerProducer.getEntityManager().createNativeQuery(sql, Autor.class);
+        q.setParameter("parte", "%" + nome + "%");
+        q.setMaxResults(MAX_RESULTS_QUERY);
+        return q.getResultList();
+    }
 }

@@ -87,5 +87,8 @@ public class Autor extends AbstractEntity {
     public String consultaAutor() {
         return nome;
     }
+    public String consultarAutor(){
+        return nome+" "+sobrenome;
+    }
 
 }

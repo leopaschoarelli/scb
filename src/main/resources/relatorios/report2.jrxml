@@ -44,11 +44,8 @@ and f.emprestimo_id = (select MAX(g.emprestimo_id) from comprovanteemprestimo g)
 	<field name="prazo" class="java.util.Date"/>
 	<group name="descricao" keepTogether="true">
 		<groupExpression><![CDATA[$F{nome}]]></groupExpression>
-		<groupHeader>
-			<band/>
-		</groupHeader>
 		<groupFooter>
-			<band height="174">
+			<band height="162">
 				<staticText>
 					<reportElement x="2" y="13" width="555" height="51" uuid="b06e7262-6a8f-4770-8fa9-806ca7b876c6"/>
 					<textElement textAlignment="Justified"/>
@@ -157,7 +154,7 @@ and f.emprestimo_id = (select MAX(g.emprestimo_id) from comprovanteemprestimo g)
 				<textElement textAlignment="Right">
 					<font size="10" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
 				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="526c84c5-0b46-47b8-bddc-e615ecf1adb5"/>
