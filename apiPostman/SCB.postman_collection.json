@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "123ed78b-28c9-4212-b0af-a369f914edb8",
+		"name": "SCB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Pais",
+			"item": [
+				{
+					"name": "Inserir Pais",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Brasil\",\r\n    \"sigla\": \"BRA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/paises",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"paises"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Pais",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Estados Unidos\",\r\n    \"sigla\": \"EUA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/paises/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"paises",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Pais",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/paises/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"paises",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar todos Paises",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/paises",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"paises"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
