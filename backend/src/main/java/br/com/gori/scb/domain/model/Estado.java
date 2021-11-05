@@ -1,34 +1,33 @@
 package br.com.gori.scb.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name = "cb_pais")
+@Entity(name = "cb_estado")
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Pais {
+public class Estado {
 
 	@EqualsAndHashCode.Include
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Long id;
 	
-    private String nome;
-
-    private String sigla;
+	private String nome;
 	
-    @OneToMany(mappedBy = "pais")
-    private List<Estado> estados = new ArrayList<>();
-    
+	private String uf;
+	
+	@ManyToOne
+	@JoinColumn(name = "pais_id")
+	private Pais pais;
+	
 }
