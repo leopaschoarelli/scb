@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.gori.scb.api.dto.request.PaisRequestDTO;
 import br.com.gori.scb.api.dto.response.PaisResponseDTO;
 import br.com.gori.scb.api.mapper.PaisMapper;
+import br.com.gori.scb.domain.exception.NegocioException;
+import br.com.gori.scb.domain.model.Pais;
 import br.com.gori.scb.domain.repository.PaisRepository;
 import lombok.AllArgsConstructor;
 
@@ -59,6 +61,14 @@ public class PaisService {
 	@Transactional(readOnly = true)
 	public boolean paisExistsById(Long id) {
 		return paisRepository.existsById(id);
+	}
+	
+	@Transactional(readOnly = true)
+	public Pais buscarPorId(Long id) {
+		var pais = paisRepository.findById(id)
+				.orElseThrow(() -> new NegocioException("País não encontrado"));
+		
+		return pais;
 	}
 	
 }
